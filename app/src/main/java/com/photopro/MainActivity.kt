@@ -2,7 +2,6 @@ package com.photopro
 
 import android.Manifest
 import android.content.ContentValues
-import android.content.pm.PackageManager
 import android.os.Build
 import android.os.Bundle
 import android.provider.MediaStore
@@ -37,12 +36,12 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
 
         // Request camera permissions if not already granted
-        if (allPermissionsGranted()) {
+        if (cameraPermissionGranted(this)) {
             startCamera()  //Start camera if permission already granted
         } else {
-            //Ask for all permissions inside REQUIRED_PERMISSIONS (declared inside the companion object)
-            //Actions to perform when permission request result arrive is onRequestPermissionsResult (below)
-            ActivityCompat.requestPermissions(this, REQUIRED_PERMISSIONS, REQUEST_CODE_PERMISSIONS)
+            //Ask for CAMERA permission
+            //The actions to perform when permission request result arrive are described inside onRequestPermissionsResult (below)
+            ActivityCompat.requestPermissions(this, arrayOf(Manifest.permission.CAMERA), REQUEST_CODE_PERMISSIONS)
         }
 
         //Add listener to button to make it take photos
@@ -57,7 +56,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun startCamera() {
-        // This is used to bind the lifecycle of cameras to the lifecycle owner.
+        // This is used to bind the lifecycle of cameras to the lifecycle owner (the main activity).
         // This eliminates the task of opening and closing the camera since CameraX is lifecycle-aware.
         val cameraProviderFuture = ProcessCameraProvider.getInstance(this)
 
@@ -72,7 +71,7 @@ class MainActivity : AppCompatActivity() {
                     it.setSurfaceProvider(cameraPreview.surfaceProvider)
                 }
 
-            // Select back camera as a default
+            // Select back camera as a default when starting at first
             //TODO: Make the user select what camera to use, if more available. Make also decide between back and front camera
             val cameraSelector = CameraSelector.DEFAULT_BACK_CAMERA
 
@@ -91,7 +90,7 @@ class MainActivity : AppCompatActivity() {
 
         }, ContextCompat.getMainExecutor(this))
 
-        //When starting the camera, build the ImageCapture object
+        //When starting the camera, build the ImageCapture object that will be able to take pictures
         imageCapture = ImageCapture.Builder().build()
     }
 
@@ -141,23 +140,17 @@ class MainActivity : AppCompatActivity() {
         )
     }
 
-    //TODO: Decide how to handle permissions. Require all permissions or only the basic ones
-    private fun allPermissionsGranted() = REQUIRED_PERMISSIONS.all {
-        ContextCompat.checkSelfPermission(baseContext, it) == PackageManager.PERMISSION_GRANTED
-    }
-
     //What to do when the permission request result are available
     override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<String>, grantResults: IntArray) {
 
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
 
         if (requestCode == REQUEST_CODE_PERMISSIONS) {
-            if (allPermissionsGranted()) {
-                //TODO: If asked permission for microphone, start camera also if microphone permission is not granted so not all permissions need to be granted
-                startCamera()  //Start camera if all permissions are granted
+            if (cameraPermissionGranted(this)) {
+                startCamera()  //Start camera if camera permission is granted
             } else {
                 //Show a message that explains why the app does not work (camera permission not granted) and exit the app
-                Toast.makeText(this, "Permissions not granted by the user.", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this, "Permissions for the camera granted by the user.", Toast.LENGTH_SHORT).show()
                 finish()
             }
         }
@@ -177,8 +170,5 @@ class MainActivity : AppCompatActivity() {
 
         //Permission code decided arbitrarily
         private const val REQUEST_CODE_PERMISSIONS = 100
-
-        //Array of required permissions that need to be checked
-        private val REQUIRED_PERMISSIONS =arrayOf(Manifest.permission.CAMERA)
     }
 }
