@@ -13,7 +13,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        app:layout_constraintGuide_percent="0.02"/>
+        app:layout_constraintGuide_percent="0.015"/>
 
     <androidx.appcompat.widget.Toolbar
         android:id="@+id/features_toolbar"
@@ -30,18 +30,64 @@
             android:layout_height="wrap_content">
 
             <!--Flash icon-->
-            <ImageView
+            <ImageButton
+                android:contentDescription="@string/flash_button_description"
+
+                android:id="@+id/flash_mode"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:src="@drawable/flash_on" />
+                android:src="@drawable/flash_on"
+                android:scaleType="fitCenter"
+                android:background="@null"
+                android:layout_weight="1"/>
 
             <!--Speech activated shoot-->
-            <ImageView
+            <ImageButton
+                android:contentDescription="@string/speech_shoot_button_description"
+
+                android:id="@+id/speech_shoot_mode"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:src="@drawable/speech_shoot_on" />
+                android:src="@drawable/speech_shoot_on"
+                android:scaleType="fitCenter"
+                android:background="@null"
+                android:layout_weight="1"/>
+
+            <!--Frame averaging-->
+            <ImageButton
+                android:contentDescription="@string/frame_avg_button_description"
+
+                android:id="@+id/frame_avg_mode"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/frame_avg_on"
+                android:scaleType="fitCenter"
+                android:background="@null"
+                android:layout_weight="1"/>
+
+            <!--Pose shoot-->
+            <ImageButton
+                android:contentDescription="@string/pose_shoot_button_description"
+
+                android:id="@+id/pose_shoot_mode"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/pose_shoot_on"
+                android:scaleType="fitCenter"
+                android:background="@null"
+                android:layout_weight="1"/>
+
+            <!--Night mode-->
+            <ImageButton
+                android:contentDescription="@string/night_mode_button_description"
+
+                android:id="@+id/night_mode_mode"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/night_mode_on"
+                android:scaleType="fitCenter"
+                android:background="@null"
+                android:layout_weight="1"/>
 
         </LinearLayout>
     </androidx.appcompat.widget.Toolbar>
@@ -52,7 +98,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        app:layout_constraintGuide_percent="0.08"/>
+        app:layout_constraintGuide_percent="0.085"/>
 
     <!--Create guideline to set the view height to a percentage of the screen-->
     <androidx.constraintlayout.widget.Guideline
@@ -88,6 +134,7 @@
         app:layout_constraintGuide_percent="0.875"/>
 
     <Button
+        android:contentDescription="@string/capture_button_description"
         android:id="@+id/image_capture_button"
 
         android:layout_height="0dp"
@@ -123,6 +170,8 @@
         app:layout_constraintTop_toTopOf="@+id/top_button_guideline" />
 
     <ImageButton
+        android:contentDescription="@string/gallery_button_description"
+
         android:id="@+id/gallery_button"
         android:layout_width="0dp"
         android:layout_height="0dp"
