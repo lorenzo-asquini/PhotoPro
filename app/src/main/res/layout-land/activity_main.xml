@@ -1,0 +1,206 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/black"
+    tools:context=".MainActivity">
+
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/top_toolbar_guideline"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_percent="@dimen/top_toolbar_guideline_percent" />
+
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/features_toolbar"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:background="@color/black"
+
+        app:contentInsetLeft="0dp"
+        app:contentInsetStart="0dp"
+
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/bottom_toolbar_guideline"
+        app:layout_constraintStart_toStartOf="@+id/top_toolbar_guideline"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+            <!--Open side menu-->
+            <ImageButton
+                android:contentDescription="@string/three_dots_menu_button_description"
+
+                android:id="@+id/three_dots_menu"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="@dimen/button_margin"
+                android:src="@drawable/vertical_dots"
+                android:scaleType="fitCenter"
+                android:background="@null"
+                android:layout_weight="1"/>
+
+            <!--Night mode-->
+            <ImageButton
+                android:contentDescription="@string/night_mode_button_description"
+
+                android:id="@+id/night_mode_mode"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="@dimen/button_margin"
+                android:background="@null"
+                android:scaleType="fitCenter"
+                android:src="@drawable/night_mode_on"
+                android:layout_weight="1"/>
+
+            <!--Pose shoot-->
+            <ImageButton
+                android:id="@+id/pose_shoot_mode"
+
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="@dimen/button_margin"
+                android:layout_weight="1"
+                android:background="@null"
+                android:contentDescription="@string/pose_shoot_button_description"
+                android:scaleType="fitCenter"
+                android:src="@drawable/pose_shoot_on" />
+
+            <!--Frame averaging-->
+            <ImageButton
+                android:id="@+id/frame_avg_mode"
+
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="@dimen/button_margin"
+                android:layout_weight="1"
+                android:background="@null"
+                android:contentDescription="@string/frame_avg_button_description"
+                android:scaleType="fitCenter"
+                android:src="@drawable/frame_avg_on" />
+
+            <!--Speech activated shoot-->
+            <ImageButton
+                android:id="@+id/speech_shoot_mode"
+
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="@dimen/button_margin"
+                android:layout_weight="1"
+                android:background="@null"
+                android:contentDescription="@string/speech_shoot_button_description"
+                android:scaleType="fitCenter"
+                android:src="@drawable/speech_shoot_on" />
+
+            <!--Flash icon-->
+            <ImageButton
+                android:id="@+id/flash_mode"
+
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="@dimen/button_margin"
+                android:layout_weight="1"
+                android:background="@null"
+                android:contentDescription="@string/flash_button_description"
+                android:scaleType="fitCenter"
+                android:src="@drawable/flash_on" />
+
+        </LinearLayout>
+    </androidx.appcompat.widget.Toolbar>
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/bottom_toolbar_guideline"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_percent="@dimen/bottom_toolbar_guideline_percent" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/top_view_guideline"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_percent="@dimen/top_view_guideline_percent" />
+
+    <androidx.camera.view.PreviewView
+        android:id="@+id/camera_preview"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/bottom_view_guideline"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toStartOf="@+id/top_view_guideline"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="1.0">
+
+    </androidx.camera.view.PreviewView>
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/bottom_view_guideline"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_percent="@dimen/bottom_view_guideline_percent" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/top_buttons_guideline"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_percent="@dimen/top_buttons_guideline_percent" />
+
+    <Button
+        android:id="@+id/image_capture_button"
+        android:layout_width="0dp"
+
+        android:layout_height="0dp"
+        android:background="@drawable/round_button"
+        android:contentDescription="@string/capture_button_description"
+        app:backgroundTint="@color/white"
+        app:layout_constraintBottom_toBottomOf="parent"
+
+        app:layout_constraintDimensionRatio="1:1"
+        app:layout_constraintEnd_toStartOf="@+id/bottom_button_guideline"
+        app:layout_constraintStart_toStartOf="@+id/top_buttons_guideline"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <Button
+        android:id="@+id/pro_mode_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/pro_mode_text"
+        android:textColor="@android:color/black"
+        app:backgroundTint="@color/teal_200"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/bottom_button_guideline"
+        app:layout_constraintStart_toStartOf="@+id/top_buttons_guideline"
+        app:layout_constraintTop_toBottomOf="@+id/image_capture_button" />
+
+    <ImageButton
+        android:id="@+id/gallery_button"
+
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:background="@null"
+        android:contentDescription="@string/gallery_button_description"
+        android:scaleType="fitCenter"
+        android:src="@drawable/gallery"
+        app:layout_constraintBottom_toTopOf="@+id/image_capture_button"
+        app:layout_constraintEnd_toStartOf="@+id/bottom_button_guideline"
+        app:layout_constraintStart_toStartOf="@+id/top_buttons_guideline"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/bottom_button_guideline"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_percent="@dimen/bottom_buttons_guideline_percent" />
+</androidx.constraintlayout.widget.ConstraintLayout>
