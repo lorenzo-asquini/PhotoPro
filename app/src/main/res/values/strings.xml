@@ -9,4 +9,5 @@
     <string name="frame_avg_button_description">Select the frame averaging mode</string>
     <string name="pose_shoot_button_description">Select the pose shoot mode</string>
     <string name="night_mode_button_description">Select the night mode mode</string>
+    <string name="three_dots_menu_button_description">Open the side menu</string>
 </resources>

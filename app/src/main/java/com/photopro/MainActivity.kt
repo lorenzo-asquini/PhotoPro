@@ -17,6 +17,7 @@ import androidx.camera.core.Preview
 import androidx.camera.core.CameraSelector
 import android.util.Log
 import android.widget.Button
+import android.widget.ImageButton
 import androidx.camera.core.ImageCaptureException
 import androidx.camera.view.PreviewView
 import java.text.SimpleDateFormat
@@ -29,6 +30,7 @@ class MainActivity : AppCompatActivity() {
     //Using lateinit makes it possible to initialize later a variable (inside onCreate)
     //Create a cameraExecutor to use the camera
     private lateinit var cameraExecutor: ExecutorService
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -53,6 +55,12 @@ class MainActivity : AppCompatActivity() {
         //Create a single thread for processing camera data
         //TODO: create multiple threads for processing data while being displayed?
         cameraExecutor = Executors.newSingleThreadExecutor()
+
+        val openGalleryButton : ImageButton = findViewById(R.id.gallery_button)
+
+        openGalleryButton.setOnClickListener(){
+            openGallery(this)
+        }
     }
 
     private fun startCamera() {
@@ -110,7 +118,7 @@ class MainActivity : AppCompatActivity() {
             put(MediaStore.MediaColumns.DISPLAY_NAME, name)
             put(MediaStore.MediaColumns.MIME_TYPE, "image/jpeg")
             if(Build.VERSION.SDK_INT > Build.VERSION_CODES.P) {
-                put(MediaStore.Images.Media.RELATIVE_PATH, "Pictures/CameraX-Image")
+                put(MediaStore.Images.Media.RELATIVE_PATH, "Pictures/PhotoPro")
             }
         }
 

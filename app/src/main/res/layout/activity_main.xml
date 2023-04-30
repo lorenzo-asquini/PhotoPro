@@ -13,13 +13,17 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        app:layout_constraintGuide_percent="0.015"/>
+        app:layout_constraintGuide_percent="@dimen/top_toolbar_guideline_percent"/>
 
     <androidx.appcompat.widget.Toolbar
         android:id="@+id/features_toolbar"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:background="@color/black"
+
+        app:contentInsetLeft="0dp"
+        app:contentInsetStart="0dp"
+
         app:layout_constraintBottom_toTopOf="@+id/bottom_toolbar_guideline"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -27,7 +31,7 @@
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="match_parent">
 
             <!--Flash icon-->
             <ImageButton
@@ -36,6 +40,7 @@
                 android:id="@+id/flash_mode"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_margin="@dimen/button_margin"
                 android:src="@drawable/flash_on"
                 android:scaleType="fitCenter"
                 android:background="@null"
@@ -48,6 +53,7 @@
                 android:id="@+id/speech_shoot_mode"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_margin="@dimen/button_margin"
                 android:src="@drawable/speech_shoot_on"
                 android:scaleType="fitCenter"
                 android:background="@null"
@@ -60,6 +66,7 @@
                 android:id="@+id/frame_avg_mode"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_margin="@dimen/button_margin"
                 android:src="@drawable/frame_avg_on"
                 android:scaleType="fitCenter"
                 android:background="@null"
@@ -72,6 +79,7 @@
                 android:id="@+id/pose_shoot_mode"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_margin="@dimen/button_margin"
                 android:src="@drawable/pose_shoot_on"
                 android:scaleType="fitCenter"
                 android:background="@null"
@@ -84,10 +92,24 @@
                 android:id="@+id/night_mode_mode"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_margin="@dimen/button_margin"
                 android:src="@drawable/night_mode_on"
                 android:scaleType="fitCenter"
                 android:background="@null"
                 android:layout_weight="1"/>
+
+            <!--Open side menu-->
+            <ImageButton
+                android:id="@+id/three_dots_menu"
+
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="@dimen/button_margin"
+                android:layout_weight="1"
+                android:background="@null"
+                android:contentDescription="@string/three_dots_menu_button_description"
+                android:scaleType="fitCenter"
+                android:src="@drawable/vertical_dots" />
 
         </LinearLayout>
     </androidx.appcompat.widget.Toolbar>
@@ -98,7 +120,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        app:layout_constraintGuide_percent="0.085"/>
+        app:layout_constraintGuide_percent="0.09" />
 
     <!--Create guideline to set the view height to a percentage of the screen-->
     <androidx.constraintlayout.widget.Guideline
@@ -106,7 +128,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        app:layout_constraintGuide_percent="0.10"/>
+        app:layout_constraintGuide_percent="@dimen/top_view_guideline_percent"/>
 
     <androidx.camera.view.PreviewView
         android:id="@+id/camera_preview"
@@ -115,7 +137,8 @@
         app:layout_constraintBottom_toTopOf="@+id/bottom_view_guideline"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/top_view_guideline" />
+        app:layout_constraintTop_toTopOf="@+id/top_view_guideline" >
+    </androidx.camera.view.PreviewView>
 
     <!--Create guideline to set the view height to a percentage of the screen-->
     <androidx.constraintlayout.widget.Guideline
@@ -123,15 +146,15 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        app:layout_constraintGuide_percent="0.85"/>
+        app:layout_constraintGuide_percent="@dimen/bottom_view_guideline_percent"/>
 
     <!--Create guideline to set the button height and width to a percentage of the screen-->
     <androidx.constraintlayout.widget.Guideline
-        android:id="@+id/top_button_guideline"
+        android:id="@+id/top_buttons_guideline"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        app:layout_constraintGuide_percent="0.875"/>
+        app:layout_constraintGuide_percent="@dimen/top_buttons_guideline_percent"/>
 
     <Button
         android:contentDescription="@string/capture_button_description"
@@ -147,15 +170,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/top_button_guideline" />
-
-    <!--Create guideline to set the button height and width to a percentage of the screen-->
-    <androidx.constraintlayout.widget.Guideline
-        android:id="@+id/bottom_button_guideline"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        app:layout_constraintGuide_percent="0.975"/>
+        app:layout_constraintTop_toTopOf="@+id/top_buttons_guideline" />
 
     <Button
         android:id="@+id/pro_mode_button"
@@ -167,7 +182,7 @@
         app:layout_constraintBottom_toTopOf="@+id/bottom_button_guideline"
         app:layout_constraintEnd_toStartOf="@+id/image_capture_button"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/top_button_guideline" />
+        app:layout_constraintTop_toTopOf="@+id/top_buttons_guideline" />
 
     <ImageButton
         android:contentDescription="@string/gallery_button_description"
@@ -182,6 +197,14 @@
         app:layout_constraintBottom_toTopOf="@+id/bottom_button_guideline"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/image_capture_button"
-        app:layout_constraintTop_toTopOf="@+id/top_button_guideline" />
+        app:layout_constraintTop_toTopOf="@+id/top_buttons_guideline" />
+
+    <!--Create guideline to set the button height and width to a percentage of the screen-->
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/bottom_button_guideline"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent="@dimen/bottom_buttons_guideline_percent"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
