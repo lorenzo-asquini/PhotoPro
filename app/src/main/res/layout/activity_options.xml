@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/black"
+    tools:context=".OptionsActivity">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <!--Top toolbar containing the back button-->
+        <androidx.appcompat.widget.Toolbar
+            android:id="@+id/options_toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/option_toolbar_height"
+            android:background="@color/black"
+
+            app:contentInsetLeft="0dp"
+            app:contentInsetStart="0dp">
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="start">
+
+                <!--Flash icon-->
+                <ImageButton
+                    android:id="@+id/back_arrow_button"
+
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_margin="@dimen/button_toolbar_margin"
+                    android:background="@null"
+                    android:contentDescription="@string/back_arrow_button_description"
+                    android:scaleType="fitStart"
+                    android:src="@drawable/back_arrow" />
+
+            </LinearLayout>
+        </androidx.appcompat.widget.Toolbar>
+
+        <!--Section title: Extensions-->
+        <TextView
+            android:id="@+id/extensions_title_textView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/white_border"
+
+            android:paddingStart="@dimen/option_title_textView_left_padding"
+            android:paddingTop="@dimen/option_title_textView_bottom_top_padding"
+            android:paddingBottom="@dimen/option_title_textView_bottom_top_padding"
+
+            android:text="@string/extensions_text"
+            android:textColor="@color/white"
+            android:textSize="@dimen/option_title_font_size" />
+
+        <Space
+            android:id="@+id/options_menu_space_1"
+            android:layout_width="match_parent"
+            android:layout_height="20dp" />
+
+        <!--List of extensions available. Easier than using recyclerView because of the difference in behavior of the buttons-->
+        <Button
+            android:id="@+id/HDR_button"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/HDR_text"
+
+            android:textColor="@android:color/black"
+            app:backgroundTint="@color/teal_200"
+            android:textSize="@dimen/option_font_size" />
+
+        <Button
+            android:id="@+id/bokeh_button"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/bokeh_text"
+
+            android:textColor="@android:color/black"
+            app:backgroundTint="@color/teal_200"
+            android:textSize="@dimen/option_font_size" />
+
+        <Space
+            android:id="@+id/options_menu_space_2"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/option_space_height" />
+
+        <!--Section title: Settings-->
+        <TextView
+            android:id="@+id/settings_textView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/white_border"
+
+            android:paddingStart="@dimen/option_title_textView_left_padding"
+            android:paddingTop="@dimen/option_title_textView_bottom_top_padding"
+            android:paddingBottom="@dimen/option_title_textView_bottom_top_padding"
+
+            android:text="@string/settings_text"
+            android:textColor="@color/white"
+            android:textSize="@dimen/option_title_font_size" />
+
+        <Space
+            android:id="@+id/options_menu_space_3"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/option_space_height" />
+
+    </LinearLayout>
+
+</ScrollView>

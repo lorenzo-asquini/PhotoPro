@@ -9,11 +9,11 @@
 
 
     <androidx.constraintlayout.widget.Guideline
-        android:id="@+id/top_toolbar_guideline"
+        android:id="@+id/top_features_toolbar_guideline"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        app:layout_constraintGuide_percent="@dimen/top_toolbar_guideline_percent" />
+        app:layout_constraintGuide_percent="@dimen/top_features_toolbar_guideline_percent" />
 
     <androidx.appcompat.widget.Toolbar
         android:id="@+id/features_toolbar"
@@ -25,8 +25,8 @@
         app:contentInsetStart="0dp"
 
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/bottom_toolbar_guideline"
-        app:layout_constraintStart_toStartOf="@+id/top_toolbar_guideline"
+        app:layout_constraintEnd_toStartOf="@+id/bottom_features_toolbar_guideline"
+        app:layout_constraintStart_toStartOf="@+id/top_features_toolbar_guideline"
         app:layout_constraintTop_toTopOf="parent">
 
         <LinearLayout
@@ -36,12 +36,12 @@
 
             <!--Open side menu-->
             <ImageButton
-                android:contentDescription="@string/three_dots_menu_button_description"
+                android:contentDescription="@string/options_button_description"
 
-                android:id="@+id/three_dots_menu"
+                android:id="@+id/options_button"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_margin="@dimen/button_margin"
+                android:layout_margin="@dimen/button_toolbar_margin"
                 android:src="@drawable/vertical_dots"
                 android:scaleType="fitCenter"
                 android:background="@null"
@@ -54,7 +54,7 @@
                 android:id="@+id/night_mode_mode"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_margin="@dimen/button_margin"
+                android:layout_margin="@dimen/button_toolbar_margin"
                 android:background="@null"
                 android:scaleType="fitCenter"
                 android:src="@drawable/night_mode_on"
@@ -66,7 +66,7 @@
 
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_margin="@dimen/button_margin"
+                android:layout_margin="@dimen/button_toolbar_margin"
                 android:layout_weight="1"
                 android:background="@null"
                 android:contentDescription="@string/pose_shoot_button_description"
@@ -79,7 +79,7 @@
 
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_margin="@dimen/button_margin"
+                android:layout_margin="@dimen/button_toolbar_margin"
                 android:layout_weight="1"
                 android:background="@null"
                 android:contentDescription="@string/frame_avg_button_description"
@@ -92,7 +92,7 @@
 
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_margin="@dimen/button_margin"
+                android:layout_margin="@dimen/button_toolbar_margin"
                 android:layout_weight="1"
                 android:background="@null"
                 android:contentDescription="@string/speech_shoot_button_description"
@@ -105,7 +105,7 @@
 
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_margin="@dimen/button_margin"
+                android:layout_margin="@dimen/button_toolbar_margin"
                 android:layout_weight="1"
                 android:background="@null"
                 android:contentDescription="@string/flash_button_description"
@@ -116,11 +116,11 @@
     </androidx.appcompat.widget.Toolbar>
 
     <androidx.constraintlayout.widget.Guideline
-        android:id="@+id/bottom_toolbar_guideline"
+        android:id="@+id/bottom_features_toolbar_guideline"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        app:layout_constraintGuide_percent="@dimen/bottom_toolbar_guideline_percent" />
+        app:layout_constraintGuide_percent="@dimen/bottom_features_toolbar_guideline_percent" />
 
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/top_view_guideline"
@@ -135,7 +135,7 @@
         android:layout_height="match_parent"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/bottom_view_guideline"
-        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="@+id/top_view_guideline"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="1.0">
@@ -148,6 +148,35 @@
         android:layout_height="wrap_content"
         android:orientation="vertical"
         app:layout_constraintGuide_percent="@dimen/bottom_view_guideline_percent" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/top_change_camera_button_guideline"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_percent="@dimen/top_change_camera_button_guideline_percent" />
+
+    <!--Button to switch from front to back camera-->
+    <ImageButton
+        android:id="@+id/change_camera_button"
+
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:background="@null"
+        android:contentDescription="@string/change_camera_button_description"
+        android:scaleType="fitCenter"
+        android:src="@drawable/change_camera"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/bottom_change_camera_button_guideline"
+        app:layout_constraintStart_toStartOf="@+id/top_change_camera_button_guideline"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/bottom_change_camera_button_guideline"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_percent="@dimen/bottom_change_camera_button_guideline_percent" />
 
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/top_buttons_guideline"
@@ -173,7 +202,7 @@
 
     <Button
         android:id="@+id/pro_mode_button"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:text="@string/pro_mode_text"
         android:textColor="@android:color/black"
