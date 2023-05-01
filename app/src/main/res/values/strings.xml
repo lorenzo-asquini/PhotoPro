@@ -1,6 +1,7 @@
 <resources>
     <string name="app_name">PhotoPro</string>
 
+    <!--MainActivity layout-->
     <string name="pro_mode_text">PRO</string>
     <string name="flash_button_description">Select the flash mode</string>
     <string name="speech_shoot_button_description">Select the voice shoot mode</string>
@@ -9,5 +10,14 @@
     <string name="frame_avg_button_description">Select the frame averaging mode</string>
     <string name="pose_shoot_button_description">Select the pose shoot mode</string>
     <string name="night_mode_button_description">Select the night mode mode</string>
-    <string name="three_dots_menu_button_description">Open the side menu</string>
+    <string name="options_button_description">Open the side menu</string>
+    <string name="change_camera_button_description">Button to switch camera</string>
+
+    <!--OptionsActivity layout-->
+    <string name="back_arrow_button_description">Back arrow to exit the activity</string>
+    <string name="extensions_text">Extensions</string>
+    <string name="settings_text">Settings</string>
+
+    <string name="HDR_text">HDR</string>
+    <string name="bokeh_text">Bokeh</string>
 </resources>

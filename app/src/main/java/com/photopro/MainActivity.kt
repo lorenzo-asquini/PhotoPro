@@ -2,26 +2,27 @@ package com.photopro
 
 import android.Manifest
 import android.content.ContentValues
+import android.content.Intent
 import android.os.Build
 import android.os.Bundle
 import android.provider.MediaStore
-import androidx.appcompat.app.AppCompatActivity
-import androidx.camera.core.ImageCapture
-import androidx.core.app.ActivityCompat
-import androidx.core.content.ContextCompat
-import java.util.concurrent.ExecutorService
-import java.util.concurrent.Executors
-import android.widget.Toast
-import androidx.camera.lifecycle.ProcessCameraProvider
-import androidx.camera.core.Preview
-import androidx.camera.core.CameraSelector
 import android.util.Log
 import android.widget.Button
 import android.widget.ImageButton
+import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
+import androidx.camera.core.CameraSelector
+import androidx.camera.core.ImageCapture
 import androidx.camera.core.ImageCaptureException
+import androidx.camera.core.Preview
+import androidx.camera.lifecycle.ProcessCameraProvider
 import androidx.camera.view.PreviewView
+import androidx.core.app.ActivityCompat
+import androidx.core.content.ContextCompat
 import java.text.SimpleDateFormat
-import java.util.Locale
+import java.util.*
+import java.util.concurrent.ExecutorService
+import java.util.concurrent.Executors
 
 class MainActivity : AppCompatActivity() {
     //Object that becomes not null when (and if) the camera is started
@@ -30,7 +31,6 @@ class MainActivity : AppCompatActivity() {
     //Using lateinit makes it possible to initialize later a variable (inside onCreate)
     //Create a cameraExecutor to use the camera
     private lateinit var cameraExecutor: ExecutorService
-
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -46,21 +46,28 @@ class MainActivity : AppCompatActivity() {
             ActivityCompat.requestPermissions(this, arrayOf(Manifest.permission.CAMERA), REQUEST_CODE_PERMISSIONS)
         }
 
+        //Add listener to button to open the options menu
+        val optionsButton: ImageButton = findViewById(R.id.options_button)
+        optionsButton.setOnClickListener{
+            val openSettingsIntent = Intent(this, OptionsActivity::class.java)
+            startActivity(openSettingsIntent)
+        }
+
         //Add listener to button to make it take photos
         val takePhotoButton : Button = findViewById(R.id.image_capture_button)
         takePhotoButton.setOnClickListener{
             takePhoto()
         }
 
+        //Add listener to button to open gallery
+        val openGalleryButton : ImageButton = findViewById(R.id.gallery_button)
+        openGalleryButton.setOnClickListener{
+            openGallery(this)
+        }
+
         //Create a single thread for processing camera data
         //TODO: create multiple threads for processing data while being displayed?
         cameraExecutor = Executors.newSingleThreadExecutor()
-
-        val openGalleryButton : ImageButton = findViewById(R.id.gallery_button)
-
-        openGalleryButton.setOnClickListener(){
-            openGallery(this)
-        }
     }
 
     private fun startCamera() {
