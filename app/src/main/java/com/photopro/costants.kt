@@ -1,6 +1,6 @@
 package com.photopro
 
-object Costant{
+object Constant{
     const val FLASH_OFF = 0
     const val FLASH_ON = 1
     const val FLASH_AUTO = 2

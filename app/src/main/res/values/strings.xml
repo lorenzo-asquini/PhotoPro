@@ -20,4 +20,6 @@
 
     <string name="HDR_text">HDR</string>
     <string name="bokeh_text">Bokeh</string>
+
+    <string name="insert_speech_shoot_word">Shoot word</string>
 </resources>

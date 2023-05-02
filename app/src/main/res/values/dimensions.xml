@@ -5,8 +5,8 @@
     <dimen name="option_title_font_size">40sp</dimen>
     <dimen name="option_font_size">30sp</dimen>
 
-    <dimen name="option_title_textView_bottom_top_padding">5dp</dimen>
-    <dimen name="option_title_textView_left_padding">5dp</dimen>
+    <dimen name="option_textView_bottom_top_padding">5dp</dimen>
+    <dimen name="option_textView_left_padding">5dp</dimen>
 
     <dimen name="option_toolbar_height">54dp</dimen>
 
