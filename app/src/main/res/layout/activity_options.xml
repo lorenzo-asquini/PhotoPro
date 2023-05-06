@@ -33,7 +33,7 @@
 
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
-                    android:layout_margin="@dimen/button_toolbar_margin"
+                    android:layout_margin="@dimen/button_toolbar_padding"
                     android:background="@null"
                     android:contentDescription="@string/back_arrow_button_description"
                     android:scaleType="fitStart"
@@ -150,6 +150,16 @@
                 android:importantForAutofill="no" />
 
         </LinearLayout>
+
+        <Button
+            android:id="@+id/info_button"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/info_text"
+
+            android:textColor="@android:color/black"
+            app:backgroundTint="@color/teal_200"
+            android:textSize="@dimen/option_font_size" />
 
     </LinearLayout>
 
