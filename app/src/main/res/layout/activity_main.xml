@@ -39,7 +39,7 @@
 
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_margin="@dimen/button_toolbar_margin"
+                android:padding="@dimen/button_toolbar_padding"
                 android:layout_weight="1"
                 android:background="@null"
                 android:contentDescription="@string/flash_button_description"
@@ -52,7 +52,7 @@
 
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_margin="@dimen/button_toolbar_margin"
+                android:padding="@dimen/button_toolbar_padding"
                 android:layout_weight="1"
                 android:background="@null"
                 android:contentDescription="@string/speech_shoot_button_description"
@@ -65,7 +65,7 @@
 
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_margin="@dimen/button_toolbar_margin"
+                android:padding="@dimen/button_toolbar_padding"
                 android:layout_weight="1"
                 android:background="@null"
                 android:contentDescription="@string/frame_avg_button_description"
@@ -78,7 +78,7 @@
 
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_margin="@dimen/button_toolbar_margin"
+                android:padding="@dimen/button_toolbar_padding"
                 android:layout_weight="1"
                 android:background="@null"
                 android:contentDescription="@string/pose_shoot_button_description"
@@ -91,7 +91,7 @@
 
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_margin="@dimen/button_toolbar_margin"
+                android:padding="@dimen/button_toolbar_padding"
                 android:layout_weight="1"
                 android:background="@null"
                 android:contentDescription="@string/night_mode_button_description"
@@ -104,7 +104,7 @@
 
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_margin="@dimen/button_toolbar_margin"
+                android:padding="@dimen/button_toolbar_padding"
                 android:layout_weight="1"
                 android:background="@null"
                 android:contentDescription="@string/options_button_description"
@@ -220,6 +220,7 @@
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:background="@null"
+        android:padding="@dimen/button_toolbar_padding"
         android:contentDescription="@string/gallery_button_description"
         android:scaleType="fitCenter"
         android:src="@drawable/gallery"
