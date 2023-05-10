@@ -2,14 +2,14 @@
     <string name="app_name">PhotoPro</string>
 
     <!--MainActivity layout-->
-    <string name="pro_mode_text">PRO</string>
-    <string name="flash_button_description">Select the flash mode</string>
-    <string name="speech_shoot_button_description">Select the voice shoot mode</string>
+    <string name="pro_text">PRO</string>
+    <string name="flash_button_description">Select the flash modality</string>
+    <string name="speech_shoot_button_description">Select the voice shoot modality</string>
     <string name="capture_button_description">Take a picture</string>
     <string name="gallery_button_description">Open the gallery</string>
-    <string name="frame_avg_button_description">Select the frame averaging mode</string>
-    <string name="pose_shoot_button_description">Select the pose shoot mode</string>
-    <string name="night_mode_button_description">Select the night mode mode</string>
+    <string name="frame_avg_button_description">Select the frame averaging modality</string>
+    <string name="pose_shoot_button_description">Select the pose shoot modality</string>
+    <string name="night_mode_button_description">Select the night mode modality</string>
     <string name="options_button_description">Open the side menu</string>
     <string name="change_camera_button_description">Button to switch camera</string>
 
