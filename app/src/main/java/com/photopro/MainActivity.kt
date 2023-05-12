@@ -23,12 +23,6 @@ import java.text.SimpleDateFormat
 import java.util.*
 import java.util.concurrent.ExecutorService
 import java.util.concurrent.Executors
-import androidx.camera.extensions.ExtensionMode
-import androidx.camera.extensions.ExtensionsManager
-
-enum class States {
-    ON, AUTO, OFF
-}
 
 class MainActivity : AppCompatActivity() {
     //Object that becomes not null when (and if) the camera is started
@@ -69,26 +63,6 @@ class MainActivity : AppCompatActivity() {
         val openGalleryButton : ImageButton = findViewById(R.id.gallery_button)
         openGalleryButton.setOnClickListener{
             openGallery(this)
-        }
-
-        var night_state = States.OFF
-        //Add listener to button to night mode on/auto/off
-        val nightModeButton : ImageButton = findViewById(R.id.night_mode_mode)
-        nightModeButton.setOnClickListener {
-            when (night_state) {
-                States.ON -> {
-                    night_state = States.AUTO
-                    nightModeButton.setImageResource(R.drawable.night_mode_auto)
-                }
-                States.AUTO -> {
-                    night_state = States.OFF
-                    nightModeButton.setImageResource(R.drawable.night_mode_off)
-                }
-                States.OFF -> {
-                    night_state = States.ON
-                    nightModeButton.setImageResource(R.drawable.night_mode_on)
-                }
-            }
         }
 
         //Create a single thread for processing camera data
