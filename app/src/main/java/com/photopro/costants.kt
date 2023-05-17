@@ -1,28 +1,29 @@
 package com.photopro
 
-import androidx.camera.core.ImageCapture
-
 object Constant{
-    //Same values as in ImageCapture for consistency
-    const val FLASH_OFF = ImageCapture.FLASH_MODE_OFF
-    const val FLASH_ON = ImageCapture.FLASH_MODE_ON
-    const val FLASH_AUTO = ImageCapture.FLASH_MODE_AUTO
 
-    const val SPEECH_SHOOT_OFF = 0
-    const val SPEECH_SHOOT_ON = 1
+    const val FLASH_OFF = 0
+    const val FLASH_ON = 1
+    const val FLASH_AUTO = 2
+    const val FLASH_ALWAYS_ON = 3
+    const val FLASH_STATES = 4  //Number of states the flash can be
 
     const val FRAME_AVG_OFF = 0
     const val FRAME_AVG_ON = 1
+    const val FRAME_AVG_STATES = 2  //Number of states the frame average shoot can be
 
     const val POSE_SHOOT_OFF = 0
     const val POSE_SHOOT_ON = 1
+    const val POSE_SHOOT_STATES = 2  //Number of states the pose shoot can be
 
     const val NIGHT_MODE_OFF = 0
     const val NIGHT_MODE_ON = 1
     const val NIGHT_MODE_AUTO = 2
+    const val NIGHT_MODE_STATES = 3  //Number of states the night mode can be
 
     const val CAMERA_BACK = 0
     const val CAMERA_FRONT = 1
+    const val CAMERA_STATES = 2  //Number of states the camera can be
 
     //TAG for debug
     const val TAG = "PhotoPro"
@@ -36,7 +37,6 @@ object Constant{
 
 object SharedPrefs{
     const val FLASH_KEY = "flash_value"
-    const val SPEECH_SHOOT_KEY = "speech_shoot_value"
     const val FRAME_AVG_KEY = "frameAvg_value"
     const val POSE_SHOOT_KEY = "pose_shoot_value"
     const val NIGHT_MODE_KEY = "night_mode_value"

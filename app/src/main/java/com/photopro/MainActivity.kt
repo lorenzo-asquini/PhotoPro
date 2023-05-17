@@ -2,8 +2,10 @@ package com.photopro
 
 import android.Manifest
 import android.content.ContentValues
+import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
+import android.hardware.camera2.CameraManager
 import android.os.Build
 import android.os.Bundle
 import android.provider.MediaStore
@@ -21,6 +23,10 @@ import java.util.*
 import java.util.concurrent.ExecutorService
 import java.util.concurrent.Executors
 
+/*TODO:
+*  -See if analyzer has right orientation
+*  -Set up base of analyzer
+*  -See if everything works*/
 class MainActivity : AppCompatActivity() {
     //Object that becomes not null when (and if) the camera is started
     private var imageCapture: ImageCapture? = null
@@ -38,9 +44,11 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
 
         preferences = getPreferences(MODE_PRIVATE)
+        val cameraManager = getSystemService(Context.CAMERA_SERVICE) as CameraManager
+        val features = getAvailableFeatures(this, cameraManager)
 
         //Draw from preferences
-        drawAllButtons(this, preferences)
+        drawAllButtons(this, preferences, features)
 
         // Request camera permissions if not already granted
         if (cameraPermissionGranted(this)) {
@@ -59,40 +67,39 @@ class MainActivity : AppCompatActivity() {
         }
 
         //Add listener to button to change flash mode
-        //TODO: handle case when flash is not available (use CameraCharacteristics). Remove button
-        //TODO: Remove button if front camera
         val flashButton : ImageButton = findViewById(R.id.flash_button)
         flashButton.setOnClickListener{
             changeFlashValue(preferences)
-            drawFlashButton(this, preferences)
+            drawFlashButton(this, preferences, true)
 
             //No need to create new imageCapture. Change the flash mode in imageCapture
             val savedFlashValue = preferences.getInt(SharedPrefs.FLASH_KEY, Constant.FLASH_OFF)
 
+            //To switch to and from always on flash it is necessary to start th camera
             when(savedFlashValue){
-                Constant.FLASH_OFF -> imageCapture!!.flashMode = ImageCapture.FLASH_MODE_OFF
+                Constant.FLASH_OFF -> {
+                    imageCapture = startCamera(this, preferences)
+                    imageCapture!!.flashMode = ImageCapture.FLASH_MODE_OFF
+                }
+
                 Constant.FLASH_ON -> imageCapture!!.flashMode = ImageCapture.FLASH_MODE_ON
+
                 Constant.FLASH_AUTO -> imageCapture!!.flashMode = ImageCapture.FLASH_MODE_AUTO
 
-                else -> imageCapture!!.flashMode = ImageCapture.FLASH_MODE_OFF  //If something goes wrong
-            }
-        }
+                Constant.FLASH_ALWAYS_ON -> imageCapture = startCamera(this, preferences)
 
-        //Add listener to button to change speech shoot mode
-        val speechShootButton: ImageButton = findViewById(R.id.speech_shoot_button)
-        //TODO: Check if microphone exists
-        speechShootButton.setOnClickListener{
-            //TODO: If permission not granted, ask permission if trying to change value
-            changeSpeechShootValue(preferences)
-            drawSpeechShootButton(this, preferences)
-            //TODO: Start listening
+                else -> {
+                    imageCapture = startCamera(this, preferences)
+                    imageCapture!!.flashMode = ImageCapture.FLASH_MODE_OFF
+                }  //If something goes wrong
+            }
         }
 
         //Add listener to button to change frame average mode
         val frameAvgButton: ImageButton = findViewById(R.id.frame_avg_button)
         frameAvgButton.setOnClickListener{
             changeFrameAvgValue(preferences)
-            drawFrameAvgButton(this, preferences)
+            drawFrameAvgButton(this, preferences, true)
             //No need to restart camera. It has effect only when taking a picture
         }
 
@@ -100,16 +107,15 @@ class MainActivity : AppCompatActivity() {
         val poseShootButton: ImageButton = findViewById(R.id.pose_shoot_button)
         poseShootButton.setOnClickListener{
             changePoseShootValue(preferences)
-            drawPoseShootButton(this, preferences)
+            drawPoseShootButton(this, preferences, true)
             imageCapture = startCamera(this,preferences)  //Start camera to start analyzer
         }
 
         //Add listener to button to change night mode mode
-        //TODO: Remove button when using FRONT_CAMERA? I don't know if front camera can do it
         val nightModeButton: ImageButton = findViewById(R.id.night_mode_button)
         nightModeButton.setOnClickListener{
             changeNightModeValue(preferences)
-            drawNightModeButton(this, preferences)
+            drawNightModeButton(this, preferences, true)
             imageCapture = startCamera(this,preferences)
         }
 
@@ -126,13 +132,15 @@ class MainActivity : AppCompatActivity() {
         }
 
         //Handle switch camera button
-        initialiseChangeCameraButton(this, preferences)
+        //Display button only if both front and back camera are available
+        initialiseChangeCameraButton(this, features, preferences)
         val changeCameraButton : ImageButton = findViewById(R.id.change_camera_button)
 
         //If button is present and pressed, then both cameras are available
         changeCameraButton.setOnClickListener{
             changeCameraFacingValue(preferences)
             imageCapture = startCamera(this,preferences)
+            drawAllButtons(this, preferences, features)  //When changing camera the available features change
         }
 
         //Create a single thread for processing camera data
@@ -140,6 +148,10 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun takePhoto() {
+        if(preferences.getInt(SharedPrefs.FRAME_AVG_KEY, Constant.FRAME_AVG_OFF) == Constant.FRAME_AVG_ON){
+            //TODO: find a way to retrieve the image from analyzer and save it
+        }
+
         // Get a stable reference of the modifiable image capture use case
         //If the camera did not start successfully, imageCapture is still null
         val imageCapture = imageCapture ?: return
@@ -155,11 +167,6 @@ class MainActivity : AppCompatActivity() {
             if(Build.VERSION.SDK_INT > Build.VERSION_CODES.P) {
                 put(MediaStore.Images.Media.RELATIVE_PATH, "Pictures/PhotoPro")
             }
-        }
-
-        if(preferences.getInt(SharedPrefs.FRAME_AVG_KEY, Constant.FRAME_AVG_OFF) == Constant.FRAME_AVG_ON){
-            startCamera(this, preferences, highQAnalyzer = true)
-            //TODO: find a way to retrieve the image from analyzer and save it
         }
 
         // Create output options object which contains file + metadata

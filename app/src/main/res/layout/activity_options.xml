@@ -108,49 +108,6 @@
             android:layout_width="match_parent"
             android:layout_height="@dimen/option_space_height" />
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="@drawable/white_border"
-            android:orientation="horizontal">
-
-            <TextView
-                android:id="@+id/insert_speech_shoot_word_textView"
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="1.5"
-                android:gravity="center"
-
-                android:paddingStart="@dimen/option_textView_left_padding"
-                android:paddingTop="@dimen/option_textView_bottom_top_padding"
-                android:paddingBottom="@dimen/option_textView_bottom_top_padding"
-
-                android:text="@string/insert_speech_shoot_word"
-                android:textColor="@color/white"
-                android:textSize="@dimen/option_font_size" />
-
-            <!--The text will change programmatically retrieving stored value-->
-            <androidx.appcompat.widget.AppCompatEditText
-                android:id="@+id/speech_shoot_word_input"
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:gravity="center"
-
-                android:inputType="textPersonName"
-                android:maxLength="10"
-
-                android:text="Shoot"
-                tools:ignore="HardcodedText,LabelFor"
-
-                android:textColor="@color/white"
-                android:textSize="@dimen/option_font_size"
-                app:backgroundTint="@color/teal_200"
-
-                android:importantForAutofill="no" />
-
-        </LinearLayout>
-
         <Button
             android:id="@+id/info_button"
             android:layout_width="match_parent"

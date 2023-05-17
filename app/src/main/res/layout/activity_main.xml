@@ -46,19 +46,6 @@
                 android:scaleType="fitCenter"
                 android:src="@drawable/flash_on" />
 
-            <!--Speech activated shoot-->
-            <ImageButton
-                android:id="@+id/speech_shoot_button"
-
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:padding="@dimen/button_toolbar_padding"
-                android:layout_weight="1"
-                android:background="@null"
-                android:contentDescription="@string/speech_shoot_button_description"
-                android:scaleType="fitCenter"
-                android:src="@drawable/speech_shoot_on" />
-
             <!--Frame averaging-->
             <ImageButton
                 android:id="@+id/frame_avg_button"

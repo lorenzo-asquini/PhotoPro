@@ -6,24 +6,53 @@ import android.content.SharedPreferences
 import android.view.View
 import android.widget.ImageButton
 import androidx.appcompat.app.AppCompatActivity
-import androidx.camera.core.CameraInfoUnavailableException
-import androidx.camera.core.CameraSelector
-import androidx.camera.lifecycle.ProcessCameraProvider
-import androidx.core.content.ContextCompat
 
 //Functions useful for both normal camera and PRO camera
 
-fun drawAllButtons(activity: AppCompatActivity, preferences: SharedPreferences){
-    drawFlashButton(activity, preferences)
-    drawSpeechShootButton(activity, preferences)
-    drawFrameAvgButton(activity, preferences)
-    drawPoseShootButton(activity, preferences)
-    drawNightModeButton(activity, preferences)
+fun drawAllButtons(activity: AppCompatActivity, preferences: SharedPreferences, features: AvailableFeatures){
+
+    //Draw flash button and night mode button only if those features are available for the given camera
+    if(preferences.getInt(SharedPrefs.CAMERA_FACING_KEY, Constant.CAMERA_BACK) == Constant.CAMERA_FRONT) {
+        if(features.isFrontFlashAvailable){
+            drawFlashButton(activity, preferences, true)
+        }else{
+            drawFlashButton(activity, preferences, false)
+        }
+
+        if(features.isFrontNightModeAvailable){
+            drawNightModeButton(activity, preferences, true)
+        }else{
+            drawNightModeButton(activity, preferences, false)
+        }
+    }
+
+    if(preferences.getInt(SharedPrefs.CAMERA_FACING_KEY, Constant.CAMERA_BACK) == Constant.CAMERA_BACK) {
+        if(features.isBackFlashAvailable){
+            drawFlashButton(activity, preferences, true)
+        }else{
+            drawFlashButton(activity, preferences, false)
+        }
+
+        if(features.isBackNightModeAvailable){
+            drawNightModeButton(activity, preferences, true)
+        }else{
+            drawNightModeButton(activity, preferences, false)
+        }
+    }
+
+    drawFrameAvgButton(activity, preferences, true)
+    drawPoseShootButton(activity, preferences, true)
 
 }
 
-fun drawFlashButton(activity: AppCompatActivity, preferences: SharedPreferences){
+fun drawFlashButton(activity: AppCompatActivity, preferences: SharedPreferences, show : Boolean){
     val flashButton: ImageButton = activity.findViewById(R.id.flash_button)
+
+    if(!show){
+        flashButton.visibility = View.GONE
+        return
+    }
+    flashButton.visibility = View.VISIBLE
 
     val flashMode = preferences.getInt(SharedPrefs.FLASH_KEY, Constant.FLASH_OFF)
 
@@ -31,42 +60,28 @@ fun drawFlashButton(activity: AppCompatActivity, preferences: SharedPreferences)
         Constant.FLASH_OFF -> flashButton.setImageResource(R.drawable.flash_off)
         Constant.FLASH_ON -> flashButton.setImageResource(R.drawable.flash_on)
         Constant.FLASH_AUTO -> flashButton.setImageResource(R.drawable.flash_auto)
+        //Constant.FLASH_ALWAYS_ON -> flashButton.setImageResource(R.drawable.flash_always_on)
     }
 }
 
 fun changeFlashValue(preferences: SharedPreferences){
     val currentValue = preferences.getInt(SharedPrefs.FLASH_KEY, Constant.FLASH_OFF)
 
-    val newValue = (currentValue+1) % 3
+    val newValue = (currentValue+1) % Constant.FLASH_STATES
 
     val editor = preferences.edit()
     editor.putInt(SharedPrefs.FLASH_KEY, newValue)
     editor.apply()
 }
 
-fun drawSpeechShootButton(activity: AppCompatActivity, preferences: SharedPreferences){
-    val speechShootButton: ImageButton = activity.findViewById(R.id.speech_shoot_button)
-
-    val speechShootValue = preferences.getInt(SharedPrefs.SPEECH_SHOOT_KEY, Constant.SPEECH_SHOOT_OFF)
-
-    when(speechShootValue){
-        Constant.SPEECH_SHOOT_OFF -> speechShootButton.setImageResource(R.drawable.speech_shoot_off)
-        Constant.SPEECH_SHOOT_ON -> speechShootButton.setImageResource(R.drawable.speech_shoot_on)
-    }
-}
-
-fun changeSpeechShootValue(preferences: SharedPreferences){
-    val currentValue = preferences.getInt(SharedPrefs.SPEECH_SHOOT_KEY, Constant.SPEECH_SHOOT_OFF)
-
-    val newValue = (currentValue+1) % 2
-
-    val editor = preferences.edit()
-    editor.putInt(SharedPrefs.SPEECH_SHOOT_KEY, newValue)
-    editor.apply()
-}
-
-fun drawFrameAvgButton(activity: AppCompatActivity, preferences: SharedPreferences){
+fun drawFrameAvgButton(activity: AppCompatActivity, preferences: SharedPreferences, show : Boolean){
     val frameAvgButton: ImageButton = activity.findViewById(R.id.frame_avg_button)
+
+    if(!show){
+        frameAvgButton.visibility = View.GONE
+        return
+    }
+    frameAvgButton.visibility = View.VISIBLE
 
     val frameAvgValue = preferences.getInt(SharedPrefs.FRAME_AVG_KEY, Constant.FRAME_AVG_OFF)
 
@@ -79,15 +94,21 @@ fun drawFrameAvgButton(activity: AppCompatActivity, preferences: SharedPreferenc
 fun changeFrameAvgValue(preferences: SharedPreferences){
     val currentValue = preferences.getInt(SharedPrefs.FRAME_AVG_KEY, Constant.FRAME_AVG_OFF)
 
-    val newValue = (currentValue+1) % 2
+    val newValue = (currentValue+1) % Constant.FRAME_AVG_STATES
 
     val editor = preferences.edit()
     editor.putInt(SharedPrefs.FRAME_AVG_KEY, newValue)
     editor.apply()
 }
 
-fun drawPoseShootButton(activity: AppCompatActivity, preferences: SharedPreferences){
+fun drawPoseShootButton(activity: AppCompatActivity, preferences: SharedPreferences, show : Boolean){
     val poseShootButton: ImageButton = activity.findViewById(R.id.pose_shoot_button)
+
+    if(!show){
+        poseShootButton.visibility = View.GONE
+        return
+    }
+    poseShootButton.visibility = View.VISIBLE
 
     val poseShootValue = preferences.getInt(SharedPrefs.POSE_SHOOT_KEY, Constant.POSE_SHOOT_OFF)
 
@@ -100,15 +121,21 @@ fun drawPoseShootButton(activity: AppCompatActivity, preferences: SharedPreferen
 fun changePoseShootValue(preferences: SharedPreferences){
     val currentValue = preferences.getInt(SharedPrefs.POSE_SHOOT_KEY, Constant.POSE_SHOOT_OFF)
 
-    val newValue = (currentValue+1) % 2
+    val newValue = (currentValue+1) % Constant.POSE_SHOOT_STATES
 
     val editor = preferences.edit()
     editor.putInt(SharedPrefs.POSE_SHOOT_KEY, newValue)
     editor.apply()
 }
 
-fun drawNightModeButton(activity: AppCompatActivity, preferences: SharedPreferences){
+fun drawNightModeButton(activity: AppCompatActivity, preferences: SharedPreferences, show : Boolean){
     val nightModeButton: ImageButton = activity.findViewById(R.id.night_mode_button)
+
+    if(!show){
+        nightModeButton.visibility = View.GONE
+        return
+    }
+    nightModeButton.visibility = View.VISIBLE
 
     val nightMode = preferences.getInt(SharedPrefs.NIGHT_MODE_KEY, Constant.NIGHT_MODE_OFF)
 
@@ -122,56 +149,35 @@ fun drawNightModeButton(activity: AppCompatActivity, preferences: SharedPreferen
 fun changeNightModeValue(preferences: SharedPreferences){
     val currentValue = preferences.getInt(SharedPrefs.NIGHT_MODE_KEY, Constant.NIGHT_MODE_OFF)
 
-    val newValue = (currentValue+1) % 3
+    val newValue = (currentValue+1) % Constant.NIGHT_MODE_STATES
 
     val editor = preferences.edit()
     editor.putInt(SharedPrefs.NIGHT_MODE_KEY, newValue)
     editor.apply()
 }
 
-fun initialiseChangeCameraButton(activity: AppCompatActivity, preferences: SharedPreferences){
-    //Check if both a front camera and back camera are available
-    var hasFrontCamera = false
-    var hasBackCamera = false
-    //TODO: Maybe possible to use CameraCharacteristics
-    val cameraProviderFuture = ProcessCameraProvider.getInstance(activity)
-    cameraProviderFuture.addListener({
-        // Used to bind the lifecycle of cameras to the lifecycle owner
-        val cameraProvider = cameraProviderFuture.get()
-        try {
-            hasFrontCamera = cameraProvider.hasCamera(CameraSelector.DEFAULT_FRONT_CAMERA)
-        } catch (e: CameraInfoUnavailableException) {
-            e.printStackTrace()
+fun initialiseChangeCameraButton(activity: AppCompatActivity, features: AvailableFeatures, preferences: SharedPreferences){
+    val changeCameraButton : ImageButton = activity.findViewById(R.id.change_camera_button)
+
+    //If one camera is not available, disable the change camera button
+    //Set the only available camera as the only value possible
+    if(!features.isFrontCameraAvailable || !features.isBackCameraAvailable){
+        changeCameraButton.visibility = View.GONE
+
+        val editor = preferences.edit()
+        if(!features.isFrontCameraAvailable){
+            editor.putInt(SharedPrefs.CAMERA_FACING_KEY, Constant.CAMERA_FRONT)
+        }else{  //Just else because at least a camera is present
+            editor.putInt(SharedPrefs.CAMERA_FACING_KEY, Constant.CAMERA_BACK)
         }
-
-        try {
-            hasBackCamera = cameraProvider.hasCamera(CameraSelector.DEFAULT_BACK_CAMERA)
-        } catch (e: CameraInfoUnavailableException) {
-            e.printStackTrace()
-        }
-
-        val changeCameraButton : ImageButton = activity.findViewById(R.id.change_camera_button)
-
-        //If one camera is not available, disable the change camera button
-        //Set the only available camera as the only value possible
-        if(!hasFrontCamera || !hasBackCamera){
-            changeCameraButton.visibility = View.GONE
-
-            val editor = preferences.edit()
-            if(hasFrontCamera){
-                editor.putInt(SharedPrefs.CAMERA_FACING_KEY, Constant.CAMERA_FRONT)
-            }else{  //Just else because at least a camera is present
-                editor.putInt(SharedPrefs.CAMERA_FACING_KEY, Constant.CAMERA_BACK)
-            }
-            editor.apply()
-        }
-    }, ContextCompat.getMainExecutor(activity))
+        editor.apply()
+    }
 }
 
 fun changeCameraFacingValue(preferences: SharedPreferences){
     val currentValue = preferences.getInt(SharedPrefs.CAMERA_FACING_KEY, Constant.CAMERA_BACK)
 
-    val newValue = (currentValue+1) % 2
+    val newValue = (currentValue+1) % Constant.CAMERA_STATES
 
     val editor = preferences.edit()
     editor.putInt(SharedPrefs.CAMERA_FACING_KEY, newValue)
