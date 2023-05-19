@@ -51,7 +51,7 @@
             <ImageButton
                 android:contentDescription="@string/night_mode_button_description"
 
-                android:id="@+id/night_mode_mode"
+                android:id="@+id/night_mode_button"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_margin="@dimen/button_toolbar_padding"
@@ -62,7 +62,7 @@
 
             <!--Pose shoot-->
             <ImageButton
-                android:id="@+id/pose_shoot_mode"
+                android:id="@+id/pose_shoot_button"
 
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -75,7 +75,7 @@
 
             <!--Frame averaging-->
             <ImageButton
-                android:id="@+id/frame_avg_mode"
+                android:id="@+id/frame_avg_button"
 
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -86,22 +86,9 @@
                 android:scaleType="fitCenter"
                 android:src="@drawable/frame_avg_on" />
 
-            <!--Speech activated shoot-->
-            <ImageButton
-                android:id="@+id/speech_shoot_mode"
-
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_margin="@dimen/button_toolbar_padding"
-                android:layout_weight="1"
-                android:background="@null"
-                android:contentDescription="@string/speech_shoot_button_description"
-                android:scaleType="fitCenter"
-                android:src="@drawable/speech_shoot_on" />
-
             <!--Flash icon-->
             <ImageButton
-                android:id="@+id/flash_mode"
+                android:id="@+id/flash_button"
 
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -204,7 +191,7 @@
         android:id="@+id/pro_mode_button"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:text="@string/pro_mode_text"
+        android:text="@string/pro_text"
         android:textColor="@android:color/black"
         app:backgroundTint="@color/teal_200"
         app:layout_constraintBottom_toBottomOf="parent"
