@@ -35,7 +35,7 @@
 
             <!--Flash icon-->
             <ImageButton
-                android:id="@+id/flash_mode"
+                android:id="@+id/flash_button"
 
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -46,22 +46,9 @@
                 android:scaleType="fitCenter"
                 android:src="@drawable/flash_on" />
 
-            <!--Speech activated shoot-->
-            <ImageButton
-                android:id="@+id/speech_shoot_mode"
-
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:padding="@dimen/button_toolbar_padding"
-                android:layout_weight="1"
-                android:background="@null"
-                android:contentDescription="@string/speech_shoot_button_description"
-                android:scaleType="fitCenter"
-                android:src="@drawable/speech_shoot_on" />
-
             <!--Frame averaging-->
             <ImageButton
-                android:id="@+id/frame_avg_mode"
+                android:id="@+id/frame_avg_button"
 
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -74,7 +61,7 @@
 
             <!--Pose shoot-->
             <ImageButton
-                android:id="@+id/pose_shoot_mode"
+                android:id="@+id/pose_shoot_button"
 
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -87,7 +74,7 @@
 
             <!--Night mode-->
             <ImageButton
-                android:id="@+id/night_mode_mode"
+                android:id="@+id/night_mode_button"
 
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -206,7 +193,7 @@
         android:id="@+id/pro_mode_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/pro_mode_text"
+        android:text="@string/pro_text"
         android:textColor="@android:color/black"
         app:backgroundTint="@color/teal_200"
         app:layout_constraintBottom_toTopOf="@+id/bottom_button_guideline"
