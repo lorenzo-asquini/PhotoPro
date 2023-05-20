@@ -205,6 +205,7 @@
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:background="@null"
+        android:padding="@dimen/button_toolbar_padding"
         android:contentDescription="@string/gallery_button_description"
         android:scaleType="fitCenter"
         android:src="@drawable/gallery"
