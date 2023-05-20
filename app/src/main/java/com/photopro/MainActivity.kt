@@ -1,12 +1,11 @@
 package com.photopro
 
 import android.Manifest
-import android.content.ContentValues
 import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
+import android.content.pm.ActivityInfo
 import android.hardware.camera2.CameraManager
-import android.os.Build
 import android.os.Bundle
 import android.provider.MediaStore
 import android.util.Log
@@ -18,8 +17,6 @@ import androidx.camera.core.ImageCapture
 import androidx.camera.core.ImageCaptureException
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
-import java.text.SimpleDateFormat
-import java.util.*
 import java.util.concurrent.ExecutorService
 import java.util.concurrent.Executors
 
@@ -30,6 +27,9 @@ import java.util.concurrent.Executors
 class MainActivity : AppCompatActivity() {
     //Object that becomes not null when (and if) the camera is started
     private var imageCapture: ImageCapture? = null
+
+    //Variable used to start frame averaging when needed
+    private var imageAnalyzer : MultiPurposeAnalyzer? = null
 
     //Using lateinit makes it possible to initialize later a variable (inside onCreate)
     //Create a cameraExecutor to use the camera
@@ -52,7 +52,9 @@ class MainActivity : AppCompatActivity() {
 
         // Request camera permissions if not already granted
         if (cameraPermissionGranted(this)) {
-            imageCapture = startCamera(this, preferences)  //Start camera if permission already granted
+            val startCameraResult = startCamera(this, preferences)  //Start camera if permission already granted
+            imageCapture = startCameraResult.first
+            imageAnalyzer = startCameraResult.second
         } else {
             //Ask for CAMERA permission
             //The actions to perform when permission request result arrive are described inside onRequestPermissionsResult (below)
@@ -78,7 +80,9 @@ class MainActivity : AppCompatActivity() {
             //To switch to and from always on flash it is necessary to start th camera
             when(savedFlashValue){
                 Constant.FLASH_OFF -> {
-                    imageCapture = startCamera(this, preferences)
+                    val startCameraResult = startCamera(this, preferences)
+                    imageCapture = startCameraResult.first
+                    imageAnalyzer = startCameraResult.second
                     imageCapture!!.flashMode = ImageCapture.FLASH_MODE_OFF
                 }
 
@@ -86,10 +90,16 @@ class MainActivity : AppCompatActivity() {
 
                 Constant.FLASH_AUTO -> imageCapture!!.flashMode = ImageCapture.FLASH_MODE_AUTO
 
-                Constant.FLASH_ALWAYS_ON -> imageCapture = startCamera(this, preferences)
+                Constant.FLASH_ALWAYS_ON -> {
+                    val result = startCamera(this, preferences)
+                    imageCapture = result.first
+                    imageAnalyzer = result.second
+                }
 
                 else -> {
-                    imageCapture = startCamera(this, preferences)
+                    val result = startCamera(this, preferences)
+                    imageCapture = result.first
+                    imageAnalyzer = result.second
                     imageCapture!!.flashMode = ImageCapture.FLASH_MODE_OFF
                 }  //If something goes wrong
             }
@@ -100,7 +110,9 @@ class MainActivity : AppCompatActivity() {
         frameAvgButton.setOnClickListener{
             changeFrameAvgValue(preferences)
             drawFrameAvgButton(this, preferences, true)
-            //No need to restart camera. It has effect only when taking a picture
+            val startCameraResult = startCamera(this, preferences)
+            imageCapture = startCameraResult.first
+            imageAnalyzer = startCameraResult.second
         }
 
         //Add listener to button to change pose shoot mode
@@ -108,7 +120,9 @@ class MainActivity : AppCompatActivity() {
         poseShootButton.setOnClickListener{
             changePoseShootValue(preferences)
             drawPoseShootButton(this, preferences, true)
-            imageCapture = startCamera(this,preferences)  //Start camera to start analyzer
+            val result = startCamera(this,preferences)  //Start camera to start analyzer
+            imageCapture = result.first
+            imageAnalyzer = result.second
         }
 
         //Add listener to button to change night mode mode
@@ -116,7 +130,9 @@ class MainActivity : AppCompatActivity() {
         nightModeButton.setOnClickListener{
             changeNightModeValue(preferences)
             drawNightModeButton(this, preferences, true)
-            imageCapture = startCamera(this,preferences)
+            val result = startCamera(this,preferences)
+            imageCapture = result.first
+            imageAnalyzer = result.second
         }
 
         //Add listener to button to make it take photos
@@ -139,7 +155,9 @@ class MainActivity : AppCompatActivity() {
         //If button is present and pressed, then both cameras are available
         changeCameraButton.setOnClickListener{
             changeCameraFacingValue(preferences)
-            imageCapture = startCamera(this,preferences)
+            val result = startCamera(this,preferences)
+            imageCapture = result.first
+            imageAnalyzer = result.second
             drawAllButtons(this, preferences, features)  //When changing camera the available features change
         }
 
@@ -148,26 +166,23 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun takePhoto() {
+
+        //Vibrate when photo is taken
+        vibratePhone(this, 100)
+
         if(preferences.getInt(SharedPrefs.FRAME_AVG_KEY, Constant.FRAME_AVG_OFF) == Constant.FRAME_AVG_ON){
-            //TODO: find a way to retrieve the image from analyzer and save it
+            //Check to see if a frame average is happening right now. Do not start a new one
+            if(imageAnalyzer!!.framesAveraged == -1) {
+                imageAnalyzer!!.startFrameAvg()  //The image will be saved by the analyzer
+            }
+            return
         }
 
         // Get a stable reference of the modifiable image capture use case
         //If the camera did not start successfully, imageCapture is still null
         val imageCapture = imageCapture ?: return
 
-        // Create time stamped name using the FILENAME_FORMAT defined inside the companion object
-        // This allows the MediaStore to be unique
-        val name = SimpleDateFormat(Constant.FILENAME_FORMAT, Locale.US).format(System.currentTimeMillis())
-
-        //Create MediaStore to store the image. Specify the path of the saved image
-        val contentValues = ContentValues().apply {
-            put(MediaStore.MediaColumns.DISPLAY_NAME, name)
-            put(MediaStore.MediaColumns.MIME_TYPE, "image/jpeg")
-            if(Build.VERSION.SDK_INT > Build.VERSION_CODES.P) {
-                put(MediaStore.Images.Media.RELATIVE_PATH, "Pictures/PhotoPro")
-            }
-        }
+        val contentValues = getSaveImageContentValues()
 
         // Create output options object which contains file + metadata
         // This object is where it is possible to specify things about how the output should be
@@ -181,15 +196,11 @@ class MainActivity : AppCompatActivity() {
             outputOptions,
             ContextCompat.getMainExecutor(this),
             object : ImageCapture.OnImageSavedCallback {
-                override fun onImageSaved(output: ImageCapture.OutputFileResults){
-                    val msg = "Photo capture succeeded: ${output.savedUri}"
-                    //TODO: Toast only for debug
-                    Toast.makeText(baseContext, msg, Toast.LENGTH_SHORT).show()
-                    Log.d(Constant.TAG, msg)
+                override fun onImageSaved(output: ImageCapture.OutputFileResults) {
+                    Log.i(Constant.TAG, "Photo saved")
                 }
-
                 override fun onError(exc: ImageCaptureException) {
-                    Log.e(Constant.TAG, "Photo capture failed: ${exc.message}", exc)
+
                 }
             }
         )
@@ -202,7 +213,9 @@ class MainActivity : AppCompatActivity() {
 
         if (requestCode == Constant.REQUEST_CODE_PERMISSIONS) {
             if (cameraPermissionGranted(this)) {
-                imageCapture = startCamera(this, preferences)  //Start camera if camera permission is granted
+                val result = startCamera(this, preferences)  //Start camera if camera permission is granted
+                imageCapture = result.first
+                imageAnalyzer = result.second
             } else {
                 //Show a message that explains why the app does not work (camera permission not granted) and exit the app
                 Toast.makeText(this, "Permissions for the camera granted by the user.", Toast.LENGTH_SHORT).show()
