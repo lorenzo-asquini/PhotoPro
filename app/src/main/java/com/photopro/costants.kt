@@ -25,6 +25,15 @@ object Constant{
     const val CAMERA_FRONT = 1
     const val CAMERA_STATES = 2  //Number of states the camera can be
 
+    const val HDR_OFF = 0
+    const val HDR_ON = 1
+
+    const val BOKEH_OFF = 0
+    const val BOKEH_ON = 1
+
+    const val FACE_RETOUCH_OFF = 0
+    const val FACE_RETOUCH_ON = 1
+
     //TAG for debug
     const val TAG = "PhotoPro"
 
@@ -33,6 +42,12 @@ object Constant{
 
     //Permission code decided arbitrarily
     const val REQUEST_CODE_PERMISSIONS = 100
+
+    //Key for saving zoom in Bundle
+    const val ZOOM_VALUE_KEY = "zoom_value"
+
+    //To which camera is the zoom value attached to
+    const val ZOOM_VALUE_CAMERA_KEY = "zoom_value_camera_key"
 }
 
 object SharedPrefs{
@@ -41,8 +56,16 @@ object SharedPrefs{
     const val POSE_SHOOT_KEY = "pose_shoot_value"
     const val NIGHT_MODE_KEY = "night_mode_value"
 
-    const val HDR_KEY = "HDR_mode"
-    const val BOKEH_KEY = "bokeh_mode"
+    const val HDR_BACK_KEY = "HDR_back_mode"
+    const val BOKEH_BACK_KEY = "bokeh_back_mode"
+    const val FACE_RETOUCH_BACK_KEY = "face_retouch_back_mode"
+
+    const val HDR_FRONT_KEY = "HDR_front_mode"
+    const val BOKEH_FRONT_KEY = "bokeh_front_mode"
+    const val FACE_RETOUCH_FRONT_KEY = "face_retouch_front_mode"
+
+    const val SMART_DELAY_SECONDS_KEY = "smart_delay_seconds"
+    const val FRAMES_TO_AVERAGE_KEY = "frames_to_average"
 
     const val CAMERA_FACING_KEY = "camera_orientation"
 }
