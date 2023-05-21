@@ -29,7 +29,6 @@ import androidx.camera.extensions.ExtensionsManager
 import androidx.camera.lifecycle.ProcessCameraProvider
 import androidx.core.content.ContextCompat
 import java.text.SimpleDateFormat
-import java.time.Duration
 import java.util.*
 
 //Functions useful for both normal camera and PRO camera
@@ -111,11 +110,11 @@ fun getAvailableFeatures(activity: AppCompatActivity, cameraManager: CameraManag
 
     val availableFeatures = AvailableFeatures(1)
 
-    if(frontCameraId != null){
+    if(frontCameraId != null) {
         availableFeatures.isFrontCameraAvailable = true
 
         val cameraCharacteristics = cameraManager.getCameraCharacteristics(frontCameraId)
-        availableFeatures.isFrontFlashAvailable =  cameraCharacteristics.get(CameraCharacteristics.FLASH_INFO_AVAILABLE)!!
+        availableFeatures.isFrontFlashAvailable = cameraCharacteristics.get(CameraCharacteristics.FLASH_INFO_AVAILABLE)!!
 
         //cameraManager.getCameraExtensionCharacteristics could be used, but it requires higher API levels
         //It becomes uselessly difficult to handle each case. For this reason the extensionManager is used
@@ -129,10 +128,10 @@ fun getAvailableFeatures(activity: AppCompatActivity, cameraManager: CameraManag
                 val extensionsManager = extensionsManagerFuture.get()
                 val cameraSelector = CameraSelector.DEFAULT_FRONT_CAMERA
 
-                availableFeatures.isFrontNightModeAvailable =  extensionsManager.isExtensionAvailable(cameraSelector, ExtensionMode.NIGHT)
-                availableFeatures.isFrontHDRAvailable =  extensionsManager.isExtensionAvailable(cameraSelector, ExtensionMode.HDR)
-                availableFeatures.isFrontBokehAvailable =  extensionsManager.isExtensionAvailable(cameraSelector, ExtensionMode.BOKEH)
-                availableFeatures.isFrontFaceRetouchAvailable =  extensionsManager.isExtensionAvailable(cameraSelector, ExtensionMode.FACE_RETOUCH)
+                availableFeatures.isFrontNightModeAvailable = extensionsManager.isExtensionAvailable(cameraSelector, ExtensionMode.NIGHT)
+                availableFeatures.isFrontHDRAvailable = extensionsManager.isExtensionAvailable(cameraSelector, ExtensionMode.HDR)
+                availableFeatures.isFrontBokehAvailable = extensionsManager.isExtensionAvailable(cameraSelector, ExtensionMode.BOKEH)
+                availableFeatures.isFrontFaceRetouchAvailable = extensionsManager.isExtensionAvailable(cameraSelector, ExtensionMode.FACE_RETOUCH)
 
             }, ContextCompat.getMainExecutor(activity))
         }, ContextCompat.getMainExecutor(activity))
@@ -229,7 +228,7 @@ fun createImageAnalysis(activity: AppCompatActivity, preferences: SharedPreferen
             currentMaxSize = Size(currentMaxSize.height, currentMaxSize.width)
         }
 
-        //TODO: Fix high resolution not working
+        //This will use the maximum resolution supported by the analyzer. This may be lower than the maximum resolution of the camera
         val resStrategy = ResolutionStrategy(currentMaxSize, ResolutionStrategy.FALLBACK_RULE_CLOSEST_HIGHER_THEN_LOWER)
         val resSelector = ResolutionSelector.Builder()
             .setHighResolutionEnabledFlag(HIGH_RESOLUTION_FLAG_ON)

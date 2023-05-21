@@ -2,6 +2,8 @@
 <resources>
     <dimen name="button_toolbar_padding">15dp</dimen>
 
+    <dimen name="focus_circle_size">50dp</dimen>
+
     <dimen name="option_title_font_size">40sp</dimen>
     <dimen name="option_font_size">30sp</dimen>
 

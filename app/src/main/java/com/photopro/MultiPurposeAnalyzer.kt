@@ -147,6 +147,6 @@ class MultiPurposeAnalyzer(private val activity: AppCompatActivity, private val 
     }
 
     companion object{
-        const val FRAME_TO_AVG = 100
+        const val FRAME_TO_AVG = 10  //TODO: Set this in options menu
     }
 }
