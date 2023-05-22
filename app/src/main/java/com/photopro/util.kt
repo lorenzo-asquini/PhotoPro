@@ -3,6 +3,7 @@ package com.photopro
 import android.Manifest
 import android.content.ContentValues
 import android.content.Context
+import android.content.Context.VIBRATOR_MANAGER_SERVICE
 import android.content.Context.VIBRATOR_SERVICE
 import android.content.SharedPreferences
 import android.content.pm.PackageManager
@@ -57,7 +58,8 @@ fun cameraPermissionGranted(baseContext : Context) =
 fun vibratePhone(activity: AppCompatActivity, duration: Long){
     val vib =
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
-            val vibratorManager = activity.getSystemService(Context.VIBRATOR_MANAGER_SERVICE) as VibratorManager
+            //TODO: How to fix?
+            val vibratorManager = activity.getSystemService(VIBRATOR_MANAGER_SERVICE) as VibratorManager
             vibratorManager.defaultVibrator
         } else {
             @Suppress("DEPRECATION")

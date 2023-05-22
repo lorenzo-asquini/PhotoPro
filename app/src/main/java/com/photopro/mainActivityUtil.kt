@@ -157,8 +157,8 @@ fun setPreviewGestures(activity: MainActivity){
                 //Show focus circle where the user tapped
                 val focusCircle: ImageView = activity.findViewById(R.id.tapToFocus_circle)
 
-                focusCircle.x = motionEvent.x
-                focusCircle.y = motionEvent.y
+                focusCircle.x = motionEvent.x - focusCircle.width/2
+                focusCircle.y = motionEvent.y - focusCircle.height/2
 
                 focusCircle.visibility = View.VISIBLE
                 val timeTillInvisible : Long = 2000
@@ -181,7 +181,7 @@ fun setPreviewGestures(activity: MainActivity){
                 // Trigger the focus and metering
                 activity.camera?.cameraControl?.startFocusAndMetering(action)
 
-                return@setOnTouchListener true
+                    return@setOnTouchListener true
             }
             else -> return@setOnTouchListener false
         }

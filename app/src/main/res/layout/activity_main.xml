@@ -138,7 +138,8 @@
             android:src="@drawable/circle"
             android:visibility="invisible"
             android:layout_height="@dimen/focus_circle_size"
-            android:layout_width="@dimen/focus_circle_size"/>
+            android:layout_width="@dimen/focus_circle_size"
+            android:contentDescription="@string/focus_circle_descriptor"/>
     </FrameLayout>
 
     <androidx.constraintlayout.widget.Guideline

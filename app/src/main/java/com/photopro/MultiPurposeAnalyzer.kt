@@ -93,8 +93,10 @@ class MultiPurposeAnalyzer(private val activity: AppCompatActivity, private val 
         //Increase the number of frames used
         framesAveraged++
 
+        val frameToAverage = preferences.getInt(SharedPrefs.FRAMES_TO_AVERAGE_KEY, Constant.DEFAULT_FRAMES_TO_AVERAGE)
+
         //If enough frames are averaged
-        if(framesAveraged >= FRAME_TO_AVG){
+        if(framesAveraged >= frameToAverage){
             //Create bitmap for result from Mat
             val resultBitmap = imageBitmap!!.copy(imageBitmap!!.config, true)
             matToBitmap(frameAvgResult, resultBitmap)
@@ -144,9 +146,5 @@ class MultiPurposeAnalyzer(private val activity: AppCompatActivity, private val 
                 Log.e(Constant.TAG, "Photo save failed: ${e.printStackTrace()}")
             }
         }
-    }
-
-    companion object{
-        const val FRAME_TO_AVG = 10  //TODO: Set this in options menu
     }
 }

@@ -20,7 +20,6 @@ import androidx.core.content.ContextCompat
 import java.util.concurrent.ExecutorService
 import java.util.concurrent.Executors
 
-//TODO: Analyzer null in front camera
 //TODO: Tap to focus not working in front camera
 
 class MainActivity : AppCompatActivity() {
@@ -116,7 +115,9 @@ class MainActivity : AppCompatActivity() {
         //Add listener to button to change frame average mode
         val frameAvgButton: ImageButton = findViewById(R.id.frame_avg_button)
         frameAvgButton.setOnClickListener{
-            if(imageAnalyzer!!.framesAveraged == -1) {  //Cannot stop change frame avg mode while frame avg is happening
+            //Cannot stop change frame avg mode while frame avg is happening
+            //Always allow change when analyzer needs still to be created
+            if(imageAnalyzer == null || imageAnalyzer!!.framesAveraged == -1) {
 
                 changeFrameAvgValue(preferences)
                 drawFrameAvgButton(this, preferences, true)
