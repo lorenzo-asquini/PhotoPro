@@ -34,6 +34,9 @@ object Constant{
     const val FACE_RETOUCH_OFF = 0
     const val FACE_RETOUCH_ON = 1
 
+    const val DEFAULT_SMART_DELAY_SECONDS = 3
+    const val DEFAULT_FRAMES_TO_AVERAGE = 5
+
     //TAG for debug
     const val TAG = "PhotoPro"
 
