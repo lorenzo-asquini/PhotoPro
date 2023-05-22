@@ -11,6 +11,7 @@
     <string name="night_mode_button_description">Select the night mode modality</string>
     <string name="options_button_description">Open the side menu</string>
     <string name="change_camera_button_description">Button to switch camera</string>
+    <string name="focus_circle_descriptor">Circle that indicates the position of the autofocus</string>
 
     <!--OptionsActivity layout-->
     <string name="back_arrow_button_description">Back arrow to exit the activity</string>
