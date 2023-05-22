@@ -117,9 +117,8 @@
         android:orientation="horizontal"
         app:layout_constraintGuide_percent="@dimen/top_view_guideline_percent" />
 
-    <!--Create guideline to set the view height to a percentage of the screen-->
-    <androidx.camera.view.PreviewView
-        android:id="@+id/camera_preview"
+    <!--Create a frame layout containing the view and the circle when present-->
+    <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="0dp"
         app:layout_constraintBottom_toTopOf="@+id/bottom_view_guideline"
@@ -127,7 +126,21 @@
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="@+id/top_view_guideline"
-        app:layout_constraintVertical_bias="1.0"/>
+        app:layout_constraintVertical_bias="1.0">
+
+        <androidx.camera.view.PreviewView
+            android:id="@+id/camera_preview"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+
+        <ImageView
+            android:id="@+id/tapToFocus_circle"
+            android:src="@drawable/circle"
+            android:visibility="invisible"
+            android:layout_height="@dimen/focus_circle_size"
+            android:layout_width="@dimen/focus_circle_size"
+            android:contentDescription="@string/focus_circle_descriptor"/>
+    </FrameLayout>
 
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/bottom_view_guideline"
@@ -147,7 +160,7 @@
     <ImageButton
         android:id="@+id/change_camera_button"
 
-        android:layout_width="0dp"
+        android:layout_width="wrap_content"
         android:layout_height="0dp"
         android:background="@null"
         android:contentDescription="@string/change_camera_button_description"
