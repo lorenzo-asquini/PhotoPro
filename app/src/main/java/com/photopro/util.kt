@@ -34,23 +34,23 @@ import java.util.*
 
 //Functions useful for both normal camera and PRO camera
 
-data class AvailableFeatures(val dummy : Int){
-    var isBackCameraAvailable = false
-    var isFrontCameraAvailable = false
+data class AvailableFeatures(
+    var isBackCameraAvailable : Boolean = false,
+    var isFrontCameraAvailable : Boolean = false,
 
-    var isFrontFlashAvailable = false
-    var isBackFlashAvailable = false
+    var isFrontFlashAvailable : Boolean = false,
+    var isBackFlashAvailable : Boolean = false,
 
-    var isFrontNightModeAvailable = false
-    var isFrontBokehAvailable = false
-    var isFrontHDRAvailable = false
-    var isFrontFaceRetouchAvailable = false
+    var isFrontNightModeAvailable : Boolean = false,
+    var isFrontBokehAvailable : Boolean = false,
+    var isFrontHDRAvailable : Boolean = false,
+    var isFrontFaceRetouchAvailable : Boolean = false,
 
-    var isBackNightModeAvailable = false
-    var isBackBokehAvailable = false
-    var isBackHDRAvailable = false
-    var isBackFaceRetouchAvailable = false
-}
+    var isBackNightModeAvailable : Boolean = false,
+    var isBackBokehAvailable : Boolean = false,
+    var isBackHDRAvailable : Boolean = false,
+    var isBackFaceRetouchAvailable : Boolean = false
+){}
 
 fun cameraPermissionGranted(baseContext : Context) =
     ContextCompat.checkSelfPermission(baseContext, Manifest.permission.CAMERA) == PackageManager.PERMISSION_GRANTED
@@ -110,7 +110,7 @@ fun getAvailableFeatures(activity: AppCompatActivity, cameraManager: CameraManag
     val frontCameraId = getFrontCameraId(cameraManager)
     val backCameraId = getBackCameraId(cameraManager)
 
-    val availableFeatures = AvailableFeatures(1)
+    val availableFeatures = AvailableFeatures()
 
     if(frontCameraId != null) {
         availableFeatures.isFrontCameraAvailable = true
