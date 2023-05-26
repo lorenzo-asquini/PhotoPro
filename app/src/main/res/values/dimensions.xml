@@ -5,6 +5,8 @@
     <dimen name="gallery_button_toolbar_padding">22dp</dimen>
     <dimen name="image_capture_button_toolbar_margin">10dp</dimen>
 
+    <dimen name="focus_circle_size">50dp</dimen>
+
     <dimen name="option_title_font_size">40sp</dimen>
     <dimen name="option_font_size">30sp</dimen>
 
