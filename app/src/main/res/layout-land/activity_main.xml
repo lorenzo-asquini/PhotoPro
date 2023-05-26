@@ -118,19 +118,19 @@
 
     <!--Create a frame layout containing the view and the circle when present-->
     <FrameLayout
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        app:layout_constraintBottom_toTopOf="@+id/bottom_view_guideline"
-        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        app:layout_constraintBottom_toTopOf="parent"
+        app:layout_constraintEnd_toEndOf="@+id/bottom_view_guideline"
         app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/top_view_guideline"
+        app:layout_constraintStart_toStartOf="@+id/top_view_guideline"
+        app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="1.0">
 
         <androidx.camera.view.PreviewView
             android:id="@+id/camera_preview"
             android:layout_width="match_parent"
-            android:layout_height="match_parent" />
+            android:layout_height="match_parent"/>
 
         <ImageView
             android:id="@+id/tapToFocus_circle"
@@ -169,10 +169,8 @@
         app:layout_constraintDimensionRatio="1:1"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/bottom_change_camera_button_guideline"
-        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="@+id/top_change_camera_button_guideline"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="1.0" />
+        app:layout_constraintTop_toTopOf="parent" />
 
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/bottom_change_camera_button_guideline"

@@ -7,13 +7,32 @@
 
     <dimen name="focus_circle_size">50dp</dimen>
 
+
     <dimen name="option_title_font_size">40sp</dimen>
     <dimen name="option_font_size">30sp</dimen>
 
     <dimen name="option_textView_bottom_top_padding">5dp</dimen>
     <dimen name="option_textView_left_padding">5dp</dimen>
 
-    <dimen name="option_toolbar_height">54dp</dimen>
+    <dimen name="option_toolbar_height">45dp</dimen>
 
     <dimen name="option_space_height">15dp</dimen>
+
+    <!--SETTINGS DIMENSIONS-->
+    <dimen name="back_padding">10dp</dimen>
+    <dimen name="main_title_font_size">25sp</dimen>
+    <dimen name="spaces">5dp</dimen>
+    <dimen name="titles_font_size">20sp</dimen>
+    <dimen name="titles_padding">5dp</dimen>
+    <dimen name="start_end_padding">30dp</dimen>
+    <dimen name="top_bottom_padding">10dp</dimen>
+    <dimen name="text_font_size">15sp</dimen>
+    <dimen name="small_text_font_size">10sp</dimen>
+
+    <dimen name="grid_icon_percentage">10</dimen>
+    <dimen name="grid_text_percentage">50</dimen>
+    <dimen name="grid_toogle_button_percentage">20</dimen>
+    <dimen name="grid_icon_dimensions">50dp</dimen>
+    <dimen name="grid_icon_padding">8dp</dimen>
+
 </resources>
