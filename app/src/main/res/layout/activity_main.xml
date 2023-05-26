@@ -107,7 +107,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        app:layout_constraintGuide_percent="0.09" />
+        app:layout_constraintGuide_percent="@dimen/bottom_features_toolbar_guideline_percent" />
 
     <!--Create guideline to set the view height to a percentage of the screen-->
     <androidx.constraintlayout.widget.Guideline
@@ -153,6 +153,7 @@
         android:contentDescription="@string/change_camera_button_description"
         android:scaleType="fitCenter"
         android:src="@drawable/change_camera"
+        app:layout_constraintDimensionRatio="1:1"
         app:layout_constraintBottom_toTopOf="@+id/bottom_change_camera_button_guideline"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -165,19 +166,11 @@
         android:orientation="horizontal"
         app:layout_constraintGuide_percent="@dimen/bottom_change_camera_button_guideline_percent" />
 
-    <!--Create guideline to set the button height and width to a percentage of the screen-->
-    <androidx.constraintlayout.widget.Guideline
-        android:id="@+id/top_buttons_guideline"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        app:layout_constraintGuide_percent="@dimen/top_buttons_guideline_percent" />
-
     <Button
         android:id="@+id/image_capture_button"
         android:layout_width="0dp"
-
         android:layout_height="0dp"
+        android:layout_margin="@dimen/image_capture_button_toolbar_margin"
         android:background="@drawable/round_button"
         android:contentDescription="@string/capture_button_description"
         app:backgroundTint="@color/white"
@@ -187,19 +180,22 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/top_buttons_guideline" />
+        app:layout_constraintTop_toTopOf="@+id/bottom_view_guideline" />
 
-    <Button
+    <ImageButton
         android:id="@+id/pro_mode_button"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/pro_text"
-        android:textColor="@android:color/black"
-        app:backgroundTint="@color/teal_200"
+
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:background="@null"
+        android:padding="@dimen/pro_button_toolbar_padding"
+        android:scaleType="fitCenter"
+        android:src="@drawable/pro"
         app:layout_constraintBottom_toTopOf="@+id/bottom_button_guideline"
         app:layout_constraintEnd_toStartOf="@+id/image_capture_button"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/top_buttons_guideline" />
+        app:layout_constraintTop_toTopOf="@+id/bottom_view_guideline"
+        app:layout_constraintDimensionRatio="1:1" />
 
     <ImageButton
         android:id="@+id/gallery_button"
@@ -207,7 +203,7 @@
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:background="@null"
-        android:padding="@dimen/button_toolbar_padding"
+        android:padding="@dimen/gallery_button_toolbar_padding"
         android:contentDescription="@string/gallery_button_description"
         android:scaleType="fitCenter"
         android:src="@drawable/gallery"
@@ -215,7 +211,7 @@
         app:layout_constraintDimensionRatio="1:1"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/image_capture_button"
-        app:layout_constraintTop_toTopOf="@+id/top_buttons_guideline" />
+        app:layout_constraintTop_toTopOf="@+id/bottom_view_guideline" />
 
     <!--Create guideline to set the button height and width to a percentage of the screen-->
     <androidx.constraintlayout.widget.Guideline
