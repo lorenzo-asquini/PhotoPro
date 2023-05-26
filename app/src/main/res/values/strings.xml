@@ -37,4 +37,14 @@
     <string name="face_retouch_back_camera_description">Face Retouch for back camera</string>
     <string name="face_retouch_front_camera_description">Face Retouch for front camera</string>
 
+    <string name="smart_delay_seconds_text">Smart Delay Seconds</string>
+    <string name="frame_avg_frame_number_text">Number of Frame for\nFrame Averaging</string>
+    <string name="smart_delay_notification_sound_text">Allow a notification\nsound forSmart Delay</string>
+
+    <string name="smart_delay_seconds_default_value">3</string>
+    <string name="frame_avg_frame_number_default_value">60</string>
+
+    <string name="smart_delay_notification_sound_icon_description">Icon for Smart Delay notification sound</string>
+    <string name="smart_delay_notification_sound_toggle_button_description">Toggle button for Smart Delay notification sound</string>
+
 </resources>

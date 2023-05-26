@@ -21,7 +21,7 @@
     <!--SETTINGS DIMENSIONS-->
     <dimen name="back_padding">10dp</dimen>
     <dimen name="main_title_font_size">25sp</dimen>
-    <dimen name="spaces">5dp</dimen>
+    <dimen name="spaces">10dp</dimen>
     <dimen name="titles_font_size">20sp</dimen>
     <dimen name="titles_padding">5dp</dimen>
     <dimen name="start_end_padding">30dp</dimen>
@@ -31,8 +31,10 @@
 
     <dimen name="grid_icon_percentage">10</dimen>
     <dimen name="grid_text_percentage">50</dimen>
-    <dimen name="grid_toogle_button_percentage">20</dimen>
+    <dimen name="grid_toggle_button_percentage">20</dimen>
     <dimen name="grid_icon_dimensions">50dp</dimen>
-    <dimen name="grid_icon_padding">8dp</dimen>
+    <dimen name="grid_icon_padding">12dp</dimen>
+
+    <dimen name="grid_edit_text_percentage">40</dimen>
 
 </resources>

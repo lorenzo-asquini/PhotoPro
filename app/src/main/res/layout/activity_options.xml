@@ -68,7 +68,6 @@
         android:paddingTop="@dimen/top_bottom_padding"
         android:paddingBottom="@dimen/top_bottom_padding">
 
-
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -78,6 +77,7 @@
             <TextView
                 android:id="@+id/extensions_title_textView"
                 android:text="@string/extensions_text"
+                android:textStyle="bold"
 
                 android:textColor="@color/white"
                 android:backgroundTint="@color/darkGray"
@@ -104,7 +104,7 @@
                 <TextView
                     android:layout_column= "2"
                     android:layout_row= "0"
-                    android:layout_columnWeight="@dimen/grid_toogle_button_percentage"
+                    android:layout_columnWeight="@dimen/grid_toggle_button_percentage"
 
                     android:id="@+id/front_camera_textView"
                     android:text="@string/front_camera_text"
@@ -120,7 +120,7 @@
                 <TextView
                     android:layout_column= "3"
                     android:layout_row= "0"
-                    android:layout_columnWeight="@dimen/grid_toogle_button_percentage"
+                    android:layout_columnWeight="@dimen/grid_toggle_button_percentage"
 
                     android:id="@+id/back_camera_textView"
                     android:text="@string/back_camera_text"
@@ -144,7 +144,7 @@
                     android:layout_height="@dimen/grid_icon_dimensions"
                     android:padding="@dimen/grid_icon_padding"
                     android:background="@null"
-                    android:src="@drawable/pose_shoot_on"
+                    android:src="@drawable/hdr"
                     android:layout_gravity="center"
                     android:contentDescription="@string/HDR_description"/>
 
@@ -166,22 +166,24 @@
                 <com.google.android.material.switchmaterial.SwitchMaterial
                     android:layout_column= "2"
                     android:layout_row= "1"
-                    android:layout_columnWeight="@dimen/grid_toogle_button_percentage"
+                    android:layout_columnWeight="@dimen/grid_toggle_button_percentage"
                     android:id="@+id/HDR_back_camera_switch"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:contentDescription="@string/HDR_back_camera_description"
-                    android:layout_gravity="center"/>
+                    android:layout_gravity="center"
+                    android:backgroundTint="@color/lightBlue"/>
 
                 <com.google.android.material.switchmaterial.SwitchMaterial
                     android:layout_column= "3"
                     android:layout_row= "1"
-                    android:layout_columnWeight="@dimen/grid_toogle_button_percentage"
+                    android:layout_columnWeight="@dimen/grid_toggle_button_percentage"
                     android:id="@+id/HDR_front_camera_switch"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:contentDescription="@string/HDR_front_camera_description"
-                    android:layout_gravity="center"/>
+                    android:layout_gravity="center"
+                    android:backgroundTint="@color/lightBlue"/>
 
                 <!--third row-->
                 <ImageView
@@ -194,7 +196,7 @@
                     android:layout_height="@dimen/grid_icon_dimensions"
                     android:padding="@dimen/grid_icon_padding"
                     android:background="@null"
-                    android:src="@drawable/pose_shoot_on"
+                    android:src="@drawable/bokeh"
                     android:layout_gravity="center"
                     android:contentDescription="@string/bokeh_description"/>
 
@@ -216,22 +218,24 @@
                 <com.google.android.material.switchmaterial.SwitchMaterial
                     android:layout_column= "2"
                     android:layout_row= "2"
-                    android:layout_columnWeight="@dimen/grid_toogle_button_percentage"
+                    android:layout_columnWeight="@dimen/grid_toggle_button_percentage"
                     android:id="@+id/bokeh_back_camera_switch"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:contentDescription="@string/bokeh_back_camera_description"
-                    android:layout_gravity="center"/>
+                    android:layout_gravity="center"
+                    android:backgroundTint="@color/lightBlue"/>
 
                 <com.google.android.material.switchmaterial.SwitchMaterial
                     android:layout_column= "3"
                     android:layout_row= "2"
-                    android:layout_columnWeight="@dimen/grid_toogle_button_percentage"
+                    android:layout_columnWeight="@dimen/grid_toggle_button_percentage"
                     android:id="@+id/bokeh_front_camera_switch"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:contentDescription="@string/bokeh_front_camera_description"
-                    android:layout_gravity="center"/>
+                    android:layout_gravity="center"
+                    android:backgroundTint="@color/lightBlue"/>
 
                 <!--fourth row-->
                 <ImageView
@@ -244,7 +248,7 @@
                     android:layout_height="@dimen/grid_icon_dimensions"
                     android:padding="@dimen/grid_icon_padding"
                     android:background="@null"
-                    android:src="@drawable/pose_shoot_on"
+                    android:src="@drawable/face_retouch"
                     android:layout_gravity="center"
                     android:contentDescription="@string/face_retouch_description"/>
 
@@ -264,24 +268,28 @@
                     android:layout_gravity="center_vertical"/>
 
                 <com.google.android.material.switchmaterial.SwitchMaterial
-                    android:layout_column= "2"
-                    android:layout_row= "3"
-                    android:layout_columnWeight="@dimen/grid_toogle_button_percentage"
                     android:id="@+id/face_retouch_back_camera_switch"
                     android:layout_width="wrap_content"
+
                     android:layout_height="wrap_content"
+                    android:layout_row="3"
+
+                    android:layout_column="2"
+                    android:layout_columnWeight="@dimen/grid_toggle_button_percentage"
+                    android:layout_gravity="center"
                     android:contentDescription="@string/face_retouch_back_camera_description"
-                    android:layout_gravity="center"/>
+                    android:backgroundTint="@color/lightBlue"/>
 
                 <com.google.android.material.switchmaterial.SwitchMaterial
                     android:layout_column= "3"
                     android:layout_row= "3"
-                    android:layout_columnWeight="@dimen/grid_toogle_button_percentage"
+                    android:layout_columnWeight="@dimen/grid_toggle_button_percentage"
                     android:id="@+id/face_retouch_front_camera_switch"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:contentDescription="@string/face_retouch_front_camera_description"
-                    android:layout_gravity="center"/>
+                    android:layout_gravity="center"
+                    android:backgroundTint="@color/lightBlue"/>
 
             </GridLayout>
 
@@ -290,11 +298,17 @@
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/spaces" />
 
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="@color/white"/>
+
             <!--Section title: Options-->
 
             <TextView
                 android:id="@+id/options_title_textView"
                 android:text="@string/options_text"
+                android:textStyle="bold"
 
                 android:textColor="@color/white"
                 android:backgroundTint="@color/darkGray"
@@ -310,9 +324,155 @@
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/spaces" />
 
+            <GridLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+
+                android:rowCount="3"
+                android:columnCount="3">
+
+                <!--first row-->
+                <ImageView
+
+                    android:layout_column= "0"
+                    android:layout_row= "0"
+                    android:layout_columnWeight="@dimen/grid_icon_percentage"
+
+                    android:layout_width="@dimen/grid_icon_dimensions"
+                    android:layout_height="@dimen/grid_icon_dimensions"
+                    android:padding="@dimen/grid_icon_padding"
+                    android:background="@null"
+                    android:src="@drawable/smart_delay_seconds"
+                    android:layout_gravity="center"
+                    android:contentDescription="@string/face_retouch_description"/>
+
+                <TextView
+                    android:layout_column= "1"
+                    android:layout_row= "0"
+                    android:layout_columnWeight="@dimen/grid_text_percentage"
+
+                    android:id="@+id/smart_delay_seconds_textView"
+                    android:text="@string/smart_delay_seconds_text"
+
+                    android:textColor="@color/white"
+                    android:textSize="@dimen/text_font_size"
+
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"/>
+
+                <EditText
+                    android:id="@+id/smart_delay_seconds"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_row="0"
+                    android:layout_column="2"
+                    android:layout_columnWeight="@dimen/grid_edit_text_percentage"
+                    android:backgroundTint="@color/white"
+                    android:textColor="@color/white"
+                    android:maxLength="2"
+                    android:inputType="number"
+                    android:textAlignment="center"
+                    android:text="@string/smart_delay_seconds_default_value"
+                    android:autofillHints="phone"
+                    android:labelFor="@+id/smart_delay_seconds_textView"/>
+
+                <!--first row-->
+                <ImageView
+
+                    android:layout_column= "0"
+                    android:layout_row= "1"
+                    android:layout_columnWeight="@dimen/grid_icon_percentage"
+
+                    android:layout_width="@dimen/grid_icon_dimensions"
+                    android:layout_height="@dimen/grid_icon_dimensions"
+                    android:padding="@dimen/grid_icon_padding"
+                    android:background="@null"
+                    android:src="@drawable/number_of_frame"
+                    android:layout_gravity="center"
+                    android:contentDescription="@string/face_retouch_description"/>
+
+                <TextView
+                    android:layout_column= "1"
+                    android:layout_row= "1"
+                    android:layout_columnWeight="@dimen/grid_text_percentage"
+
+                    android:id="@+id/frame_avg_frame_number_textView"
+                    android:text="@string/frame_avg_frame_number_text"
+
+                    android:textColor="@color/white"
+                    android:textSize="@dimen/text_font_size"
+
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"/>
+
+                <EditText
+                    android:layout_column= "2"
+                    android:layout_row= "1"
+                    android:layout_columnWeight="@dimen/grid_edit_text_percentage"
+                    android:id="@+id/frame_avg_frame_number"
+                    android:layout_width="wrap_content"
+
+                    android:layout_height="wrap_content"
+                    android:backgroundTint="@color/white"
+                    android:textColor="@color/white"
+                    android:maxLength="3"
+                    android:inputType="number"
+                    android:textAlignment="center"
+                    android:text="@string/frame_avg_frame_number_default_value"
+                    android:autofillHints="phone"
+                    android:labelFor="@+id/frame_avg_frame_number_textView"/>
+
+                <!--third row-->
+                <ImageView
+
+                    android:layout_column= "0"
+                    android:layout_row= "2"
+                    android:layout_columnWeight="@dimen/grid_icon_percentage"
+
+                    android:layout_width="@dimen/grid_icon_dimensions"
+                    android:layout_height="@dimen/grid_icon_dimensions"
+                    android:padding="@dimen/grid_icon_padding"
+                    android:background="@null"
+                    android:src="@drawable/notification_sound"
+                    android:layout_gravity="center"
+                    android:contentDescription="@string/smart_delay_notification_sound_icon_description"/>
+
+                <TextView
+                    android:layout_column= "1"
+                    android:layout_row= "2"
+                    android:layout_columnWeight="@dimen/grid_text_percentage"
+
+                    android:id="@+id/smart_delay_notification_sound_textView"
+                    android:text="@string/smart_delay_notification_sound_text"
+
+                    android:textColor="@color/white"
+                    android:textSize="@dimen/text_font_size"
+
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"/>
+
+                    <com.google.android.material.switchmaterial.SwitchMaterial
+                    android:id="@+id/smart_delay_notification_sound_switch"
+                    android:layout_width="wrap_content"
+
+                    android:layout_height="wrap_content"
+
+                    android:layout_row="2"
+                    android:layout_column="2"
+                    android:layout_columnWeight="@dimen/grid_edit_text_percentage"
+                    android:layout_gravity="center"
+                    android:contentDescription="@string/smart_delay_notification_sound_toggle_button_description"
+                    android:backgroundTint="@color/lightBlue"/>
+
+            </GridLayout>
+
         </LinearLayout>
 
     </ScrollView>
+
 </LinearLayout>
 
 
