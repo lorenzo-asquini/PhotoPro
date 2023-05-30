@@ -60,7 +60,7 @@ fun drawFlashButton(activity: AppCompatActivity, preferences: SharedPreferences,
         Constant.FLASH_OFF -> flashButton.setImageResource(R.drawable.flash_off)
         Constant.FLASH_ON -> flashButton.setImageResource(R.drawable.flash_on)
         Constant.FLASH_AUTO -> flashButton.setImageResource(R.drawable.flash_auto)
-        //Constant.FLASH_ALWAYS_ON -> flashButton.setImageResource(R.drawable.flash_always_on)
+        Constant.FLASH_ALWAYS_ON -> flashButton.setImageResource(R.drawable.flash_always_on)
     }
 }
 

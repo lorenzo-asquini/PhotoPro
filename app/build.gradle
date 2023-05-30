@@ -63,4 +63,6 @@ dependencies {
     implementation('androidx.concurrent:concurrent-futures-ktx:1.1.0')
 
     implementation project(":openCV")
+
+    implementation 'com.google.android.material:material:1.0.0-beta01'
 }
