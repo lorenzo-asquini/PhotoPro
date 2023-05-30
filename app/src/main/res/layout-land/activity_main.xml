@@ -41,7 +41,7 @@
                 android:id="@+id/options_button"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_margin="@dimen/button_toolbar_padding"
+                android:padding="@dimen/button_toolbar_padding"
                 android:src="@drawable/vertical_dots"
                 android:scaleType="fitCenter"
                 android:background="@null"
@@ -54,7 +54,7 @@
                 android:id="@+id/night_mode_button"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_margin="@dimen/button_toolbar_padding"
+                android:padding="@dimen/button_toolbar_padding"
                 android:background="@null"
                 android:scaleType="fitCenter"
                 android:src="@drawable/night_mode_on"
@@ -66,7 +66,7 @@
 
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_margin="@dimen/button_toolbar_padding"
+                android:padding="@dimen/button_toolbar_padding"
                 android:layout_weight="1"
                 android:background="@null"
                 android:contentDescription="@string/pose_shoot_button_description"
@@ -79,7 +79,7 @@
 
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_margin="@dimen/button_toolbar_padding"
+                android:padding="@dimen/button_toolbar_padding"
                 android:layout_weight="1"
                 android:background="@null"
                 android:contentDescription="@string/frame_avg_button_description"
@@ -92,7 +92,7 @@
 
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_margin="@dimen/button_toolbar_padding"
+                android:padding="@dimen/button_toolbar_padding"
                 android:layout_weight="1"
                 android:background="@null"
                 android:contentDescription="@string/flash_button_description"
@@ -199,15 +199,17 @@
     <ImageButton
         android:id="@+id/pro_mode_button"
         android:layout_width="0dp"
-        android:layout_height="wrap_content"
+        android:layout_height="0dp"
         android:background="@null"
         android:padding="@dimen/pro_button_toolbar_padding"
         android:scaleType="fitCenter"
         android:src="@drawable/pro"
+        android:contentDescription="@string/pro_mode_button_description"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/bottom_button_guideline"
         app:layout_constraintStart_toStartOf="@+id/bottom_view_guideline"
-        app:layout_constraintTop_toBottomOf="@+id/image_capture_button" />
+        app:layout_constraintTop_toBottomOf="@+id/image_capture_button"
+        app:layout_constraintDimensionRatio="1:1"/>
 
     <ImageButton
         android:id="@+id/gallery_button"
@@ -222,7 +224,8 @@
         app:layout_constraintBottom_toTopOf="@+id/image_capture_button"
         app:layout_constraintEnd_toStartOf="@+id/bottom_button_guideline"
         app:layout_constraintStart_toStartOf="@+id/bottom_view_guideline"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintDimensionRatio="1:1"/>
 
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/bottom_button_guideline"

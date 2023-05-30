@@ -12,6 +12,7 @@
     <string name="options_button_description">Open the side menu</string>
     <string name="change_camera_button_description">Button to switch camera</string>
     <string name="focus_circle_descriptor">Circle that indicates the position of the autofocus</string>
+    <string name="pro_mode_button_description">Button used to switch to PRO mode</string>
 
     <!--OptionsActivity layout-->
     <string name="back_arrow_button_description">Back arrow to exit the activity</string>
@@ -38,11 +39,12 @@
     <string name="face_retouch_front_camera_description">Face Retouch for front camera</string>
 
     <string name="smart_delay_seconds_text">Smart Delay Seconds</string>
-    <string name="frame_avg_frame_number_text">Number of Frame for\nFrame Averaging</string>
-    <string name="smart_delay_notification_sound_text">Allow a notification\nsound forSmart Delay</string>
+    <string name="frame_avg_frame_number_text">Number of Frames for\nFrame Averaging</string>
+    <string name="smart_delay_notification_sound_text">Allow a notification\nsound for Smart Delay</string>
 
+    <!--These two strings will be overwritten at runtime-->
     <string name="smart_delay_seconds_default_value">3</string>
-    <string name="frame_avg_frame_number_default_value">60</string>
+    <string name="frame_avg_frame_number_default_value">5</string>
 
     <string name="smart_delay_notification_sound_icon_description">Icon for Smart Delay notification sound</string>
     <string name="smart_delay_notification_sound_toggle_button_description">Toggle button for Smart Delay notification sound</string>

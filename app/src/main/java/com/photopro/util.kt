@@ -50,7 +50,7 @@ data class AvailableFeatures(
     var isBackBokehAvailable : Boolean = false,
     var isBackHDRAvailable : Boolean = false,
     var isBackFaceRetouchAvailable : Boolean = false
-){}
+)
 
 fun cameraPermissionGranted(baseContext : Context) =
     ContextCompat.checkSelfPermission(baseContext, Manifest.permission.CAMERA) == PackageManager.PERMISSION_GRANTED

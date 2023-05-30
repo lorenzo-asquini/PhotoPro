@@ -29,7 +29,6 @@
                 android:src="@drawable/back_arrow"
                 android:contentDescription="@string/back_arrow_button_description"
 
-
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:padding="@dimen/back_padding"
@@ -68,406 +67,422 @@
         android:paddingTop="@dimen/top_bottom_padding"
         android:paddingBottom="@dimen/top_bottom_padding">
 
+        <!--LinearLayout containing everything-->
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical">
 
-            <!--Section title: Extensions-->
-            <TextView
-                android:id="@+id/extensions_title_textView"
-                android:text="@string/extensions_text"
-                android:textStyle="bold"
-
-                android:textColor="@color/white"
-                android:backgroundTint="@color/darkGray"
-                android:textSize="@dimen/titles_font_size"
-
+            <!--LinearLayout containing the extension handling-->
+            <LinearLayout
+                android:id="@+id/extension_menu"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:orientation="vertical">
 
-                android:padding = "@dimen/titles_padding" />
-
-            <Space
-                android:id="@+id/options_menu_space_1"
-                android:layout_width="match_parent"
-                android:layout_height="@dimen/spaces" />
-
-            <GridLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-
-                android:rowCount="4"
-                android:columnCount="4">
-
-                <!--first row-->
+                <!--Section title: Extensions-->
                 <TextView
-                    android:layout_column= "2"
-                    android:layout_row= "0"
-                    android:layout_columnWeight="@dimen/grid_toggle_button_percentage"
-
-                    android:id="@+id/front_camera_textView"
-                    android:text="@string/front_camera_text"
+                    android:id="@+id/extensions_title_textView"
+                    android:text="@string/extensions_text"
+                    android:textStyle="bold"
 
                     android:textColor="@color/white"
-                    android:textSize="@dimen/small_text_font_size"
-                    android:textAlignment="center"
+                    android:backgroundTint="@color/darkGray"
+                    android:textSize="@dimen/titles_font_size"
 
-                    android:layout_width="wrap_content"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_gravity="center"/>
 
-                <TextView
-                    android:layout_column= "3"
-                    android:layout_row= "0"
-                    android:layout_columnWeight="@dimen/grid_toggle_button_percentage"
+                    android:padding = "@dimen/titles_padding" />
 
-                    android:id="@+id/back_camera_textView"
-                    android:text="@string/back_camera_text"
+                <Space
+                    android:id="@+id/options_menu_space_1"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/spaces" />
 
-                    android:textColor="@color/white"
-                    android:textSize="@dimen/small_text_font_size"
-                    android:textAlignment="center"
-
-                    android:layout_width="wrap_content"
+                <!--GridLayout containing all the options-->
+                <GridLayout
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_gravity="center"/>
-
-                <!--second row-->
-                <ImageView
-
-                    android:layout_column= "0"
-                    android:layout_row= "1"
-                    android:layout_columnWeight="@dimen/grid_icon_percentage"
-
-                    android:layout_width="@dimen/grid_icon_dimensions"
-                    android:layout_height="@dimen/grid_icon_dimensions"
-                    android:padding="@dimen/grid_icon_padding"
-                    android:background="@null"
-                    android:src="@drawable/hdr"
-                    android:layout_gravity="center"
-                    android:contentDescription="@string/HDR_description"/>
-
-                <TextView
-                    android:layout_column= "1"
-                    android:layout_row= "1"
-                    android:layout_columnWeight="@dimen/grid_text_percentage"
-
-                    android:id="@+id/hdr_textView"
-                    android:text="@string/HDR_text"
-
-                    android:textColor="@color/white"
-                    android:textSize="@dimen/text_font_size"
-
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center_vertical"/>
-
-                <com.google.android.material.switchmaterial.SwitchMaterial
-                    android:layout_column= "2"
-                    android:layout_row= "1"
-                    android:layout_columnWeight="@dimen/grid_toggle_button_percentage"
-                    android:id="@+id/HDR_back_camera_switch"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:contentDescription="@string/HDR_back_camera_description"
-                    android:layout_gravity="center"
-                    android:backgroundTint="@color/lightBlue"/>
-
-                <com.google.android.material.switchmaterial.SwitchMaterial
-                    android:layout_column= "3"
-                    android:layout_row= "1"
-                    android:layout_columnWeight="@dimen/grid_toggle_button_percentage"
-                    android:id="@+id/HDR_front_camera_switch"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:contentDescription="@string/HDR_front_camera_description"
-                    android:layout_gravity="center"
-                    android:backgroundTint="@color/lightBlue"/>
-
-                <!--third row-->
-                <ImageView
-
-                    android:layout_column= "0"
-                    android:layout_row= "2"
-                    android:layout_columnWeight="@dimen/grid_icon_percentage"
-
-                    android:layout_width="@dimen/grid_icon_dimensions"
-                    android:layout_height="@dimen/grid_icon_dimensions"
-                    android:padding="@dimen/grid_icon_padding"
-                    android:background="@null"
-                    android:src="@drawable/bokeh"
-                    android:layout_gravity="center"
-                    android:contentDescription="@string/bokeh_description"/>
-
-                <TextView
-                    android:layout_column= "1"
-                    android:layout_row= "2"
-                    android:layout_columnWeight="@dimen/grid_text_percentage"
-
-                    android:id="@+id/bokeh_textView"
-                    android:text="@string/bokeh_text"
-
-                    android:textColor="@color/white"
-                    android:textSize="@dimen/text_font_size"
-
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center_vertical"/>
-
-                <com.google.android.material.switchmaterial.SwitchMaterial
-                    android:layout_column= "2"
-                    android:layout_row= "2"
-                    android:layout_columnWeight="@dimen/grid_toggle_button_percentage"
-                    android:id="@+id/bokeh_back_camera_switch"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:contentDescription="@string/bokeh_back_camera_description"
-                    android:layout_gravity="center"
-                    android:backgroundTint="@color/lightBlue"/>
-
-                <com.google.android.material.switchmaterial.SwitchMaterial
-                    android:layout_column= "3"
-                    android:layout_row= "2"
-                    android:layout_columnWeight="@dimen/grid_toggle_button_percentage"
-                    android:id="@+id/bokeh_front_camera_switch"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:contentDescription="@string/bokeh_front_camera_description"
-                    android:layout_gravity="center"
-                    android:backgroundTint="@color/lightBlue"/>
-
-                <!--fourth row-->
-                <ImageView
-
-                    android:layout_column= "0"
-                    android:layout_row= "3"
-                    android:layout_columnWeight="@dimen/grid_icon_percentage"
-
-                    android:layout_width="@dimen/grid_icon_dimensions"
-                    android:layout_height="@dimen/grid_icon_dimensions"
-                    android:padding="@dimen/grid_icon_padding"
-                    android:background="@null"
-                    android:src="@drawable/face_retouch"
-                    android:layout_gravity="center"
-                    android:contentDescription="@string/face_retouch_description"/>
-
-                <TextView
-                    android:layout_column= "1"
-                    android:layout_row= "3"
-                    android:layout_columnWeight="@dimen/grid_text_percentage"
-
-                    android:id="@+id/face_retouch_textView"
-                    android:text="@string/face_retouch_text"
-
-                    android:textColor="@color/white"
-                    android:textSize="@dimen/text_font_size"
-
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center_vertical"/>
-
-                <com.google.android.material.switchmaterial.SwitchMaterial
-                    android:id="@+id/face_retouch_back_camera_switch"
-                    android:layout_width="wrap_content"
-
-                    android:layout_height="wrap_content"
-                    android:layout_row="3"
-
-                    android:layout_column="2"
-                    android:layout_columnWeight="@dimen/grid_toggle_button_percentage"
-                    android:layout_gravity="center"
-                    android:contentDescription="@string/face_retouch_back_camera_description"
-                    android:backgroundTint="@color/lightBlue"/>
-
-                <com.google.android.material.switchmaterial.SwitchMaterial
-                    android:layout_column= "3"
-                    android:layout_row= "3"
-                    android:layout_columnWeight="@dimen/grid_toggle_button_percentage"
-                    android:id="@+id/face_retouch_front_camera_switch"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:contentDescription="@string/face_retouch_front_camera_description"
-                    android:layout_gravity="center"
-                    android:backgroundTint="@color/lightBlue"/>
-
-            </GridLayout>
-
-            <Space
-                android:id="@+id/options_menu_space_2"
-                android:layout_width="match_parent"
-                android:layout_height="@dimen/spaces" />
-
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="1dp"
-                android:background="@color/white"/>
-
-            <!--Section title: Options-->
-
-            <TextView
-                android:id="@+id/options_title_textView"
-                android:text="@string/options_text"
-                android:textStyle="bold"
-
-                android:textColor="@color/white"
-                android:backgroundTint="@color/darkGray"
-                android:textSize="@dimen/titles_font_size"
-
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-
-                android:padding = "@dimen/titles_padding" />
-
-            <Space
-                android:id="@+id/options_menu_space_3"
-                android:layout_width="match_parent"
-                android:layout_height="@dimen/spaces" />
-
-            <GridLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-
-                android:rowCount="3"
-                android:columnCount="3">
-
-                <!--first row-->
-                <ImageView
-
-                    android:layout_column= "0"
-                    android:layout_row= "0"
-                    android:layout_columnWeight="@dimen/grid_icon_percentage"
-
-                    android:layout_width="@dimen/grid_icon_dimensions"
-                    android:layout_height="@dimen/grid_icon_dimensions"
-                    android:padding="@dimen/grid_icon_padding"
-                    android:background="@null"
-                    android:src="@drawable/smart_delay_seconds"
-                    android:layout_gravity="center"
-                    android:contentDescription="@string/face_retouch_description"/>
-
-                <TextView
-                    android:layout_column= "1"
-                    android:layout_row= "0"
-                    android:layout_columnWeight="@dimen/grid_text_percentage"
-
-                    android:id="@+id/smart_delay_seconds_textView"
-                    android:text="@string/smart_delay_seconds_text"
-
-                    android:textColor="@color/white"
-                    android:textSize="@dimen/text_font_size"
-
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center_vertical"/>
-
-                <EditText
-                    android:id="@+id/smart_delay_seconds"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_row="0"
-                    android:layout_column="2"
-                    android:layout_columnWeight="@dimen/grid_edit_text_percentage"
-                    android:backgroundTint="@color/white"
-                    android:textColor="@color/white"
-                    android:maxLength="2"
-                    android:inputType="number"
-                    android:textAlignment="center"
-                    android:text="@string/smart_delay_seconds_default_value"
-                    android:autofillHints="phone"
-                    android:labelFor="@+id/smart_delay_seconds_textView"/>
-
-                <!--first row-->
-                <ImageView
-
-                    android:layout_column= "0"
-                    android:layout_row= "1"
-                    android:layout_columnWeight="@dimen/grid_icon_percentage"
-
-                    android:layout_width="@dimen/grid_icon_dimensions"
-                    android:layout_height="@dimen/grid_icon_dimensions"
-                    android:padding="@dimen/grid_icon_padding"
-                    android:background="@null"
-                    android:src="@drawable/number_of_frame"
-                    android:layout_gravity="center"
-                    android:contentDescription="@string/face_retouch_description"/>
-
-                <TextView
-                    android:layout_column= "1"
-                    android:layout_row= "1"
-                    android:layout_columnWeight="@dimen/grid_text_percentage"
-
-                    android:id="@+id/frame_avg_frame_number_textView"
-                    android:text="@string/frame_avg_frame_number_text"
-
-                    android:textColor="@color/white"
-                    android:textSize="@dimen/text_font_size"
-
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center_vertical"/>
-
-                <EditText
-                    android:layout_column= "2"
-                    android:layout_row= "1"
-                    android:layout_columnWeight="@dimen/grid_edit_text_percentage"
-                    android:id="@+id/frame_avg_frame_number"
-                    android:layout_width="wrap_content"
-
-                    android:layout_height="wrap_content"
-                    android:backgroundTint="@color/white"
-                    android:textColor="@color/white"
-                    android:maxLength="3"
-                    android:inputType="number"
-                    android:textAlignment="center"
-                    android:text="@string/frame_avg_frame_number_default_value"
-                    android:autofillHints="phone"
-                    android:labelFor="@+id/frame_avg_frame_number_textView"/>
-
-                <!--third row-->
-                <ImageView
-
-                    android:layout_column= "0"
-                    android:layout_row= "2"
-                    android:layout_columnWeight="@dimen/grid_icon_percentage"
-
-                    android:layout_width="@dimen/grid_icon_dimensions"
-                    android:layout_height="@dimen/grid_icon_dimensions"
-                    android:padding="@dimen/grid_icon_padding"
-                    android:background="@null"
-                    android:src="@drawable/notification_sound"
-                    android:layout_gravity="center"
-                    android:contentDescription="@string/smart_delay_notification_sound_icon_description"/>
-
-                <TextView
-                    android:layout_column= "1"
-                    android:layout_row= "2"
-                    android:layout_columnWeight="@dimen/grid_text_percentage"
-
-                    android:id="@+id/smart_delay_notification_sound_textView"
-                    android:text="@string/smart_delay_notification_sound_text"
-
-                    android:textColor="@color/white"
-                    android:textSize="@dimen/text_font_size"
-
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center_vertical"/>
+
+                    android:rowCount="4"
+                    android:columnCount="4">
+
+                    <!--First row-->
+                    <TextView
+                        android:layout_column= "2"
+                        android:layout_row= "0"
+                        android:layout_columnWeight="@dimen/grid_toggle_button_percentage"
+
+                        android:id="@+id/front_camera_textView"
+                        android:text="@string/front_camera_text"
+
+                        android:textColor="@color/white"
+                        android:textSize="@dimen/small_text_font_size"
+                        android:textAlignment="center"
+
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"/>
+
+                    <TextView
+                        android:layout_column= "3"
+                        android:layout_row= "0"
+                        android:layout_columnWeight="@dimen/grid_toggle_button_percentage"
+
+                        android:id="@+id/back_camera_textView"
+                        android:text="@string/back_camera_text"
+
+                        android:textColor="@color/white"
+                        android:textSize="@dimen/small_text_font_size"
+                        android:textAlignment="center"
+
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"/>
+
+                    <!--Second row. HDR-->
+                    <ImageView
+                        android:id = "@+id/HDR_logo"
+
+                        android:layout_column= "0"
+                        android:layout_row= "1"
+                        android:layout_columnWeight="@dimen/grid_icon_percentage"
+
+                        android:layout_width="@dimen/grid_icon_dimensions"
+                        android:layout_height="@dimen/grid_icon_dimensions"
+                        android:padding="@dimen/grid_icon_padding"
+                        android:background="@null"
+                        android:src="@drawable/hdr"
+                        android:layout_gravity="center"
+                        android:contentDescription="@string/HDR_description"/>
+
+                    <TextView
+                        android:id="@+id/HDR_textView"
+
+                        android:layout_column= "1"
+                        android:layout_row= "1"
+                        android:layout_columnWeight="@dimen/grid_text_percentage"
+
+                        android:text="@string/HDR_text"
+                        android:textColor="@color/white"
+                        android:textSize="@dimen/text_font_size"
+
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_vertical"/>
 
                     <com.google.android.material.switchmaterial.SwitchMaterial
-                    android:id="@+id/smart_delay_notification_sound_switch"
-                    android:layout_width="wrap_content"
+                        android:id="@+id/HDR_back_camera_switch"
+                        android:layout_column= "2"
+                        android:layout_row= "1"
+                        android:layout_columnWeight="@dimen/grid_toggle_button_percentage"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:contentDescription="@string/HDR_back_camera_description"
+                        android:layout_gravity="center"
+                        android:backgroundTint="@color/lightBlue"/>
 
+                    <com.google.android.material.switchmaterial.SwitchMaterial
+                        android:id="@+id/HDR_front_camera_switch"
+                        android:layout_column= "3"
+                        android:layout_row= "1"
+                        android:layout_columnWeight="@dimen/grid_toggle_button_percentage"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:contentDescription="@string/HDR_front_camera_description"
+                        android:layout_gravity="center"
+                        android:backgroundTint="@color/lightBlue"/>
+
+                    <!--third row-->
+                    <ImageView
+                        android:id="@+id/bokeh_logo"
+                        android:layout_column= "0"
+                        android:layout_row= "2"
+                        android:layout_columnWeight="@dimen/grid_icon_percentage"
+
+                        android:layout_width="@dimen/grid_icon_dimensions"
+                        android:layout_height="@dimen/grid_icon_dimensions"
+                        android:padding="@dimen/grid_icon_padding"
+                        android:background="@null"
+                        android:src="@drawable/bokeh"
+                        android:layout_gravity="center"
+                        android:contentDescription="@string/bokeh_description"/>
+
+                    <TextView
+                        android:id="@+id/bokeh_textView"
+                        android:layout_column= "1"
+                        android:layout_row= "2"
+                        android:layout_columnWeight="@dimen/grid_text_percentage"
+
+                        android:text="@string/bokeh_text"
+                        android:textColor="@color/white"
+                        android:textSize="@dimen/text_font_size"
+
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_vertical"/>
+
+                    <com.google.android.material.switchmaterial.SwitchMaterial
+                        android:id="@+id/bokeh_back_camera_switch"
+                        android:layout_column= "2"
+                        android:layout_row= "2"
+                        android:layout_columnWeight="@dimen/grid_toggle_button_percentage"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:contentDescription="@string/bokeh_back_camera_description"
+                        android:layout_gravity="center"
+                        android:backgroundTint="@color/lightBlue"/>
+
+                    <com.google.android.material.switchmaterial.SwitchMaterial
+                        android:id="@+id/bokeh_front_camera_switch"
+                        android:layout_column= "3"
+                        android:layout_row= "2"
+                        android:layout_columnWeight="@dimen/grid_toggle_button_percentage"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:contentDescription="@string/bokeh_front_camera_description"
+                        android:layout_gravity="center"
+                        android:backgroundTint="@color/lightBlue"/>
+
+                    <!--fourth row-->
+                    <ImageView
+                        android:id="@+id/face_retouch_logo"
+                        android:layout_column= "0"
+                        android:layout_row= "3"
+                        android:layout_columnWeight="@dimen/grid_icon_percentage"
+
+                        android:layout_width="@dimen/grid_icon_dimensions"
+                        android:layout_height="@dimen/grid_icon_dimensions"
+                        android:padding="@dimen/grid_icon_padding"
+                        android:background="@null"
+                        android:src="@drawable/face_retouch"
+                        android:layout_gravity="center"
+                        android:contentDescription="@string/face_retouch_description"/>
+
+                    <TextView
+                        android:id="@+id/face_retouch_textView"
+                        android:layout_column= "1"
+                        android:layout_row= "3"
+                        android:layout_columnWeight="@dimen/grid_text_percentage"
+
+                        android:text="@string/face_retouch_text"
+                        android:textColor="@color/white"
+                        android:textSize="@dimen/text_font_size"
+
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_vertical"/>
+
+                    <com.google.android.material.switchmaterial.SwitchMaterial
+                        android:id="@+id/face_retouch_back_camera_switch"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_row="3"
+                        android:layout_column="2"
+                        android:layout_columnWeight="@dimen/grid_toggle_button_percentage"
+                        android:layout_gravity="center"
+                        android:contentDescription="@string/face_retouch_back_camera_description"
+                        android:backgroundTint="@color/lightBlue"/>
+
+                    <com.google.android.material.switchmaterial.SwitchMaterial
+                        android:id="@+id/face_retouch_front_camera_switch"
+                        android:layout_column= "3"
+                        android:layout_row= "3"
+                        android:layout_columnWeight="@dimen/grid_toggle_button_percentage"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:contentDescription="@string/face_retouch_front_camera_description"
+                        android:layout_gravity="center"
+                        android:backgroundTint="@color/lightBlue"/>
+
+                </GridLayout>
+
+                <Space
+                    android:id="@+id/options_menu_space_2"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/spaces" />
+
+                <!--White line-->
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:background="@color/white"/>
+
+            </LinearLayout>
+
+            <!--LinearLayout containing the extension handling-->
+            <LinearLayout
+                android:id="@+id/options_menu"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/options_title_textView"
+                    android:text="@string/options_text"
+                    android:textStyle="bold"
+
+                    android:textColor="@color/white"
+                    android:backgroundTint="@color/darkGray"
+                    android:textSize="@dimen/titles_font_size"
+
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
 
-                    android:layout_row="2"
-                    android:layout_column="2"
-                    android:layout_columnWeight="@dimen/grid_edit_text_percentage"
-                    android:layout_gravity="center"
-                    android:contentDescription="@string/smart_delay_notification_sound_toggle_button_description"
-                    android:backgroundTint="@color/lightBlue"/>
+                    android:padding = "@dimen/titles_padding" />
 
-            </GridLayout>
+                <Space
+                    android:id="@+id/options_menu_space_3"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/spaces" />
+
+                <GridLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+
+                    android:rowCount="3"
+                    android:columnCount="3">
+
+                    <!--first row-->
+                    <ImageView
+
+                        android:layout_column= "0"
+                        android:layout_row= "0"
+                        android:layout_columnWeight="@dimen/grid_icon_percentage"
+
+                        android:layout_width="@dimen/grid_icon_dimensions"
+                        android:layout_height="@dimen/grid_icon_dimensions"
+                        android:padding="@dimen/grid_icon_padding"
+                        android:background="@null"
+                        android:src="@drawable/smart_delay_seconds"
+                        android:layout_gravity="center"
+                        android:contentDescription="@string/face_retouch_description"/>
+
+                    <TextView
+                        android:layout_column= "1"
+                        android:layout_row= "0"
+                        android:layout_columnWeight="@dimen/grid_text_percentage"
+
+                        android:id="@+id/smart_delay_seconds_textView"
+                        android:text="@string/smart_delay_seconds_text"
+
+                        android:textColor="@color/white"
+                        android:textSize="@dimen/text_font_size"
+
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_vertical"/>
+
+                    <EditText
+                        android:id="@+id/smart_delay_seconds"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_row="0"
+                        android:layout_column="2"
+                        android:layout_columnWeight="@dimen/grid_edit_text_percentage"
+                        android:backgroundTint="@color/white"
+                        android:textColor="@color/white"
+                        android:maxLength="2"
+                        android:inputType="number"
+                        android:textAlignment="center"
+                        android:text="@string/smart_delay_seconds_default_value"
+                        android:autofillHints="phone"
+                        android:labelFor="@+id/smart_delay_seconds_textView"/>
+
+                    <!--first row-->
+                    <ImageView
+
+                        android:layout_column= "0"
+                        android:layout_row= "1"
+                        android:layout_columnWeight="@dimen/grid_icon_percentage"
+
+                        android:layout_width="@dimen/grid_icon_dimensions"
+                        android:layout_height="@dimen/grid_icon_dimensions"
+                        android:padding="@dimen/grid_icon_padding"
+                        android:background="@null"
+                        android:src="@drawable/number_of_frame"
+                        android:layout_gravity="center"
+                        android:contentDescription="@string/face_retouch_description"/>
+
+                    <TextView
+                        android:layout_column= "1"
+                        android:layout_row= "1"
+                        android:layout_columnWeight="@dimen/grid_text_percentage"
+
+                        android:id="@+id/frame_avg_frame_number_textView"
+                        android:text="@string/frame_avg_frame_number_text"
+
+                        android:textColor="@color/white"
+                        android:textSize="@dimen/text_font_size"
+
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_vertical"/>
+
+                    <EditText
+                        android:layout_column= "2"
+                        android:layout_row= "1"
+                        android:layout_columnWeight="@dimen/grid_edit_text_percentage"
+                        android:id="@+id/frame_avg_frame_number"
+                        android:layout_width="wrap_content"
+
+                        android:layout_height="wrap_content"
+                        android:backgroundTint="@color/white"
+                        android:textColor="@color/white"
+                        android:maxLength="4"
+                        android:inputType="number"
+                        android:textAlignment="center"
+                        android:text="@string/frame_avg_frame_number_default_value"
+                        android:autofillHints="phone"
+                        android:labelFor="@+id/frame_avg_frame_number_textView"/>
+
+                    <!--third row-->
+                    <ImageView
+
+                        android:layout_column= "0"
+                        android:layout_row= "2"
+                        android:layout_columnWeight="@dimen/grid_icon_percentage"
+
+                        android:layout_width="@dimen/grid_icon_dimensions"
+                        android:layout_height="@dimen/grid_icon_dimensions"
+                        android:padding="@dimen/grid_icon_padding"
+                        android:background="@null"
+                        android:src="@drawable/notification_sound"
+                        android:layout_gravity="center"
+                        android:contentDescription="@string/smart_delay_notification_sound_icon_description"/>
+
+                    <TextView
+                        android:layout_column= "1"
+                        android:layout_row= "2"
+                        android:layout_columnWeight="@dimen/grid_text_percentage"
+
+                        android:id="@+id/smart_delay_notification_sound_textView"
+                        android:text="@string/smart_delay_notification_sound_text"
+
+                        android:textColor="@color/white"
+                        android:textSize="@dimen/text_font_size"
+
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_vertical"/>
+
+                        <com.google.android.material.switchmaterial.SwitchMaterial
+                        android:id="@+id/smart_delay_notification_sound_switch"
+                        android:layout_width="wrap_content"
+
+                        android:layout_height="wrap_content"
+
+                        android:layout_row="2"
+                        android:layout_column="2"
+                        android:layout_columnWeight="@dimen/grid_edit_text_percentage"
+                        android:layout_gravity="center"
+                        android:contentDescription="@string/smart_delay_notification_sound_toggle_button_description"
+                        android:backgroundTint="@color/lightBlue"/>
+
+                </GridLayout>
+
+            </LinearLayout>
 
         </LinearLayout>
 
