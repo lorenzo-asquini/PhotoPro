@@ -100,7 +100,7 @@ class MainActivity : AppCompatActivity() {
                 }
 
                 Constant.FLASH_ALWAYS_ON -> {
-                    camera?.cameraControl?.enableTorch(false)
+                    camera?.cameraControl?.enableTorch(true)
                 }
 
                 else -> {

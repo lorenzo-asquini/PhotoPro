@@ -25,17 +25,29 @@ object Constant{
     const val CAMERA_FRONT = 1
     const val CAMERA_STATES = 2  //Number of states the camera can be
 
-    const val HDR_OFF = 0
-    const val HDR_ON = 1
+    const val HDR_FRONT_OFF = 0
+    const val HDR_FRONT_ON = 1
 
-    const val BOKEH_OFF = 0
-    const val BOKEH_ON = 1
+    const val HDR_BACK_OFF = 0
+    const val HDR_BACK_ON = 1
 
-    const val FACE_RETOUCH_OFF = 0
-    const val FACE_RETOUCH_ON = 1
+    const val BOKEH_FRONT_OFF = 0
+    const val BOKEH_FRONT_ON = 1
+
+    const val BOKEH_BACK_OFF = 0
+    const val BOKEH_BACK_ON = 1
+
+    const val FACE_RETOUCH_FRONT_OFF = 0
+    const val FACE_RETOUCH_FRONT_ON = 1
+
+    const val FACE_RETOUCH_BACK_OFF = 0
+    const val FACE_RETOUCH_BACK_ON = 1
 
     const val DEFAULT_SMART_DELAY_SECONDS = 3
     const val DEFAULT_FRAMES_TO_AVERAGE = 5
+
+    const val SMART_DELAY_NOTIFICATION_OFF = 0
+    const val SMART_DELAY_NOTIFICATION_ON = 1
 
     //TAG for debug
     const val TAG = "PhotoPro"
@@ -69,6 +81,8 @@ object SharedPrefs{
 
     const val SMART_DELAY_SECONDS_KEY = "smart_delay_seconds"
     const val FRAMES_TO_AVERAGE_KEY = "frames_to_average"
+
+    const val SMART_DELAY_NOTIFICATION_KEY = "smart_delay_notification"
 
     const val CAMERA_FACING_KEY = "camera_orientation"
 }

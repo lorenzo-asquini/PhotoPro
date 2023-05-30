@@ -204,6 +204,7 @@
         android:padding="@dimen/pro_button_toolbar_padding"
         android:scaleType="fitCenter"
         android:src="@drawable/pro"
+        android:contentDescription="@string/pro_mode_button_description"
         app:layout_constraintBottom_toTopOf="@+id/bottom_button_guideline"
         app:layout_constraintEnd_toStartOf="@+id/image_capture_button"
         app:layout_constraintStart_toStartOf="parent"
