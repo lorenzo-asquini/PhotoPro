@@ -118,19 +118,19 @@
 
     <!--Create a frame layout containing the view and the circle when present-->
     <FrameLayout
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        app:layout_constraintBottom_toTopOf="@+id/bottom_view_guideline"
-        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        app:layout_constraintBottom_toTopOf="parent"
+        app:layout_constraintEnd_toEndOf="@+id/bottom_view_guideline"
         app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/top_view_guideline"
+        app:layout_constraintStart_toStartOf="@+id/top_view_guideline"
+        app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="1.0">
 
         <androidx.camera.view.PreviewView
             android:id="@+id/camera_preview"
             android:layout_width="match_parent"
-            android:layout_height="match_parent" />
+            android:layout_height="match_parent"/>
 
         <ImageView
             android:id="@+id/tapToFocus_circle"
@@ -166,12 +166,11 @@
         android:contentDescription="@string/change_camera_button_description"
         android:scaleType="fitCenter"
         android:src="@drawable/change_camera"
+        app:layout_constraintDimensionRatio="1:1"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/bottom_change_camera_button_guideline"
-        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="@+id/top_change_camera_button_guideline"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="1.0" />
+        app:layout_constraintTop_toTopOf="parent" />
 
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/bottom_change_camera_button_guideline"
@@ -180,18 +179,13 @@
         android:orientation="vertical"
         app:layout_constraintGuide_percent="@dimen/bottom_change_camera_button_guideline_percent" />
 
-    <androidx.constraintlayout.widget.Guideline
-        android:id="@+id/top_buttons_guideline"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        app:layout_constraintGuide_percent="@dimen/top_buttons_guideline_percent" />
 
     <Button
         android:id="@+id/image_capture_button"
         android:layout_width="0dp"
 
         android:layout_height="0dp"
+        android:layout_margin="@dimen/image_capture_button_toolbar_margin"
         android:background="@drawable/round_button"
         android:contentDescription="@string/capture_button_description"
         app:backgroundTint="@color/white"
@@ -199,19 +193,20 @@
 
         app:layout_constraintDimensionRatio="1:1"
         app:layout_constraintEnd_toStartOf="@+id/bottom_button_guideline"
-        app:layout_constraintStart_toStartOf="@+id/top_buttons_guideline"
+        app:layout_constraintStart_toStartOf="@+id/bottom_view_guideline"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <Button
+    <ImageButton
         android:id="@+id/pro_mode_button"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:text="@string/pro_text"
-        android:textColor="@android:color/black"
-        app:backgroundTint="@color/teal_200"
+        android:background="@null"
+        android:padding="@dimen/pro_button_toolbar_padding"
+        android:scaleType="fitCenter"
+        android:src="@drawable/pro"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/bottom_button_guideline"
-        app:layout_constraintStart_toStartOf="@+id/top_buttons_guideline"
+        app:layout_constraintStart_toStartOf="@+id/bottom_view_guideline"
         app:layout_constraintTop_toBottomOf="@+id/image_capture_button" />
 
     <ImageButton
@@ -220,13 +215,13 @@
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:background="@null"
-        android:padding="@dimen/button_toolbar_padding"
+        android:padding="@dimen/gallery_button_toolbar_padding"
         android:contentDescription="@string/gallery_button_description"
         android:scaleType="fitCenter"
         android:src="@drawable/gallery"
         app:layout_constraintBottom_toTopOf="@+id/image_capture_button"
         app:layout_constraintEnd_toStartOf="@+id/bottom_button_guideline"
-        app:layout_constraintStart_toStartOf="@+id/top_buttons_guideline"
+        app:layout_constraintStart_toStartOf="@+id/bottom_view_guideline"
         app:layout_constraintTop_toTopOf="parent" />
 
     <androidx.constraintlayout.widget.Guideline
