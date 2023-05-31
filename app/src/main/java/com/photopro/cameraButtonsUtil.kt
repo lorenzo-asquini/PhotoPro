@@ -41,7 +41,7 @@ fun drawAllButtons(activity: AppCompatActivity, preferences: SharedPreferences, 
     }
 
     drawFrameAvgButton(activity, preferences, true)
-    drawPoseShootButton(activity, preferences, true)
+    drawSmartDelayButton(activity, preferences, true)
 
 }
 
@@ -101,30 +101,30 @@ fun changeFrameAvgValue(preferences: SharedPreferences){
     editor.apply()
 }
 
-fun drawPoseShootButton(activity: AppCompatActivity, preferences: SharedPreferences, show : Boolean){
-    val poseShootButton: ImageButton = activity.findViewById(R.id.pose_shoot_button)
+fun drawSmartDelayButton(activity: AppCompatActivity, preferences: SharedPreferences, show : Boolean){
+    val smartDelayButton: ImageButton = activity.findViewById(R.id.smart_delay_button)
 
     if(!show){
-        poseShootButton.visibility = View.GONE
+        smartDelayButton.visibility = View.GONE
         return
     }
-    poseShootButton.visibility = View.VISIBLE
+    smartDelayButton.visibility = View.VISIBLE
 
-    val poseShootValue = preferences.getInt(SharedPrefs.POSE_SHOOT_KEY, Constant.POSE_SHOOT_OFF)
+    val smartDelayValue = preferences.getInt(SharedPrefs.SMART_DELAY_KEY, Constant.SMART_DELAY_OFF)
 
-    when(poseShootValue){
-        Constant.POSE_SHOOT_OFF -> poseShootButton.setImageResource(R.drawable.pose_shoot_off)
-        Constant.POSE_SHOOT_ON -> poseShootButton.setImageResource(R.drawable.pose_shoot_on)
+    when(smartDelayValue){
+        Constant.SMART_DELAY_OFF -> smartDelayButton.setImageResource(R.drawable.smart_delay_off)
+        Constant.SMART_DELAY_ON -> smartDelayButton.setImageResource(R.drawable.smart_delay_on)
     }
 }
 
-fun changePoseShootValue(preferences: SharedPreferences){
-    val currentValue = preferences.getInt(SharedPrefs.POSE_SHOOT_KEY, Constant.POSE_SHOOT_OFF)
+fun changeSmartDelayValue(preferences: SharedPreferences){
+    val currentValue = preferences.getInt(SharedPrefs.SMART_DELAY_KEY, Constant.SMART_DELAY_OFF)
 
-    val newValue = (currentValue+1) % Constant.POSE_SHOOT_STATES
+    val newValue = (currentValue+1) % Constant.SMART_DELAY_STATES
 
     val editor = preferences.edit()
-    editor.putInt(SharedPrefs.POSE_SHOOT_KEY, newValue)
+    editor.putInt(SharedPrefs.SMART_DELAY_KEY, newValue)
     editor.apply()
 }
 
