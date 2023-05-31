@@ -5,7 +5,10 @@ import android.content.SharedPreferences
 import android.hardware.camera2.CameraManager
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.view.ActionMode
+import android.widget.EditText
 import android.widget.ImageButton
+import android.widget.LinearLayout
 
 class OptionsActivity : AppCompatActivity() {
 
@@ -33,5 +36,16 @@ class OptionsActivity : AppCompatActivity() {
         backArrowButton.setOnClickListener{
             finish()
         }
+    }
+
+    override fun onPause() {
+        super.onPause()
+
+        //Validate inputs even when pausing the activity
+        val framesToAverageEditText = findViewById<EditText>(R.id.frame_avg_frame_number)
+        validateInputFramesToAverage(framesToAverageEditText, this, preferences)
+
+        val smartDelaySecondsEditText = findViewById<EditText>(R.id.smart_delay_seconds)
+        validateInputSmartDelaySeconds(smartDelaySecondsEditText, this, preferences)
     }
 }

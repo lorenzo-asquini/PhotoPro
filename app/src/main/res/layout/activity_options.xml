@@ -1,13 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 <LinearLayout
+    android:id = "@+id/options_container"
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context=".OptionsActivity">
+    tools:context=".OptionsActivity"
+
+    android:clickable="true"
+    android:focusable="true"
+    android:focusableInTouchMode="true" >
 
     <!--Top toolbar containing the back button-->
     <androidx.appcompat.widget.Toolbar
@@ -67,7 +72,7 @@
         android:paddingTop="@dimen/top_bottom_padding"
         android:paddingBottom="@dimen/top_bottom_padding">
 
-        <!--LinearLayout containing everything-->
+        <!--LinearLayout containing everything. A scroll view can have only one child-->
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -386,9 +391,10 @@
                         android:maxLength="2"
                         android:inputType="number"
                         android:textAlignment="center"
+                        android:imeOptions="actionDone"
+                        android:importantForAutofill="no"
                         android:text="@string/smart_delay_seconds_default_value"
-                        android:autofillHints="phone"
-                        android:labelFor="@+id/smart_delay_seconds_textView"/>
+                        android:labelFor="@+id/smart_delay_seconds_textView" />
 
                     <!--first row-->
                     <ImageView
@@ -433,9 +439,10 @@
                         android:maxLength="4"
                         android:inputType="number"
                         android:textAlignment="center"
+                        android:imeOptions="actionDone"
+                        android:importantForAutofill="no"
                         android:text="@string/frame_avg_frame_number_default_value"
-                        android:autofillHints="phone"
-                        android:labelFor="@+id/frame_avg_frame_number_textView"/>
+                        android:labelFor="@+id/frame_avg_frame_number_textView" />
 
                     <!--third row-->
                     <ImageView
