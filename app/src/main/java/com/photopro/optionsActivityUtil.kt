@@ -2,6 +2,8 @@ package com.photopro
 
 import android.content.Context
 import android.content.SharedPreferences
+import android.content.res.ColorStateList
+import android.util.Log
 import android.view.View
 import android.view.inputmethod.EditorInfo
 import android.view.inputmethod.InputMethodManager
@@ -9,8 +11,10 @@ import android.widget.EditText
 import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.TextView
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.google.android.material.switchmaterial.SwitchMaterial
+
 
 //Draw extension options according to the feature availability
 fun showExtensionsToggles(activity: AppCompatActivity, features: AvailableFeatures){
@@ -18,6 +22,7 @@ fun showExtensionsToggles(activity: AppCompatActivity, features: AvailableFeatur
     //See if at least one extension is available. If not, do not show the choices
     var isOneExtensionAvailable = false
 
+    //HDR
     if(!features.isFrontHDRAvailable && !features.isBackHDRAvailable){
 
         //Do not show the row containing the HDR choice if not available
@@ -37,6 +42,7 @@ fun showExtensionsToggles(activity: AppCompatActivity, features: AvailableFeatur
         isOneExtensionAvailable = true
     }
 
+    //Bokeh
     if(!features.isFrontBokehAvailable && !features.isBackBokehAvailable){
 
         //Do not show the row containing the bokeh choice if not available
@@ -56,6 +62,7 @@ fun showExtensionsToggles(activity: AppCompatActivity, features: AvailableFeatur
         isOneExtensionAvailable = true
     }
 
+    //Face retouch
     if(!features.isFrontFaceRetouchAvailable && !features.isBackFaceRetouchAvailable){
 
         //Do not show the row containing the HDR choice if not available
@@ -111,7 +118,7 @@ fun retrieveOptionsValue(activity: AppCompatActivity, preferences: SharedPrefere
 
     //Frames to average
     activity.findViewById<EditText>(R.id.frame_avg_frame_number).setText(
-        preferences.getInt(SharedPrefs.FRAME_AVG_KEY, Constant.DEFAULT_FRAMES_TO_AVERAGE).toString()
+        preferences.getInt(SharedPrefs.NR_FRAMES_TO_AVERAGE_KEY, Constant.DEFAULT_FRAMES_TO_AVERAGE).toString()
     )
 
     //Smart delay notification
@@ -254,19 +261,32 @@ fun setValueChangeListeners(activity: AppCompatActivity, preferences: SharedPref
     }
 
     //Smart delay seconds
-    val smartDelaySeconds = activity.findViewById<EditText>(R.id.smart_delay_seconds)
-    smartDelaySeconds.setOnEditorActionListener { textView, actionId, _ ->
+    val smartDelaySecondsEditText = activity.findViewById<EditText>(R.id.smart_delay_seconds)
+    //Validate input on focus change
+    smartDelaySecondsEditText.setOnFocusChangeListener { _, hasFocus ->
+        Log.e("my", "hh")
+        if (!hasFocus) {
+            validateInputSmartDelaySeconds(smartDelaySecondsEditText, activity, preferences)
+
+            // Hide keyboard
+            val imm = smartDelaySecondsEditText.context.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+            imm.hideSoftInputFromWindow(smartDelaySecondsEditText.windowToken, 0)
+            // Give up focus
+            smartDelaySecondsEditText.clearFocus()
+        }
+    }
+
+    //Validate input when action done
+    smartDelaySecondsEditText.setOnEditorActionListener { view, actionId, _ ->
         return@setOnEditorActionListener when (actionId) {
             EditorInfo.IME_ACTION_DONE -> {
+                validateInputSmartDelaySeconds(smartDelaySecondsEditText, activity, preferences)
 
-                //TODO: Check inserted values
-                //TODO: Make keyboard disappear in a good way
-                val insertedSeconds = smartDelaySeconds.text.toString().toInt()
-
-                val inputMethodManager = textView.context.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
-                inputMethodManager.hideSoftInputFromWindow(textView.windowToken, 0)
-
-                textView.clearFocus()
+                // Hide keyboard
+                val imm = view.context.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+                imm.hideSoftInputFromWindow(view.windowToken, 0)
+                // Give up focus
+                view.clearFocus()
                 true
             }
             else -> false
@@ -274,19 +294,32 @@ fun setValueChangeListeners(activity: AppCompatActivity, preferences: SharedPref
     }
 
     //Smart delay seconds
-    val framesToAverage = activity.findViewById<EditText>(R.id.frame_avg_frame_number)
-    framesToAverage.setOnEditorActionListener { textView, actionId, _ ->
+    val framesToAverageEditText = activity.findViewById<EditText>(R.id.frame_avg_frame_number)
+    //Validate input on focus change
+    smartDelaySecondsEditText.setOnFocusChangeListener { _, hasFocus ->
+        if (!hasFocus) {
+            validateInputFramesToAverage(framesToAverageEditText, activity, preferences)
+
+            // Hide keyboard
+            val imm = smartDelaySecondsEditText.context.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+            imm.hideSoftInputFromWindow(smartDelaySecondsEditText.windowToken, 0)
+            // Give up focus
+            smartDelaySecondsEditText.clearFocus()
+        }
+    }
+
+    //Validate input when action done
+    framesToAverageEditText.setOnEditorActionListener { view, actionId, _ ->
         return@setOnEditorActionListener when (actionId) {
             EditorInfo.IME_ACTION_DONE -> {
 
-                //TODO: Check inserted values
-                //TODO: Make keyboard disappear in a good way
-                val insertedFrames = framesToAverage.text.toString().toInt()
+                validateInputFramesToAverage(framesToAverageEditText, activity, preferences)
 
-                val inputMethodManager = textView.context.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
-                inputMethodManager.hideSoftInputFromWindow(textView.windowToken, 0)
-
-                textView.clearFocus()
+                // Hide keyboard
+                val imm = view.context.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+                imm.hideSoftInputFromWindow(view.windowToken, 0)
+                // Give up focus
+                view.clearFocus()
                 true
             }
             else -> false
@@ -306,5 +339,55 @@ fun setValueChangeListeners(activity: AppCompatActivity, preferences: SharedPref
         }
 
         editor.apply()
+    }
+}
+
+fun validateInputSmartDelaySeconds(smartDelaySecondsEditText: EditText, activity: AppCompatActivity, preferences: SharedPreferences){
+    //Input validation
+    val input = smartDelaySecondsEditText.text.toString()
+    if (input.isNotEmpty()) {
+        val inputNumber = input.toIntOrNull()
+        if (inputNumber == null || inputNumber < 1) {
+            // Invalid input. Set red
+            smartDelaySecondsEditText.backgroundTintList = ColorStateList.valueOf(activity.getColor(R.color.error_color))
+            smartDelaySecondsEditText.setTextColor(activity.getColor(R.color.error_color))
+
+            val toast = Toast.makeText(activity, R.string.invalid_input, Toast.LENGTH_SHORT)
+            toast.show()
+
+        } else {
+            // Valid input. Set white and save
+            smartDelaySecondsEditText.backgroundTintList = ColorStateList.valueOf(activity.getColor(R.color.white))
+            smartDelaySecondsEditText.setTextColor(activity.getColor(R.color.white))
+
+            val editor = preferences.edit()
+            editor.putInt(SharedPrefs.SMART_DELAY_SECONDS_KEY, inputNumber)
+            editor.apply()
+        }
+    }
+}
+
+fun validateInputFramesToAverage(framesToAverageEditText: EditText, activity: AppCompatActivity, preferences: SharedPreferences){
+    //Input validation
+    val input = framesToAverageEditText.text.toString()
+    if (input.isNotEmpty()) {
+        val inputNumber = input.toIntOrNull()
+        if (inputNumber == null || inputNumber < 1) {
+            // Invalid input. Set red
+            framesToAverageEditText.backgroundTintList = ColorStateList.valueOf(activity.getColor(R.color.error_color))
+            framesToAverageEditText.setTextColor(activity.getColor(R.color.error_color))
+
+            val toast = Toast.makeText(activity, R.string.invalid_input, Toast.LENGTH_SHORT)
+            toast.show()
+
+        } else {
+            // Valid input. Set white and save
+            framesToAverageEditText.backgroundTintList = ColorStateList.valueOf(activity.getColor(R.color.white))
+            framesToAverageEditText.setTextColor(activity.getColor(R.color.white))
+
+            val editor = preferences.edit()
+            editor.putInt(SharedPrefs.NR_FRAMES_TO_AVERAGE_KEY, inputNumber)
+            editor.apply()
+        }
     }
 }
