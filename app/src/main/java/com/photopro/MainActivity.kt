@@ -40,6 +40,9 @@ class MainActivity : AppCompatActivity() {
     //Necessary lateinit because the SharedPreferences need the activity to be created
     private lateinit var preferences : SharedPreferences
 
+    //Avoid opening the options menu multiple times when spamming button
+    private var isOptionsButtonClicked = false
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -64,11 +67,15 @@ class MainActivity : AppCompatActivity() {
             ActivityCompat.requestPermissions(this, arrayOf(Manifest.permission.CAMERA), Constant.REQUEST_CODE_PERMISSIONS)
         }
 
+
         //Add listener to button to open the options menu
         val optionsButton: ImageButton = findViewById(R.id.options_button)
         optionsButton.setOnClickListener{
-            val openSettingsIntent = Intent(this, OptionsActivity::class.java)
-            startActivity(openSettingsIntent)
+            if(!isOptionsButtonClicked) {
+                val openSettingsIntent = Intent(this, OptionsActivity::class.java)
+                startActivity(openSettingsIntent)
+                isOptionsButtonClicked = true
+            }
         }
 
         //Add listener to button to change flash mode
@@ -122,11 +129,11 @@ class MainActivity : AppCompatActivity() {
                 imageAnalyzer = startCameraResult.second
         }
 
-        //Add listener to button to change pose shoot mode
-        val poseShootButton: ImageButton = findViewById(R.id.pose_shoot_button)
-        poseShootButton.setOnClickListener{
-            changePoseShootValue(preferences)
-            drawPoseShootButton(this, preferences, true)
+        //Add listener to button to change smart delay mode
+        val smartDelayButton: ImageButton = findViewById(R.id.smart_delay_button)
+        smartDelayButton.setOnClickListener{
+            changeSmartDelayValue(preferences)
+            drawSmartDelayButton(this, preferences, true)
             val startCameraResult = startCamera(this,preferences)  //Start camera to start analyzer
             imageCapture = startCameraResult.first
             imageAnalyzer = startCameraResult.second
@@ -235,6 +242,13 @@ class MainActivity : AppCompatActivity() {
                 finish()
             }
         }
+    }
+
+    override fun onPause() {
+        super.onPause()
+
+        //Reset the value when pausing the current activity
+        isOptionsButtonClicked = false
     }
 
     override fun onSaveInstanceState(outState: Bundle) {

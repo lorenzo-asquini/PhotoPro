@@ -60,18 +60,18 @@
                 android:src="@drawable/night_mode_on"
                 android:layout_weight="1"/>
 
-            <!--Pose shoot-->
+            <!--Smart delay-->
             <ImageButton
-                android:id="@+id/pose_shoot_button"
+                android:id="@+id/smart_delay_button"
 
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:padding="@dimen/button_toolbar_padding"
                 android:layout_weight="1"
                 android:background="@null"
-                android:contentDescription="@string/pose_shoot_button_description"
+                android:contentDescription="@string/smart_delay_button_description"
                 android:scaleType="fitCenter"
-                android:src="@drawable/pose_shoot_on" />
+                android:src="@drawable/smart_delay_on" />
 
             <!--Frame averaging-->
             <ImageButton

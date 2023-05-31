@@ -58,7 +58,8 @@ fun cameraPermissionGranted(baseContext : Context) =
 fun vibratePhone(activity: AppCompatActivity, duration: Long){
     val vib =
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
-            //TODO: How to fix?
+            //Gives error while it is correct as for:
+            //https://developer.android.com/reference/android/content/Context#VIBRATOR_MANAGER_SERVICE
             val vibratorManager = activity.getSystemService(VIBRATOR_MANAGER_SERVICE) as VibratorManager
             vibratorManager.defaultVibrator
         } else {
@@ -185,12 +186,12 @@ fun getSaveImageContentValues() : ContentValues {
 fun createImageAnalysis(activity: AppCompatActivity, preferences: SharedPreferences) : Pair<ImageAnalysis?, MultiPurposeAnalyzer?>{
 
     val nightModeValue = preferences.getInt(SharedPrefs.NIGHT_MODE_KEY, Constant.NIGHT_MODE_OFF)
-    val poseShootValue = preferences.getInt(SharedPrefs.POSE_SHOOT_KEY, Constant.POSE_SHOOT_OFF)
+    val smartDelayValue = preferences.getInt(SharedPrefs.SMART_DELAY_KEY, Constant.SMART_DELAY_OFF)
     val frameAvgValue = preferences.getInt(SharedPrefs.FRAME_AVG_KEY, Constant.FRAME_AVG_OFF)
 
     if(frameAvgValue == Constant.FRAME_AVG_ON ||
         nightModeValue == Constant.NIGHT_MODE_AUTO ||
-        poseShootValue == Constant.POSE_SHOOT_ON){
+        smartDelayValue == Constant.SMART_DELAY_ON){
 
         val cameraManager = activity.getSystemService(Context.CAMERA_SERVICE) as CameraManager
 

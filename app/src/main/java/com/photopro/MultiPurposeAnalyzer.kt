@@ -38,11 +38,11 @@ class MultiPurposeAnalyzer(private val activity: AppCompatActivity, private val 
 
     override fun analyze(image: ImageProxy){
 
-        val poseShootValue = preferences.getInt(SharedPrefs.POSE_SHOOT_KEY, Constant.POSE_SHOOT_OFF)
+        val smartDelayValue = preferences.getInt(SharedPrefs.SMART_DELAY_KEY, Constant.SMART_DELAY_OFF)
         val nightModeValue = preferences.getInt(SharedPrefs.NIGHT_MODE_KEY, Constant.NIGHT_MODE_OFF)
         val frameAvgValue = preferences.getInt(SharedPrefs.FRAME_AVG_KEY, Constant.FRAME_AVG_OFF)
 
-        val isImageBitmapNeeded = poseShootValue == Constant.POSE_SHOOT_ON || nightModeValue == Constant.NIGHT_MODE_ON
+        val isImageBitmapNeeded = smartDelayValue == Constant.SMART_DELAY_ON || nightModeValue == Constant.NIGHT_MODE_ON
 
         //Create only one copy of the image that will be used by everyone
         imageBitmap =
@@ -52,7 +52,7 @@ class MultiPurposeAnalyzer(private val activity: AppCompatActivity, private val 
                 null  //Clear old bitmap to free memory
             }
 
-        if(poseShootValue == Constant.POSE_SHOOT_ON){
+        if(smartDelayValue == Constant.SMART_DELAY_ON){
             //TODO: run function. Create function inside this class and access the imageBitmap directly as class variable
         }
 
@@ -93,7 +93,7 @@ class MultiPurposeAnalyzer(private val activity: AppCompatActivity, private val 
         //Increase the number of frames used
         framesAveraged++
 
-        val frameToAverage = preferences.getInt(SharedPrefs.FRAMES_TO_AVERAGE_KEY, Constant.DEFAULT_FRAMES_TO_AVERAGE)
+        val frameToAverage = preferences.getInt(SharedPrefs.NR_FRAMES_TO_AVERAGE_KEY, Constant.DEFAULT_FRAMES_TO_AVERAGE)
 
         //If enough frames are averaged
         if(framesAveraged >= frameToAverage){
