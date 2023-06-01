@@ -3,12 +3,12 @@ package com.photopro
 import android.content.Context
 import android.content.SharedPreferences
 import android.hardware.camera2.CameraManager
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.view.ActionMode
+import android.view.MotionEvent
+import android.view.inputmethod.InputMethodManager
 import android.widget.EditText
 import android.widget.ImageButton
-import android.widget.LinearLayout
+import androidx.appcompat.app.AppCompatActivity
 
 class OptionsActivity : AppCompatActivity() {
 
@@ -21,9 +21,9 @@ class OptionsActivity : AppCompatActivity() {
         val cameraManager = getSystemService(Context.CAMERA_SERVICE) as CameraManager
         val features = getAvailableFeatures(this, cameraManager)
 
-        preferences = getPreferences(MODE_PRIVATE)
+        preferences = getSharedPreferences(SharedPrefs.SHARED_PREFERENCES_KEY, MODE_PRIVATE)
 
-        //Show the extension toggles if feature is available
+        //Show the extension toggles if features are available
         showExtensionsToggles(this, features)
 
         //Retrieve the saved preferences and show them
@@ -42,10 +42,23 @@ class OptionsActivity : AppCompatActivity() {
         super.onPause()
 
         //Validate inputs even when pausing the activity
-        val framesToAverageEditText = findViewById<EditText>(R.id.frame_avg_frame_number)
+        val framesToAverageEditText = findViewById<EditText>(R.id.frame_avg_frame_number_editText)
         validateInputFramesToAverage(framesToAverageEditText, this, preferences)
 
-        val smartDelaySecondsEditText = findViewById<EditText>(R.id.smart_delay_seconds)
+        val smartDelaySecondsEditText = findViewById<EditText>(R.id.smart_delay_seconds_editText)
         validateInputSmartDelaySeconds(smartDelaySecondsEditText, this, preferences)
+    }
+
+    //Hide the keyboard when touching anywhere in the activity
+    override fun dispatchTouchEvent(ev: MotionEvent?): Boolean {
+        if (currentFocus != null) {
+            val imm = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+            imm.hideSoftInputFromWindow(currentFocus!!.windowToken, 0)
+
+            //Remove cursors when hiding keyboard
+            findViewById<EditText>(R.id.frame_avg_frame_number_editText).clearFocus()
+            findViewById<EditText>(R.id.smart_delay_seconds_editText).clearFocus()
+        }
+        return super.dispatchTouchEvent(ev)
     }
 }
