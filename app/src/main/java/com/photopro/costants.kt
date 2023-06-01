@@ -66,6 +66,8 @@ object Constant{
 }
 
 object SharedPrefs{
+    const val SHARED_PREFERENCES_KEY = "global_shared_preferences"
+
     const val FLASH_KEY = "flash_value"
     const val FRAME_AVG_KEY = "frameAvg_value"
     const val SMART_DELAY_KEY = "smart_delay_value"

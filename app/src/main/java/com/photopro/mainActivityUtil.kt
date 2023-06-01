@@ -1,21 +1,15 @@
 package com.photopro
 
-import android.annotation.SuppressLint
 import android.content.SharedPreferences
 import android.os.Bundle
-import android.os.Handler
-import android.os.Looper
 import android.util.Log
-import android.view.MotionEvent
-import android.view.ScaleGestureDetector
-import android.view.View
-import android.widget.ImageView
-import androidx.camera.core.*
+import androidx.camera.core.CameraSelector
+import androidx.camera.core.ImageAnalysis
+import androidx.camera.core.ImageCapture
+import androidx.camera.core.Preview
 import androidx.camera.lifecycle.ProcessCameraProvider
 import androidx.camera.view.PreviewView
 import androidx.core.content.ContextCompat
-import java.util.*
-
 
 //File with useful functions for MainActivity
 
@@ -108,82 +102,4 @@ fun startCamera(activity: MainActivity, preferences: SharedPreferences, savedIns
     }
 
     return Pair(imageCapture, analyzer)
-}
-
-//Variable used to be sure that the circle is set to invisible depending on the last tap
-var startTime : Long = 0
-@SuppressLint("ClickableViewAccessibility")
-fun setPreviewGestures(activity: MainActivity){
-
-    // Listen to pinch gestures
-    val listener = object : ScaleGestureDetector.SimpleOnScaleGestureListener() {
-        override fun onScale(detector: ScaleGestureDetector): Boolean {
-            // Get the camera's current zoom ratio
-            val currentZoomRatio = activity.camera?.cameraInfo?.zoomState?.value?.zoomRatio ?: 0F
-
-            // Get the pinch gesture's scaling factor
-            val delta = detector.scaleFactor
-
-            // Update the camera's zoom ratio
-            activity.camera?.cameraControl?.setZoomRatio(currentZoomRatio * delta)
-
-            // Return true, as the event was handled
-            return true
-        }
-    }
-    val scaleGestureDetector = ScaleGestureDetector(activity, listener)
-
-    // Attach the pinch gesture listener to the viewfinder
-    val cameraPreview : PreviewView = activity.findViewById(R.id.camera_preview)
-
-    cameraPreview.setOnTouchListener { _, motionEvent: MotionEvent ->
-
-        //Handle zoom
-        scaleGestureDetector.onTouchEvent(motionEvent)
-
-        //Handle tap to focus
-        when (motionEvent.action) {
-            MotionEvent.ACTION_DOWN -> {
-                return@setOnTouchListener true
-            }
-
-            MotionEvent.ACTION_UP -> {
-                // Get the MeteringPointFactory from PreviewView
-                val factory = cameraPreview.meteringPointFactory
-
-                // Create a MeteringPoint from the tap coordinates
-                val point = factory.createPoint(motionEvent.x, motionEvent.y)
-
-                //Show focus circle where the user tapped
-                val focusCircle: ImageView = activity.findViewById(R.id.tapToFocus_circle)
-
-                focusCircle.x = motionEvent.x - focusCircle.width/2
-                focusCircle.y = motionEvent.y - focusCircle.height/2
-
-                focusCircle.visibility = View.VISIBLE
-                val timeTillInvisible : Long = 2000
-
-                //Reset the time of the last tap
-                startTime = Calendar.getInstance().timeInMillis
-
-                //Make the circle disappear after a few seconds
-                Handler(Looper.getMainLooper()).postDelayed({
-                    //If the delayed action is referring to the last tap
-                    if(Calendar.getInstance().timeInMillis - startTime >= timeTillInvisible) {
-                        focusCircle.visibility = View.INVISIBLE
-                    }
-                }, timeTillInvisible)
-
-                // Create a MeteringAction from the MeteringPoint
-                // All actions are performed: AF(Auto Focus), AE(Auto Exposure) and AWB(Auto White Balance)
-                val action = FocusMeteringAction.Builder(point).build()
-
-                // Trigger the focus and metering
-                activity.camera?.cameraControl?.startFocusAndMetering(action)
-
-                    return@setOnTouchListener true
-            }
-            else -> return@setOnTouchListener false
-        }
-    }
 }

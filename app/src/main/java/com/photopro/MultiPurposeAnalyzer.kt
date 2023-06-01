@@ -1,6 +1,5 @@
 package com.photopro
 
-import android.content.Context
 import android.content.SharedPreferences
 import android.graphics.Bitmap
 import android.graphics.Matrix
@@ -8,6 +7,7 @@ import android.net.Uri
 import android.provider.MediaStore
 import android.util.Log
 import android.view.Surface
+import android.widget.ImageButton
 import androidx.appcompat.app.AppCompatActivity
 import androidx.camera.core.ImageAnalysis
 import androidx.camera.core.ImageProxy
@@ -21,7 +21,9 @@ import java.io.OutputStream
 
 class MultiPurposeAnalyzer(private val activity: AppCompatActivity, private val rotation: Int) : ImageAnalysis.Analyzer{
 
-    private val preferences : SharedPreferences = activity.getPreferences(Context.MODE_PRIVATE)
+    private val preferences : SharedPreferences = activity.getSharedPreferences(SharedPrefs.SHARED_PREFERENCES_KEY,
+        AppCompatActivity.MODE_PRIVATE
+    )
 
     //Global variable so it can be accessed without passing it as a parameter
     private var imageBitmap : Bitmap? = null
@@ -73,9 +75,12 @@ class MultiPurposeAnalyzer(private val activity: AppCompatActivity, private val 
     fun startFrameAvg() {
         //Start capturing a picture with frame average
         framesAveraged = 0
+
+        //Change color to make visible that image averaging is happening
+        val frameAvgButton: ImageButton = activity.findViewById(R.id.frame_avg_button)
+        frameAvgButton.setColorFilter(activity.getColor(R.color.active_frame_avg_color))
     }
 
-    //TODO: Put a disclaimer that shows image averaging in process
     private fun frameAvg(){
         //Load current frame in Mat
         val currentFrame = Mat()
@@ -93,10 +98,10 @@ class MultiPurposeAnalyzer(private val activity: AppCompatActivity, private val 
         //Increase the number of frames used
         framesAveraged++
 
-        val frameToAverage = preferences.getInt(SharedPrefs.NR_FRAMES_TO_AVERAGE_KEY, Constant.DEFAULT_FRAMES_TO_AVERAGE)
+        val framesToAverage = preferences.getInt(SharedPrefs.NR_FRAMES_TO_AVERAGE_KEY, Constant.DEFAULT_FRAMES_TO_AVERAGE)
 
         //If enough frames are averaged
-        if(framesAveraged >= frameToAverage){
+        if(framesAveraged >= framesToAverage){
             //Create bitmap for result from Mat
             val resultBitmap = imageBitmap!!.copy(imageBitmap!!.config, true)
             matToBitmap(frameAvgResult, resultBitmap)
@@ -131,6 +136,10 @@ class MultiPurposeAnalyzer(private val activity: AppCompatActivity, private val 
             //Clear memory and stop frame averaging
             frameAvgResult = null
             framesAveraged = -1
+
+            //Set the image color to white when not in used
+            val frameAvgButton: ImageButton = activity.findViewById(R.id.frame_avg_button)
+            frameAvgButton.setColorFilter(activity.getColor(R.color.white))
 
             return
         }

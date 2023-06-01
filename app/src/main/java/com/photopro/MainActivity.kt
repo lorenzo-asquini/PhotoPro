@@ -11,7 +11,6 @@ import android.util.Log
 import android.widget.Button
 import android.widget.ImageButton
 import android.widget.Toast
-import androidx.appcompat.app.AppCompatActivity
 import androidx.camera.core.Camera
 import androidx.camera.core.ImageCapture
 import androidx.camera.core.ImageCaptureException
@@ -22,7 +21,7 @@ import java.util.concurrent.Executors
 
 //TODO: Tap to focus not working in front camera
 
-class MainActivity : AppCompatActivity() {
+class MainActivity : CameraAppCompactActivity() {
     //Object that becomes not null when (and if) the camera is started
     private var imageCapture: ImageCapture? = null
 
@@ -31,7 +30,7 @@ class MainActivity : AppCompatActivity() {
 
     //Public variable set when the camera is initialised.
     //Not returned because the initialisation may happen after the startCamera has finished
-    var camera: Camera? = null
+    override var camera: Camera? = null
 
     //Using lateinit makes it possible to initialize later a variable (inside onCreate)
     //Create a cameraExecutor to use the camera
@@ -48,7 +47,7 @@ class MainActivity : AppCompatActivity() {
 
         setContentView(R.layout.activity_main)
 
-        preferences = getPreferences(MODE_PRIVATE)
+        preferences = getSharedPreferences(SharedPrefs.SHARED_PREFERENCES_KEY, MODE_PRIVATE)
         val cameraManager = getSystemService(Context.CAMERA_SERVICE) as CameraManager
         val features = getAvailableFeatures(this, cameraManager)
 
@@ -67,6 +66,8 @@ class MainActivity : AppCompatActivity() {
             ActivityCompat.requestPermissions(this, arrayOf(Manifest.permission.CAMERA), Constant.REQUEST_CODE_PERMISSIONS)
         }
 
+        /*ADD LISTENERS TO BUTTONS*/
+        //TODO: Move listeners to cameraButtonsUtil because used both by the PRO mode and the normal mode?
 
         //Add listener to button to open the options menu
         val optionsButton: ImageButton = findViewById(R.id.options_button)
@@ -249,6 +250,13 @@ class MainActivity : AppCompatActivity() {
 
         //Reset the value when pausing the current activity
         isOptionsButtonClicked = false
+
+        //Stop frame averaging if activity is stopped (if analyzer was initialised)
+        imageAnalyzer?.framesAveraged = -1
+
+        //Change color to make visible that image averaging is stopped
+        val frameAvgButton: ImageButton = findViewById(R.id.frame_avg_button)
+        frameAvgButton.setColorFilter(getColor(R.color.white))
     }
 
     override fun onSaveInstanceState(outState: Bundle) {

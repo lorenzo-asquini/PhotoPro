@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 <LinearLayout
-    android:id = "@+id/options_container"
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
@@ -12,7 +11,7 @@
 
     android:clickable="true"
     android:focusable="true"
-    android:focusableInTouchMode="true" >
+    android:focusableInTouchMode="true">
 
     <!--Top toolbar containing the back button-->
     <androidx.appcompat.widget.Toolbar
@@ -371,6 +370,7 @@
 
                         android:id="@+id/smart_delay_seconds_textView"
                         android:text="@string/smart_delay_seconds_text"
+                        android:labelFor="@+id/smart_delay_seconds_editText"
 
                         android:textColor="@color/white"
                         android:textSize="@dimen/text_font_size"
@@ -380,7 +380,7 @@
                         android:layout_gravity="center_vertical"/>
 
                     <EditText
-                        android:id="@+id/smart_delay_seconds"
+                        android:id="@+id/smart_delay_seconds_editText"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_row="0"
@@ -394,7 +394,10 @@
                         android:imeOptions="actionDone"
                         android:importantForAutofill="no"
                         android:text="@string/smart_delay_seconds_default_value"
-                        android:labelFor="@+id/smart_delay_seconds_textView" />
+
+                        android:clickable="true"
+                        android:focusable="true"
+                        android:focusableInTouchMode="true"/>
 
                     <!--first row-->
                     <ImageView
@@ -418,6 +421,7 @@
 
                         android:id="@+id/frame_avg_frame_number_textView"
                         android:text="@string/frame_avg_frame_number_text"
+                        android:labelFor="@+id/frame_avg_frame_number_editText"
 
                         android:textColor="@color/white"
                         android:textSize="@dimen/text_font_size"
@@ -430,7 +434,7 @@
                         android:layout_column= "2"
                         android:layout_row= "1"
                         android:layout_columnWeight="@dimen/grid_edit_text_percentage"
-                        android:id="@+id/frame_avg_frame_number"
+                        android:id="@+id/frame_avg_frame_number_editText"
                         android:layout_width="wrap_content"
 
                         android:layout_height="wrap_content"
@@ -442,7 +446,10 @@
                         android:imeOptions="actionDone"
                         android:importantForAutofill="no"
                         android:text="@string/frame_avg_frame_number_default_value"
-                        android:labelFor="@+id/frame_avg_frame_number_textView" />
+
+                        android:clickable="true"
+                        android:focusable="true"
+                        android:focusableInTouchMode="true"/>
 
                     <!--third row-->
                     <ImageView
