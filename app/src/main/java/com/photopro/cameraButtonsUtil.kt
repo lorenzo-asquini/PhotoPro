@@ -85,6 +85,9 @@ fun drawFrameAvgButton(activity: AppCompatActivity, preferences: SharedPreferenc
 
     val frameAvgValue = preferences.getInt(SharedPrefs.FRAME_AVG_KEY, Constant.FRAME_AVG_OFF)
 
+    //From any state, the final color after touching the icon should be white
+    frameAvgButton.setColorFilter(activity.getColor(R.color.white))
+
     when(frameAvgValue){
         Constant.FRAME_AVG_OFF -> frameAvgButton.setImageResource(R.drawable.frame_avg_off)
         Constant.FRAME_AVG_ON -> frameAvgButton.setImageResource(R.drawable.frame_avg_on)
