@@ -2,22 +2,52 @@
     <string name="app_name">PhotoPro</string>
 
     <!--MainActivity layout-->
-    <string name="pro_mode_text">PRO</string>
-    <string name="flash_button_description">Select the flash mode</string>
-    <string name="speech_shoot_button_description">Select the voice shoot mode</string>
+    <string name="pro_text">PRO</string>
+    <string name="flash_button_description">Select the flash modality</string>
     <string name="capture_button_description">Take a picture</string>
     <string name="gallery_button_description">Open the gallery</string>
-    <string name="frame_avg_button_description">Select the frame averaging mode</string>
-    <string name="pose_shoot_button_description">Select the pose shoot mode</string>
-    <string name="night_mode_button_description">Select the night mode mode</string>
+    <string name="frame_avg_button_description">Select the frame averaging modality</string>
+    <string name="smart_delay_button_description">Select the smart delay modality</string>
+    <string name="night_mode_button_description">Select the night mode modality</string>
     <string name="options_button_description">Open the side menu</string>
     <string name="change_camera_button_description">Button to switch camera</string>
+    <string name="focus_circle_descriptor">Circle that indicates the position of the autofocus</string>
+    <string name="pro_mode_button_description">Button used to switch to PRO mode</string>
 
     <!--OptionsActivity layout-->
     <string name="back_arrow_button_description">Back arrow to exit the activity</string>
     <string name="extensions_text">Extensions</string>
+    <string name="options_text">Options</string>
     <string name="settings_text">Settings</string>
 
+    <string name="info_text">Info</string>
+
+    <string name="front_camera_text">FRONT\nCAMERA</string>
+    <string name="back_camera_text">BACK\nCAMERA</string>
+
     <string name="HDR_text">HDR</string>
+    <string name="HDR_description">HDR icon</string>
+    <string name="HDR_back_camera_description">HDR for back camera</string>
+    <string name="HDR_front_camera_description">HDR for front camera</string>
     <string name="bokeh_text">Bokeh</string>
+    <string name="bokeh_description">Bokeh icon</string>
+    <string name="bokeh_back_camera_description">Bokeh for back camera</string>
+    <string name="bokeh_front_camera_description">Bokeh for front camera</string>
+    <string name="face_retouch_text">Face Retouch</string>
+    <string name="face_retouch_description">Face Retouch icon</string>
+    <string name="face_retouch_back_camera_description">Face Retouch for back camera</string>
+    <string name="face_retouch_front_camera_description">Face Retouch for front camera</string>
+
+    <string name="smart_delay_seconds_text">Smart Delay Seconds</string>
+    <string name="frame_avg_frame_number_text">Number of Frames for\nFrame Averaging</string>
+    <string name="smart_delay_notification_sound_text">Allow a notification\nsound for Smart Delay</string>
+
+    <!--These two strings will be overwritten at runtime-->
+    <string name="smart_delay_seconds_default_value">3</string>
+    <string name="frame_avg_frame_number_default_value">5</string>
+
+    <string name="smart_delay_notification_sound_icon_description">Icon for Smart Delay notification sound</string>
+    <string name="smart_delay_notification_sound_toggle_button_description">Toggle button for Smart Delay notification sound</string>
+
+    <string name="invalid_input">Invalid input. Ignored</string>
 </resources>

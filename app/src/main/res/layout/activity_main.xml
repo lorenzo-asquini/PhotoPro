@@ -35,63 +35,50 @@
 
             <!--Flash icon-->
             <ImageButton
-                android:id="@+id/flash_mode"
+                android:id="@+id/flash_button"
 
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_margin="@dimen/button_toolbar_margin"
+                android:padding="@dimen/button_toolbar_padding"
                 android:layout_weight="1"
                 android:background="@null"
                 android:contentDescription="@string/flash_button_description"
                 android:scaleType="fitCenter"
                 android:src="@drawable/flash_on" />
 
-            <!--Speech activated shoot-->
-            <ImageButton
-                android:id="@+id/speech_shoot_mode"
-
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_margin="@dimen/button_toolbar_margin"
-                android:layout_weight="1"
-                android:background="@null"
-                android:contentDescription="@string/speech_shoot_button_description"
-                android:scaleType="fitCenter"
-                android:src="@drawable/speech_shoot_on" />
-
             <!--Frame averaging-->
             <ImageButton
-                android:id="@+id/frame_avg_mode"
+                android:id="@+id/frame_avg_button"
 
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_margin="@dimen/button_toolbar_margin"
+                android:padding="@dimen/button_toolbar_padding"
                 android:layout_weight="1"
                 android:background="@null"
                 android:contentDescription="@string/frame_avg_button_description"
                 android:scaleType="fitCenter"
                 android:src="@drawable/frame_avg_on" />
 
-            <!--Pose shoot-->
+            <!--Smart delay-->
             <ImageButton
-                android:id="@+id/pose_shoot_mode"
+                android:id="@+id/smart_delay_button"
 
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_margin="@dimen/button_toolbar_margin"
+                android:padding="@dimen/button_toolbar_padding"
                 android:layout_weight="1"
                 android:background="@null"
-                android:contentDescription="@string/pose_shoot_button_description"
+                android:contentDescription="@string/smart_delay_button_description"
                 android:scaleType="fitCenter"
-                android:src="@drawable/pose_shoot_on" />
+                android:src="@drawable/smart_delay_on" />
 
             <!--Night mode-->
             <ImageButton
-                android:id="@+id/night_mode_mode"
+                android:id="@+id/night_mode_button"
 
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_margin="@dimen/button_toolbar_margin"
+                android:padding="@dimen/button_toolbar_padding"
                 android:layout_weight="1"
                 android:background="@null"
                 android:contentDescription="@string/night_mode_button_description"
@@ -104,7 +91,7 @@
 
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_margin="@dimen/button_toolbar_margin"
+                android:padding="@dimen/button_toolbar_padding"
                 android:layout_weight="1"
                 android:background="@null"
                 android:contentDescription="@string/options_button_description"
@@ -120,7 +107,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        app:layout_constraintGuide_percent="0.09" />
+        app:layout_constraintGuide_percent="@dimen/bottom_features_toolbar_guideline_percent" />
 
     <!--Create guideline to set the view height to a percentage of the screen-->
     <androidx.constraintlayout.widget.Guideline
@@ -130,9 +117,8 @@
         android:orientation="horizontal"
         app:layout_constraintGuide_percent="@dimen/top_view_guideline_percent" />
 
-    <!--Create guideline to set the view height to a percentage of the screen-->
-    <androidx.camera.view.PreviewView
-        android:id="@+id/camera_preview"
+    <!--Create a frame layout containing the view and the circle when present-->
+    <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="0dp"
         app:layout_constraintBottom_toTopOf="@+id/bottom_view_guideline"
@@ -140,7 +126,21 @@
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="@+id/top_view_guideline"
-        app:layout_constraintVertical_bias="1.0"></androidx.camera.view.PreviewView>
+        app:layout_constraintVertical_bias="1.0">
+
+        <androidx.camera.view.PreviewView
+            android:id="@+id/camera_preview"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+
+        <ImageView
+            android:id="@+id/tapToFocus_circle"
+            android:src="@drawable/circle"
+            android:visibility="invisible"
+            android:layout_height="@dimen/focus_circle_size"
+            android:layout_width="@dimen/focus_circle_size"
+            android:contentDescription="@string/focus_circle_descriptor"/>
+    </FrameLayout>
 
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/bottom_view_guideline"
@@ -166,6 +166,7 @@
         android:contentDescription="@string/change_camera_button_description"
         android:scaleType="fitCenter"
         android:src="@drawable/change_camera"
+        app:layout_constraintDimensionRatio="1:1"
         app:layout_constraintBottom_toTopOf="@+id/bottom_change_camera_button_guideline"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -178,19 +179,11 @@
         android:orientation="horizontal"
         app:layout_constraintGuide_percent="@dimen/bottom_change_camera_button_guideline_percent" />
 
-    <!--Create guideline to set the button height and width to a percentage of the screen-->
-    <androidx.constraintlayout.widget.Guideline
-        android:id="@+id/top_buttons_guideline"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        app:layout_constraintGuide_percent="@dimen/top_buttons_guideline_percent" />
-
     <Button
         android:id="@+id/image_capture_button"
         android:layout_width="0dp"
-
         android:layout_height="0dp"
+        android:layout_margin="@dimen/image_capture_button_toolbar_margin"
         android:background="@drawable/round_button"
         android:contentDescription="@string/capture_button_description"
         app:backgroundTint="@color/white"
@@ -200,19 +193,23 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/top_buttons_guideline" />
+        app:layout_constraintTop_toTopOf="@+id/bottom_view_guideline" />
 
-    <Button
+    <ImageButton
         android:id="@+id/pro_mode_button"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/pro_mode_text"
-        android:textColor="@android:color/black"
-        app:backgroundTint="@color/teal_200"
+
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:background="@null"
+        android:padding="@dimen/pro_button_toolbar_padding"
+        android:scaleType="fitCenter"
+        android:src="@drawable/pro"
+        android:contentDescription="@string/pro_mode_button_description"
         app:layout_constraintBottom_toTopOf="@+id/bottom_button_guideline"
         app:layout_constraintEnd_toStartOf="@+id/image_capture_button"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/top_buttons_guideline" />
+        app:layout_constraintTop_toTopOf="@+id/bottom_view_guideline"
+        app:layout_constraintDimensionRatio="1:1" />
 
     <ImageButton
         android:id="@+id/gallery_button"
@@ -220,6 +217,7 @@
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:background="@null"
+        android:padding="@dimen/gallery_button_toolbar_padding"
         android:contentDescription="@string/gallery_button_description"
         android:scaleType="fitCenter"
         android:src="@drawable/gallery"
@@ -227,7 +225,7 @@
         app:layout_constraintDimensionRatio="1:1"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/image_capture_button"
-        app:layout_constraintTop_toTopOf="@+id/top_buttons_guideline" />
+        app:layout_constraintTop_toTopOf="@+id/bottom_view_guideline" />
 
     <!--Create guideline to set the button height and width to a percentage of the screen-->
     <androidx.constraintlayout.widget.Guideline
