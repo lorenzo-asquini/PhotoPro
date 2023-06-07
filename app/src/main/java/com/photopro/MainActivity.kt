@@ -5,12 +5,19 @@ import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
 import android.hardware.camera2.CameraManager
+import android.media.RingtoneManager
+import android.net.Uri
+import android.os.Build
 import android.os.Bundle
+import android.os.CountDownTimer
 import android.provider.MediaStore
 import android.util.Log
+import android.view.View
 import android.widget.Button
 import android.widget.ImageButton
+import android.widget.TextView
 import android.widget.Toast
+import androidx.annotation.RequiresApi
 import androidx.camera.core.Camera
 import androidx.camera.core.ImageCapture
 import androidx.camera.core.ImageCaptureException
@@ -21,7 +28,12 @@ import java.util.concurrent.Executors
 
 //TODO: Tap to focus not working in front camera
 
-class MainActivity : CameraAppCompactActivity() {
+interface MyListener {
+    fun onEventCall(obj : MultiPurposeAnalyzer)
+}
+
+//Implements also MyListener
+class MainActivity : CameraAppCompactActivity(),MyListener {
     //Object that becomes not null when (and if) the camera is started
     private var imageCapture: ImageCapture? = null
 
@@ -41,6 +53,10 @@ class MainActivity : CameraAppCompactActivity() {
 
     //Avoid opening the options menu multiple times when spamming button
     private var isOptionsButtonClicked = false
+
+    //Timer display and toggle check for smart delay
+    private lateinit var tv_timer : TextView
+    private var toggle : Boolean = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -132,7 +148,16 @@ class MainActivity : CameraAppCompactActivity() {
 
         //Add listener to button to change smart delay mode
         val smartDelayButton: ImageButton = findViewById(R.id.smart_delay_button)
+        tv_timer = findViewById(R.id.tv_timer)
+        tv_timer.visibility = View.INVISIBLE
         smartDelayButton.setOnClickListener{
+            tv_timer.text = "00"
+            toggle = !toggle
+            if(toggle) {
+                tv_timer.visibility = View.VISIBLE
+            }else {
+                tv_timer.visibility = View.INVISIBLE
+            }
             changeSmartDelayValue(preferences)
             drawSmartDelayButton(this, preferences, true)
             val startCameraResult = startCamera(this,preferences)  //Start camera to start analyzer
@@ -273,5 +298,33 @@ class MainActivity : CameraAppCompactActivity() {
     override fun onDestroy() {
         super.onDestroy()
         cameraExecutor.shutdown()
+    }
+
+    //Method used for manage count down timer for smart delay
+    override fun onEventCall(smartAnalyzer : MultiPurposeAnalyzer){
+        smartAnalyzer.setDetected(true)
+        try {
+            val notification: Uri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION)
+            val r = RingtoneManager.getRingtone(applicationContext, notification)
+            r.play()
+        } catch (e: java.lang.Exception) {
+            e.printStackTrace()
+        }
+        val timer = object: CountDownTimer(10000, 1000) {
+            override fun onTick(millisUntilFinished: Long) {
+                val timeleft = millisUntilFinished / 1000
+                tv_timer.text = timeleft.toString()
+            }
+
+            override fun onFinish() {
+                tv_timer.text = "00"
+                if(toggle){ //Only if the smart delay button is on
+                    Log.d("PoseDetection: ", "Photo capturing")
+                    takePhoto()
+                    smartAnalyzer.setDetected(false)
+                }
+            }
+        }.start()
+        Log.d("PoseDetection: ", "Photo taken")
     }
 }
