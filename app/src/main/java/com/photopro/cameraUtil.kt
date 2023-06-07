@@ -166,6 +166,7 @@ fun createImageAnalysis(activity: AppCompatActivity, preferences: SharedPreferen
             .setResolutionStrategy(resStrategy).build()
 
         val analyzer = MultiPurposeAnalyzer(activity, currentRotation)
+        analyzer.addListener(activity as MyListener) //Adding analyzer listener for smart delay
 
         //This is a UseCase
         val imageAnalysis = ImageAnalysis.Builder()

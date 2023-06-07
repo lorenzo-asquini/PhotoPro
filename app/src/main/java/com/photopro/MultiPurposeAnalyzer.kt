@@ -1,5 +1,6 @@
 package com.photopro
 
+import android.content.ContentValues
 import android.content.SharedPreferences
 import android.graphics.Bitmap
 import android.graphics.Matrix
@@ -9,6 +10,7 @@ import android.util.Log
 import android.view.Surface
 import android.widget.ImageButton
 import androidx.appcompat.app.AppCompatActivity
+import androidx.camera.core.ExperimentalGetImage
 import androidx.camera.core.ImageAnalysis
 import androidx.camera.core.ImageProxy
 import org.opencv.android.OpenCVLoader
@@ -18,12 +20,24 @@ import org.opencv.core.Core.addWeighted
 import org.opencv.core.Mat
 import org.opencv.core.Size
 import java.io.OutputStream
+import com.google.mlkit.vision.pose.PoseDetection
+import com.google.mlkit.vision.pose.PoseDetector
+import com.google.mlkit.vision.pose.PoseLandmark
+import com.google.mlkit.vision.pose.accurate.AccuratePoseDetectorOptions
+import com.google.mlkit.vision.common.InputImage
 
 class MultiPurposeAnalyzer(private val activity: AppCompatActivity, private val rotation: Int) : ImageAnalysis.Analyzer{
 
     private val preferences : SharedPreferences = activity.getSharedPreferences(SharedPrefs.SHARED_PREFERENCES_KEY,
         AppCompatActivity.MODE_PRIVATE
     )
+
+    //Needed for PoseDetection
+    private lateinit var listener : MyListener
+    private lateinit var recognizer : PoseDetector
+    private var recognized = 0
+    private var detected = false
+    var likelyHood : Float = 0F
 
     //Global variable so it can be accessed without passing it as a parameter
     private var imageBitmap : Bitmap? = null
@@ -38,6 +52,7 @@ class MultiPurposeAnalyzer(private val activity: AppCompatActivity, private val 
         OpenCVLoader.initDebug()
     }
 
+    @ExperimentalGetImage
     override fun analyze(image: ImageProxy){
 
         val smartDelayValue = preferences.getInt(SharedPrefs.SMART_DELAY_KEY, Constant.SMART_DELAY_OFF)
@@ -54,8 +69,9 @@ class MultiPurposeAnalyzer(private val activity: AppCompatActivity, private val 
                 null  //Clear old bitmap to free memory
             }
 
-        if(smartDelayValue == Constant.SMART_DELAY_ON){
-            //TODO: run function. Create function inside this class and access the imageBitmap directly as class variable
+        if(smartDelayValue == Constant.SMART_DELAY_ON && !detected){
+            Log.d("PoseDetection: ", "DETECTED: $detected")
+            smartDelay(image)
         }
 
         if(nightModeValue == Constant.NIGHT_MODE_ON){
@@ -69,7 +85,10 @@ class MultiPurposeAnalyzer(private val activity: AppCompatActivity, private val 
             }
         }
 
-        image.close()
+        Log.d("PoseDetection: ", "OKkkkkkkkkkkkkkkkkkkkkkkkkkkkk")
+        if(!(smartDelayValue == Constant.SMART_DELAY_ON && !detected)){
+            image.close()
+        }
     }
 
     fun startFrameAvg() {
@@ -155,5 +174,59 @@ class MultiPurposeAnalyzer(private val activity: AppCompatActivity, private val 
                 Log.e(Constant.TAG, "Photo save failed: ${e.printStackTrace()}")
             }
         }
+    }
+
+    //Initialize the PoseDetector for smart delay
+    private fun mlPoseDetection(){
+        val options = AccuratePoseDetectorOptions.Builder()
+            .setDetectorMode(AccuratePoseDetectorOptions.SINGLE_IMAGE_MODE)
+            .build()
+        recognizer = PoseDetection.getClient(options)
+    }
+
+    //Listener for smart delay
+    fun addListener(ls: MyListener) {
+        listener = ls
+    }
+
+    private fun notifyActivity(){
+        listener.onEventCall(this)
+    }
+
+    @ExperimentalGetImage
+    fun smartDelay(image: ImageProxy) {
+        mlPoseDetection()
+        val inImage = InputImage.fromMediaImage(image.image!! , image.imageInfo.rotationDegrees )
+        recognizer.process(inImage)
+            .addOnSuccessListener{posList ->
+                likelyHood = 0F
+                for(landmark in posList.allPoseLandmarks){
+                    if(!landmark.equals(null)) {
+                        likelyHood += landmark.inFrameLikelihood
+                        Log.d("PoseDetection: ", "Likely: ${landmark.landmarkType} ${landmark.inFrameLikelihood}")
+                    }
+                }
+                Log.d("PoseDetection: ", "Pose detected: $likelyHood")
+                if(likelyHood>=27.0){
+                    recognized++
+                    Log.d("PoseDetection: ", "OK $recognized")
+                }else{
+                    recognized = 0
+                }
+                if(recognized == 3){
+                    Log.d("PoseDetection: ", "Taking picture in few seconds")
+                    recognized = 0
+                    notifyActivity()
+                }
+                image.close()
+            }
+            .addOnFailureListener{
+                Log.d(ContentValues.TAG,"Error from analyzer")
+                image.close()
+            }
+    }
+
+    fun setDetected(truth : Boolean){
+        detected = truth
     }
 }
