@@ -27,6 +27,3 @@ CameraUtil:
 
 build.gradle:
 	Added dependencies for mlkit-posedetecion
-
-IMPORTANT:
-	Please add the tv_timer TextView on the layout file with id = count_timer
