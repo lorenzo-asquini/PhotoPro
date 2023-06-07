@@ -235,4 +235,14 @@
         android:orientation="horizontal"
         app:layout_constraintGuide_percent="@dimen/bottom_buttons_guideline_percent" />
 
+    <TextView
+        android:id="@+id/tv_timer"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:text="00"
+        app:layout_constraintBottom_toTopOf="@+id/top_change_camera_button_guideline"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent" />
+    
 </androidx.constraintlayout.widget.ConstraintLayout>
