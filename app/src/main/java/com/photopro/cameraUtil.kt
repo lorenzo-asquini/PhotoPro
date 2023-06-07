@@ -184,7 +184,7 @@ fun createImageAnalysis(activity: AppCompatActivity, preferences: SharedPreferen
 //Variable used to be sure that the circle is set to invisible depending on the last tap
 var startTime : Long = 0
 @SuppressLint("ClickableViewAccessibility")
-fun setPreviewGestures(activity: CameraAppCompactActivity){
+fun setPreviewGestures(activity: MainActivity, preferences: SharedPreferences, features: AvailableFeatures){
 
     // Listen to pinch gestures
     val listener = object : ScaleGestureDetector.SimpleOnScaleGestureListener() {
@@ -219,6 +219,22 @@ fun setPreviewGestures(activity: CameraAppCompactActivity){
             }
 
             MotionEvent.ACTION_UP -> {
+
+                //Do nothing if current camera does not support autofocus
+                if(preferences.getInt(SharedPrefs.CAMERA_FACING_KEY, Constant.CAMERA_BACK) == Constant.CAMERA_FRONT){
+                    if(!features.isFrontAutoFocusAvailable){
+                        return@setOnTouchListener true
+                    }
+                }
+
+                if(preferences.getInt(SharedPrefs.CAMERA_FACING_KEY, Constant.CAMERA_BACK) == Constant.CAMERA_BACK){
+                    if(!features.isBackAutoFocusAvailable){
+                        return@setOnTouchListener true
+                    }
+                }
+
+                //Current camera does support autofocus
+
                 // Get the MeteringPointFactory from PreviewView
                 val factory = cameraPreview.meteringPointFactory
 

@@ -8,7 +8,9 @@ import android.net.Uri
 import android.provider.MediaStore
 import android.util.Log
 import android.view.Surface
+import android.view.View
 import android.widget.ImageButton
+import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.camera.core.ExperimentalGetImage
 import androidx.camera.core.ImageAnalysis
@@ -22,7 +24,6 @@ import org.opencv.core.Size
 import java.io.OutputStream
 import com.google.mlkit.vision.pose.PoseDetection
 import com.google.mlkit.vision.pose.PoseDetector
-import com.google.mlkit.vision.pose.PoseLandmark
 import com.google.mlkit.vision.pose.accurate.AccuratePoseDetectorOptions
 import com.google.mlkit.vision.common.InputImage
 
@@ -34,10 +35,20 @@ class MultiPurposeAnalyzer(private val activity: AppCompatActivity, private val 
 
     //Needed for PoseDetection
     private lateinit var listener : MyListener
-    private lateinit var recognizer : PoseDetector
-    private var recognized = 0
-    private var detected = false
-    var likelyHood : Float = 0F
+    private lateinit var smartDelayRecognizer : PoseDetector
+
+    //A person must be recognized for multiple frames before being sure that it is a person
+    private var smartDelayTimesRecognized = 0
+    var personDetected = false
+        set(value) {
+            field = value
+
+            if(!personDetected){
+                //Hide timer if person is not detected
+                val smartDelayTimer : TextView = activity.findViewById(R.id.smart_delay_timer)
+                smartDelayTimer.visibility = View.INVISIBLE
+            }
+        }
 
     //Global variable so it can be accessed without passing it as a parameter
     private var imageBitmap : Bitmap? = null
@@ -69,8 +80,8 @@ class MultiPurposeAnalyzer(private val activity: AppCompatActivity, private val 
                 null  //Clear old bitmap to free memory
             }
 
-        if(smartDelayValue == Constant.SMART_DELAY_ON && !detected){
-            Log.d("PoseDetection: ", "DETECTED: $detected")
+        //If a person is detected, do not search again until the photo is taken
+        if(smartDelayValue == Constant.SMART_DELAY_ON && !personDetected){
             smartDelay(image)
         }
 
@@ -85,8 +96,8 @@ class MultiPurposeAnalyzer(private val activity: AppCompatActivity, private val 
             }
         }
 
-        Log.d("PoseDetection: ", "OKkkkkkkkkkkkkkkkkkkkkkkkkkkkk")
-        if(!(smartDelayValue == Constant.SMART_DELAY_ON && !detected)){
+        //Close the imageProxy if it was not already closed by the smart delay function
+        if(!(smartDelayValue == Constant.SMART_DELAY_ON && !personDetected)){
             image.close()
         }
     }
@@ -181,7 +192,7 @@ class MultiPurposeAnalyzer(private val activity: AppCompatActivity, private val 
         val options = AccuratePoseDetectorOptions.Builder()
             .setDetectorMode(AccuratePoseDetectorOptions.SINGLE_IMAGE_MODE)
             .build()
-        recognizer = PoseDetection.getClient(options)
+        smartDelayRecognizer = PoseDetection.getClient(options)
     }
 
     //Listener for smart delay
@@ -196,26 +207,34 @@ class MultiPurposeAnalyzer(private val activity: AppCompatActivity, private val 
     @ExperimentalGetImage
     fun smartDelay(image: ImageProxy) {
         mlPoseDetection()
-        val inImage = InputImage.fromMediaImage(image.image!! , image.imageInfo.rotationDegrees )
-        recognizer.process(inImage)
+
+        val inImage = InputImage.fromMediaImage(image.image!!, image.imageInfo.rotationDegrees)
+
+        smartDelayRecognizer.process(inImage)
             .addOnSuccessListener{posList ->
-                likelyHood = 0F
+
+                var detectionLikelihood = 0F
+
                 for(landmark in posList.allPoseLandmarks){
                     if(!landmark.equals(null)) {
-                        likelyHood += landmark.inFrameLikelihood
-                        Log.d("PoseDetection: ", "Likely: ${landmark.landmarkType} ${landmark.inFrameLikelihood}")
+                        detectionLikelihood += landmark.inFrameLikelihood
                     }
                 }
-                Log.d("PoseDetection: ", "Pose detected: $likelyHood")
-                if(likelyHood>=27.0){
-                    recognized++
-                    Log.d("PoseDetection: ", "OK $recognized")
+
+                Log.d("PoseDetection: ", "Pose detected: $detectionLikelihood")
+
+                if(detectionLikelihood>=27.0){
+                    smartDelayTimesRecognized++
+                    Log.d("PoseDetection: ", "OK $smartDelayTimesRecognized")
                 }else{
-                    recognized = 0
+                    //Reset counter if for one frame the person is not detected
+                    smartDelayTimesRecognized = 0
                 }
-                if(recognized == 3){
+
+                //Person recognized multiple times. It should be a real person
+                if(smartDelayTimesRecognized == 3){
                     Log.d("PoseDetection: ", "Taking picture in few seconds")
-                    recognized = 0
+                    smartDelayTimesRecognized = 0
                     notifyActivity()
                 }
                 image.close()
@@ -224,9 +243,5 @@ class MultiPurposeAnalyzer(private val activity: AppCompatActivity, private val 
                 Log.d(ContentValues.TAG,"Error from analyzer")
                 image.close()
             }
-    }
-
-    fun setDetected(truth : Boolean){
-        detected = truth
     }
 }
