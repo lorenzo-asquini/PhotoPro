@@ -5,12 +5,18 @@ import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
 import android.hardware.camera2.CameraManager
+import android.media.RingtoneManager
+import android.net.Uri
 import android.os.Bundle
+import android.os.CountDownTimer
 import android.provider.MediaStore
 import android.util.Log
+import android.view.View
 import android.widget.Button
 import android.widget.ImageButton
+import android.widget.TextView
 import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
 import androidx.camera.core.Camera
 import androidx.camera.core.ImageCapture
 import androidx.camera.core.ImageCaptureException
@@ -19,18 +25,24 @@ import androidx.core.content.ContextCompat
 import java.util.concurrent.ExecutorService
 import java.util.concurrent.Executors
 
-//TODO: Tap to focus not working in front camera
+interface MyListener {
+    fun onEventCall(analyzer : MultiPurposeAnalyzer)
+}
 
-class MainActivity : CameraAppCompactActivity() {
+//Implements also MyListener
+class MainActivity : AppCompatActivity(), MyListener {
     //Object that becomes not null when (and if) the camera is started
     private var imageCapture: ImageCapture? = null
 
     //Variable used to start frame averaging when needed
     private var imageAnalyzer : MultiPurposeAnalyzer? = null
 
+    //Timer for smart delay
+    private var timer : CountDownTimer? = null
+
     //Public variable set when the camera is initialised.
     //Not returned because the initialisation may happen after the startCamera has finished
-    override var camera: Camera? = null
+    var camera: Camera? = null
 
     //Using lateinit makes it possible to initialize later a variable (inside onCreate)
     //Create a cameraExecutor to use the camera
@@ -67,7 +79,6 @@ class MainActivity : CameraAppCompactActivity() {
         }
 
         /*ADD LISTENERS TO BUTTONS*/
-        //TODO: Move listeners to cameraButtonsUtil because used both by the PRO mode and the normal mode?
 
         //Add listener to button to open the options menu
         val optionsButton: ImageButton = findViewById(R.id.options_button)
@@ -112,9 +123,6 @@ class MainActivity : CameraAppCompactActivity() {
                 }
 
                 else -> {
-                    val result = startCamera(this, preferences)
-                    imageCapture = result.first
-                    imageAnalyzer = result.second
                     imageCapture!!.flashMode = ImageCapture.FLASH_MODE_OFF
                 }  //If something goes wrong
             }
@@ -132,6 +140,9 @@ class MainActivity : CameraAppCompactActivity() {
 
         //Add listener to button to change smart delay mode
         val smartDelayButton: ImageButton = findViewById(R.id.smart_delay_button)
+        val smartDelayTimer : TextView = findViewById(R.id.smart_delay_timer)
+        smartDelayTimer.visibility = View.INVISIBLE
+
         smartDelayButton.setOnClickListener{
             changeSmartDelayValue(preferences)
             drawSmartDelayButton(this, preferences, true)
@@ -180,7 +191,7 @@ class MainActivity : CameraAppCompactActivity() {
         //Zoom is maintained when changing to landscape
         //Add listener to the camera preview that will get the point of the tap and set the focus on that point
         //Focus point is lost when changing to landscape and changing camera
-        setPreviewGestures(this)
+        setPreviewGestures(this, preferences, features)
 
         //Create a single thread for processing camera data
         cameraExecutor = Executors.newSingleThreadExecutor()
@@ -254,9 +265,27 @@ class MainActivity : CameraAppCompactActivity() {
         //Stop frame averaging if activity is stopped (if analyzer was initialised)
         imageAnalyzer?.framesAveraged = -1
 
+        //Make the person not detected anymore and cancel timer if it was set
+        imageAnalyzer?.personDetected = false  //Also removes countdown
+        timer?.cancel()
+
         //Change color to make visible that image averaging is stopped
         val frameAvgButton: ImageButton = findViewById(R.id.frame_avg_button)
         frameAvgButton.setColorFilter(getColor(R.color.white))
+    }
+
+    override fun onResume() {
+        super.onResume()
+
+        //Necessary to set again always on flash when resuming activity
+        when(preferences.getInt(SharedPrefs.FLASH_KEY, Constant.FLASH_OFF)){
+            Constant.FLASH_ALWAYS_ON -> {
+                camera?.cameraControl?.enableTorch(true)
+            }
+            else -> {
+                imageCapture!!.flashMode = ImageCapture.FLASH_MODE_OFF
+            }
+        }
     }
 
     override fun onSaveInstanceState(outState: Bundle) {
@@ -273,5 +302,50 @@ class MainActivity : CameraAppCompactActivity() {
     override fun onDestroy() {
         super.onDestroy()
         cameraExecutor.shutdown()
+    }
+
+    //Manage count down timer for smart delay
+    override fun onEventCall(analyzer : MultiPurposeAnalyzer){
+        analyzer.personDetected = true
+
+        //Notify the user with a sound if a person was detected
+        try {
+            //Play the notification only if enabled
+            val smartDelayValue = preferences.getInt(SharedPrefs.SMART_DELAY_KEY, Constant.SMART_DELAY_OFF)
+            if(smartDelayValue == Constant.SMART_DELAY_NOTIFICATION_ON) {
+                val notification: Uri =
+                    RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION)
+                val r = RingtoneManager.getRingtone(applicationContext, notification)
+                r.play()
+            }
+        } catch (e: java.lang.Exception) {
+            e.printStackTrace()
+        }
+
+        //Show timer text when a person is detected
+        val smartDelayTimer : TextView = findViewById(R.id.smart_delay_timer)
+        smartDelayTimer.visibility = View.VISIBLE
+
+        val timerSeconds = preferences.getInt(SharedPrefs.SMART_DELAY_SECONDS_KEY, Constant.DEFAULT_SMART_DELAY_SECONDS)
+        timer = object: CountDownTimer((timerSeconds * 1000).toLong(), 1000) {
+            override fun onTick(millisUntilFinished: Long) {
+                val timeLeft = millisUntilFinished / 1000
+                smartDelayTimer.text = timeLeft.toString()
+            }
+
+            override fun onFinish() {
+                val smartDelayValue = preferences.getInt(SharedPrefs.SMART_DELAY_KEY, Constant.SMART_DELAY_OFF)
+                //Only if the smart delay button is still on, take a photo
+                if(smartDelayValue == Constant.SMART_DELAY_ON && analyzer.personDetected){
+                    Log.d("PoseDetection: ", "Photo capturing")
+                    takePhoto()
+                    analyzer.personDetected = false
+                }
+
+                //Hide timer at the end of the countdown
+                smartDelayTimer.visibility = View.INVISIBLE
+            }
+        }.start()
+        Log.d("PoseDetection: ", "Photo taken")
     }
 }

@@ -5,6 +5,7 @@ import android.content.Intent
 import android.content.SharedPreferences
 import android.view.View
 import android.widget.ImageButton
+import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 
 //Functions useful for both normal camera and PRO camera
@@ -106,6 +107,11 @@ fun changeFrameAvgValue(preferences: SharedPreferences){
 
 fun drawSmartDelayButton(activity: AppCompatActivity, preferences: SharedPreferences, show : Boolean){
     val smartDelayButton: ImageButton = activity.findViewById(R.id.smart_delay_button)
+
+    //In any case, when drawing the button there should not be the timer visible
+    //(Both if not active or if just activated)
+    val smartDelayTimer : TextView = activity.findViewById(R.id.smart_delay_timer)
+    smartDelayTimer.visibility = View.INVISIBLE
 
     if(!show){
         smartDelayButton.visibility = View.GONE

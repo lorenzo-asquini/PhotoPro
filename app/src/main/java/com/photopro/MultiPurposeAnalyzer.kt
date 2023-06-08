@@ -1,5 +1,6 @@
 package com.photopro
 
+import android.content.ContentValues
 import android.content.SharedPreferences
 import android.graphics.Bitmap
 import android.graphics.Color
@@ -9,8 +10,11 @@ import android.os.CountDownTimer
 import android.provider.MediaStore
 import android.util.Log
 import android.view.Surface
+import android.view.View
 import android.widget.ImageButton
+import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
+import androidx.camera.core.ExperimentalGetImage
 import androidx.camera.core.ImageAnalysis
 import androidx.camera.core.ImageProxy
 import kotlinx.coroutines.delay
@@ -22,13 +26,33 @@ import org.opencv.core.Core.addWeighted
 import org.opencv.core.Mat
 import org.opencv.core.Size
 import java.io.OutputStream
-import kotlin.concurrent.thread
+import com.google.mlkit.vision.pose.PoseDetection
+import com.google.mlkit.vision.pose.PoseDetector
+import com.google.mlkit.vision.pose.accurate.AccuratePoseDetectorOptions
+import com.google.mlkit.vision.common.InputImage
 
 class MultiPurposeAnalyzer(private val activity: AppCompatActivity, private val rotation: Int) : ImageAnalysis.Analyzer{
 
     private val preferences : SharedPreferences = activity.getSharedPreferences(SharedPrefs.SHARED_PREFERENCES_KEY,
         AppCompatActivity.MODE_PRIVATE
     )
+
+    //Needed for PoseDetection
+    private lateinit var listener : MyListener
+    private lateinit var smartDelayRecognizer : PoseDetector
+
+    //A person must be recognized for multiple frames before being sure that it is a person
+    private var smartDelayTimesRecognized = 0
+    var personDetected = false
+        set(value) {
+            field = value
+
+            if(!personDetected){
+                //Hide timer if person is not detected
+                val smartDelayTimer : TextView = activity.findViewById(R.id.smart_delay_timer)
+                smartDelayTimer.visibility = View.INVISIBLE
+            }
+        }
 
     //Global variable so it can be accessed without passing it as a parameter
     private var imageBitmap : Bitmap? = null
@@ -46,6 +70,7 @@ class MultiPurposeAnalyzer(private val activity: AppCompatActivity, private val 
         OpenCVLoader.initDebug()
     }
 
+    @ExperimentalGetImage
     override fun analyze(image: ImageProxy){
 
         val smartDelayValue = preferences.getInt(SharedPrefs.SMART_DELAY_KEY, Constant.SMART_DELAY_OFF)
@@ -62,9 +87,9 @@ class MultiPurposeAnalyzer(private val activity: AppCompatActivity, private val 
                 null  //Clear old bitmap to free memory
             }
 
-        if(smartDelayValue == Constant.SMART_DELAY_ON){
-            //TODO: run function. Create function inside this class and access the imageBitmap directly as class variable
-
+        //If a person is detected, do not search again until the photo is taken
+        if(smartDelayValue == Constant.SMART_DELAY_ON && !personDetected){
+            smartDelay(image)
         }
 
         if(nightModeValue == Constant.NIGHT_MODE_AUTO){
@@ -79,7 +104,10 @@ class MultiPurposeAnalyzer(private val activity: AppCompatActivity, private val 
             }
         }
 
-        image.close()
+        //Close the imageProxy if it was not already closed by the smart delay function
+        if(!(smartDelayValue == Constant.SMART_DELAY_ON && !personDetected)){
+            image.close()
+        }
     }
 
     fun startFrameAvg() {
@@ -167,6 +195,62 @@ class MultiPurposeAnalyzer(private val activity: AppCompatActivity, private val 
         }
     }
 
+    //Initialize the PoseDetector for smart delay
+    private fun mlPoseDetection(){
+        val options = AccuratePoseDetectorOptions.Builder()
+            .setDetectorMode(AccuratePoseDetectorOptions.SINGLE_IMAGE_MODE)
+            .build()
+        smartDelayRecognizer = PoseDetection.getClient(options)
+    }
+
+    //Listener for smart delay
+    fun addListener(ls: MyListener) {
+        listener = ls
+    }
+
+    private fun notifyActivity(){
+        listener.onEventCall(this)
+    }
+
+    @ExperimentalGetImage
+    fun smartDelay(image: ImageProxy) {
+        mlPoseDetection()
+
+        val inImage = InputImage.fromMediaImage(image.image!!, image.imageInfo.rotationDegrees)
+
+        smartDelayRecognizer.process(inImage)
+            .addOnSuccessListener{posList ->
+
+                var detectionLikelihood = 0F
+
+                for(landmark in posList.allPoseLandmarks){
+                    if(!landmark.equals(null)) {
+                        detectionLikelihood += landmark.inFrameLikelihood
+                    }
+                }
+
+                Log.d("PoseDetection: ", "Pose detected: $detectionLikelihood")
+
+                if(detectionLikelihood>=27.0){
+                    smartDelayTimesRecognized++
+                    Log.d("PoseDetection: ", "OK $smartDelayTimesRecognized")
+                }else{
+                    //Reset counter if for one frame the person is not detected
+                    smartDelayTimesRecognized = 0
+                }
+
+                //Person recognized multiple times. It should be a real person
+                if(smartDelayTimesRecognized == 3){
+                    Log.d("PoseDetection: ", "Taking picture in few seconds")
+                    smartDelayTimesRecognized = 0
+                    notifyActivity()
+                }
+                image.close()
+            }
+            .addOnFailureListener{
+                Log.d(ContentValues.TAG,"Error from analyzer")
+                image.close()
+            }
     private fun isNightModeActive()
     {
         var isDark = false
