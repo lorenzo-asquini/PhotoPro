@@ -168,182 +168,182 @@
         app:layout_constraintGuide_percent="@dimen/top_change_camera_button_guideline_percent" />
 
     <LinearLayout
-        android:id = "@+id/pro_mode_component"
+        android:id = "@+id/pro_mode_menu"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:layout_constraintBottom_toBottomOf="@+id/top_change_camera_button_guideline"
         android:background="@drawable/rounded_corners"
         android:padding="@dimen/pro_mode_padding"
         android:layout_margin="@dimen/pro_mode_padding"
-        android:orientation="vertical">
-        <!--android:visibility="invisible"-->
+        android:orientation="vertical"
+        android:visibility="invisible">
 
-    <LinearLayout
-        android:id = "@+id/pro_mode_sliders"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical">
-
-
-        <!--WHITE BALANCE-->
-        <TextView
-            android:id="@+id/white_balance_title_textView"
-            android:text="@string/white_balance"
-            android:textSize="@dimen/pro_mode_font_size"
-
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textColor="@color/white"/>
         <LinearLayout
+            android:id = "@+id/pro_mode_sliders"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-
-            <com.google.android.material.slider.Slider
-                android:id="@+id/white_balance_slider"
-
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="@dimen/slider_percentage"
-
-                android:stepSize="500"
-                android:valueFrom="2000"
-                android:valueTo="7000"
-
-                app:haloColor="@color/white"
-                app:haloRadius="2dp"
-                app:labelBehavior="gone"
-                app:thumbColor="@color/white"
-
-                app:thumbRadius="6dp"
-                app:thumbStrokeColor="@color/white"
-                app:tickColor="@color/black"
-
-
-                app:tickColorActive="#00000000"
-                app:tickColorInactive="#00000000"
-                app:trackColor="@color/white"
-                app:trackColorActive="#00000000"
-                app:trackColorInactive="#00000000"
-                app:trackHeight="3dp" />
-            <TextView
-                android:id="@+id/white_balance_slider_value"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="@dimen/slider_value_percentage"
-                android:textAlignment="center"
-                android:layout_gravity="center"
-                android:padding="@dimen/slider_value_padding"
-
-                android:text="2500"
-                android:textColor="@color/white"
-                android:textSize="@dimen/pro_mode_font_size"/>
-        </LinearLayout>
-
-        <!--ISO-->
-        <TextView
-            android:id="@+id/iso_title_textView"
-            android:text="@string/iso"
-            android:textSize="@dimen/pro_mode_font_size"
-
-            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textColor="@color/white"/>
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-            <com.google.android.material.slider.Slider
-                android:id="@+id/iso_slider"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="@dimen/slider_percentage"
-
-                android:stepSize="500"
-                android:valueFrom="200"
-                android:valueTo="3200"
-
-                app:haloColor="@color/white"
-                app:haloRadius="2dp"
-                app:labelBehavior="gone"
-                app:thumbColor="@color/white"
-
-                app:thumbRadius="6dp"
-                app:thumbStrokeColor="@color/white"
-                app:tickColor="@color/black"
+            android:orientation="vertical">
 
 
-                app:tickColorActive="#00000000"
-                app:tickColorInactive="#00000000"
-                app:trackColor="@color/white"
-                app:trackColorActive="#00000000"
-                app:trackColorInactive="#00000000"
-                app:trackHeight="3dp" />
+            <!--WHITE BALANCE-->
             <TextView
-                android:id="@+id/iso_slider_value"
-                android:layout_width="0dp"
+                android:id="@+id/white_balance_title_textView"
+                android:text="@string/white_balance"
+                android:textSize="@dimen/pro_mode_font_size"
+
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_weight="@dimen/slider_value_percentage"
-                android:textAlignment="center"
-                android:layout_gravity="center"
-                android:padding="@dimen/slider_value_padding"
+                android:textColor="@color/white"/>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
 
-                android:text="2000"
-                android:textColor="@color/white"
-                android:textSize="@dimen/pro_mode_font_size"/>
-        </LinearLayout>
+                <com.google.android.material.slider.Slider
+                    android:id="@+id/white_balance_slider"
 
-        <!--SHUTTER SPEED-->
-        <TextView
-            android:id="@+id/shutter_speed_title_textView"
-            android:text="@string/shutter_speed"
-            android:textSize="@dimen/pro_mode_font_size"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="@dimen/slider_percentage"
 
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textColor="@color/white"/>
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-            <com.google.android.material.slider.Slider
-                android:id="@+id/shutter_speed_slider"
+                    android:stepSize="500"
+                    android:valueFrom="2000"
+                    android:valueTo="7000"
 
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="@dimen/slider_percentage"
+                    app:haloColor="@color/white"
+                    app:haloRadius="2dp"
+                    app:labelBehavior="gone"
+                    app:thumbColor="@color/white"
 
-                android:stepSize="0.5"
-                android:valueFrom="0.5"
-                android:valueTo="30"
-
-                app:haloColor="@color/white"
-                app:haloRadius="2dp"
-                app:labelBehavior="gone"
-                app:thumbColor="@color/white"
-
-                app:thumbRadius="6dp"
-                app:thumbStrokeColor="@color/white"
-                app:tickColor="@color/black"
+                    app:thumbRadius="6dp"
+                    app:thumbStrokeColor="@color/white"
+                    app:tickColor="@color/black"
 
 
-                app:tickColorActive="#00000000"
-                app:tickColorInactive="#00000000"
-                app:trackColor="@color/white"
-                app:trackColorActive="#00000000"
-                app:trackColorInactive="#00000000"
-                app:trackHeight="3dp" />
+                    app:tickColorActive="#00000000"
+                    app:tickColorInactive="#00000000"
+                    app:trackColor="@color/white"
+                    app:trackColorActive="#00000000"
+                    app:trackColorInactive="#00000000"
+                    app:trackHeight="3dp" />
+                <TextView
+                    android:id="@+id/white_balance_slider_value"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="@dimen/slider_value_percentage"
+                    android:textAlignment="center"
+                    android:layout_gravity="center"
+                    android:padding="@dimen/slider_value_padding"
+
+                    android:text="2500"
+                    android:textColor="@color/white"
+                    android:textSize="@dimen/pro_mode_font_size"/>
+            </LinearLayout>
+
+            <!--ISO-->
             <TextView
-                android:id="@+id/shutter_speed_slider_value"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="@dimen/slider_value_percentage"
-                android:textAlignment="center"
-                android:layout_gravity="center"
-                android:padding="@dimen/slider_value_padding"
+                android:id="@+id/iso_title_textView"
+                android:text="@string/iso"
+                android:textSize="@dimen/pro_mode_font_size"
 
-                android:text="8"
-                android:textColor="@color/white"
-                android:textSize="@dimen/pro_mode_font_size"/>
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@color/white"/>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+                <com.google.android.material.slider.Slider
+                    android:id="@+id/iso_slider"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="@dimen/slider_percentage"
+
+                    android:stepSize="500"
+                    android:valueFrom="200"
+                    android:valueTo="3200"
+
+                    app:haloColor="@color/white"
+                    app:haloRadius="2dp"
+                    app:labelBehavior="gone"
+                    app:thumbColor="@color/white"
+
+                    app:thumbRadius="6dp"
+                    app:thumbStrokeColor="@color/white"
+                    app:tickColor="@color/black"
+
+
+                    app:tickColorActive="#00000000"
+                    app:tickColorInactive="#00000000"
+                    app:trackColor="@color/white"
+                    app:trackColorActive="#00000000"
+                    app:trackColorInactive="#00000000"
+                    app:trackHeight="3dp" />
+                <TextView
+                    android:id="@+id/iso_slider_value"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="@dimen/slider_value_percentage"
+                    android:textAlignment="center"
+                    android:layout_gravity="center"
+                    android:padding="@dimen/slider_value_padding"
+
+                    android:text="2000"
+                    android:textColor="@color/white"
+                    android:textSize="@dimen/pro_mode_font_size"/>
+            </LinearLayout>
+
+            <!--SHUTTER SPEED-->
+            <TextView
+                android:id="@+id/shutter_speed_title_textView"
+                android:text="@string/shutter_speed"
+                android:textSize="@dimen/pro_mode_font_size"
+
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@color/white"/>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+                <com.google.android.material.slider.Slider
+                    android:id="@+id/shutter_speed_slider"
+
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="@dimen/slider_percentage"
+
+                    android:stepSize="0.5"
+                    android:valueFrom="0.5"
+                    android:valueTo="30"
+
+                    app:haloColor="@color/white"
+                    app:haloRadius="2dp"
+                    app:labelBehavior="gone"
+                    app:thumbColor="@color/white"
+
+                    app:thumbRadius="6dp"
+                    app:thumbStrokeColor="@color/white"
+                    app:tickColor="@color/black"
+
+
+                    app:tickColorActive="#00000000"
+                    app:tickColorInactive="#00000000"
+                    app:trackColor="@color/white"
+                    app:trackColorActive="#00000000"
+                    app:trackColorInactive="#00000000"
+                    app:trackHeight="3dp" />
+                <TextView
+                    android:id="@+id/shutter_speed_slider_value"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="@dimen/slider_value_percentage"
+                    android:textAlignment="center"
+                    android:layout_gravity="center"
+                    android:padding="@dimen/slider_value_padding"
+
+                    android:text="8"
+                    android:textColor="@color/white"
+                    android:textSize="@dimen/pro_mode_font_size"/>
+            </LinearLayout>
         </LinearLayout>
-    </LinearLayout>
 
         <LinearLayout
             android:layout_width="match_parent"

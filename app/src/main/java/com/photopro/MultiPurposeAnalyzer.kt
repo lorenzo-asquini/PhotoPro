@@ -17,8 +17,6 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.camera.core.ExperimentalGetImage
 import androidx.camera.core.ImageAnalysis
 import androidx.camera.core.ImageProxy
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.runBlocking
 import org.opencv.android.OpenCVLoader
 import org.opencv.android.Utils.bitmapToMat
 import org.opencv.android.Utils.matToBitmap
@@ -30,19 +28,20 @@ import com.google.mlkit.vision.pose.PoseDetection
 import com.google.mlkit.vision.pose.PoseDetector
 import com.google.mlkit.vision.pose.accurate.AccuratePoseDetectorOptions
 import com.google.mlkit.vision.common.InputImage
+import java.util.Calendar
 
-class MultiPurposeAnalyzer(private val activity: AppCompatActivity, private val rotation: Int) : ImageAnalysis.Analyzer{
+class MultiPurposeAnalyzer(private val activity: MainActivity, private val rotation: Int) : ImageAnalysis.Analyzer{
 
     private val preferences : SharedPreferences = activity.getSharedPreferences(SharedPrefs.SHARED_PREFERENCES_KEY,
         AppCompatActivity.MODE_PRIVATE
     )
 
     //Needed for PoseDetection
-    private lateinit var listener : MyListener
+    private lateinit var listener : SmartDelayListener
     private lateinit var smartDelayRecognizer : PoseDetector
 
     //A person must be recognized for multiple frames before being sure that it is a person
-    private var smartDelayTimesRecognized = 0
+    private var smartDelayFramesWithPerson = 0
     var personDetected = false
         set(value) {
             field = value
@@ -54,15 +53,17 @@ class MultiPurposeAnalyzer(private val activity: AppCompatActivity, private val 
             }
         }
 
+    //Contains the time when the last photo was taken using smart delay
+    //Wait a bit before starting to find a person again
+    var smartDelayLastPhotoTaken : Long = 0
+
     //Global variable so it can be accessed without passing it as a parameter
     private var imageBitmap : Bitmap? = null
 
-    var isNightModeOn : Boolean = false
-        private set
+    privat var forceNightMode = false
 
     //Running result of frame avg
     private var frameAvgResult : Mat? = null
-
     //Number of frames averaged till now
     var framesAveraged = -1
 
@@ -77,25 +78,11 @@ class MultiPurposeAnalyzer(private val activity: AppCompatActivity, private val 
         val nightModeValue = preferences.getInt(SharedPrefs.NIGHT_MODE_KEY, Constant.NIGHT_MODE_OFF)
         val frameAvgValue = preferences.getInt(SharedPrefs.FRAME_AVG_KEY, Constant.FRAME_AVG_OFF)
 
-        val isImageBitmapNeeded = smartDelayValue == Constant.SMART_DELAY_ON || nightModeValue == Constant.NIGHT_MODE_AUTO
-
-        //Create only one copy of the image that will be used by everyone
-        imageBitmap =
-            if(isImageBitmapNeeded){
-                image.toBitmap()
-            }else{
-                null  //Clear old bitmap to free memory
-            }
-
-        //If a person is detected, do not search again until the photo is taken
-        if(smartDelayValue == Constant.SMART_DELAY_ON && !personDetected){
-            smartDelay(image)
-        }
-
         if(nightModeValue == Constant.NIGHT_MODE_AUTO){
-            //TODO: run function. Create function inside this class and access the imageBitmap directly as class variable
+            imageBitmap = image.toBitmap()
             isNightModeActive()
         }
+
         if(frameAvgValue == Constant.FRAME_AVG_ON){
             //If averaging is happening, create imageBitmap if not already created
             if(framesAveraged >= 0){
@@ -104,11 +91,76 @@ class MultiPurposeAnalyzer(private val activity: AppCompatActivity, private val 
             }
         }
 
+        //Necessary to call as the last one because it may close the ImageProxy
+        //If a person is detected, do not search again until the photo is taken
+
+        if(smartDelayValue == Constant.SMART_DELAY_ON && !personDetected){
+
+            val timeBetweenDetections = 2000 //ms
+            if(Calendar.getInstance().timeInMillis - smartDelayLastPhotoTaken >= timeBetweenDetections) {
+                smartDelay(image)
+            }else{
+                image.close()  //Close to prevent blocking
+            }
+        }
+
         //Close the imageProxy if it was not already closed by the smart delay function
+        //This will not happen if the smartDelay is stopped between two detections, so it is close above
         if(!(smartDelayValue == Constant.SMART_DELAY_ON && !personDetected)){
             image.close()
         }
     }
+
+    ////////////////////
+
+    private fun isNightModeActive()
+    {
+        val isDark = (getAverageBrightness() < 80)
+
+        //Check after one second if the brightness level has changed
+        object : CountDownTimer(1000, 1000) {
+            override fun onTick(millisUntilFinished: Long) {}
+
+            override fun onFinish() {
+                val brightness = getAverageBrightness()
+
+                //It is still dark. Do not create a new camera if it is not necessary
+                if(isDark && brightness < 80 && !forceNightMode) {
+                    val nighModeButton: ImageButton = activity.findViewById(R.id.night_mode_button)
+                    nighModeButton.setColorFilter(activity.getColor(R.color.night_mode_is_on_color))
+                    forceNightMode = true
+                    activity.startCameraWrapper(forceNightMode = true)
+                }
+
+                //It is still bright. Do not create a new camera if it is not necessary
+                else if (!isDark && brightness >= 80 && forceNightMode)
+                {
+                    val nighModeButton: ImageButton = activity.findViewById(R.id.night_mode_button)
+                    nighModeButton.setColorFilter(activity.getColor(R.color.white))
+                    forceNightMode = false
+                    activity.startCameraWrapper(forceNightMode = false)
+                }
+            }
+        }.start()
+
+    }
+
+    private fun getAverageBrightness(): Double
+    {
+        var sum = 0
+        val totalPixels = imageBitmap!!.width * imageBitmap!!.height
+        val pixels = IntArray(totalPixels)
+        imageBitmap!!.getPixels(pixels, 0, imageBitmap!!.width, 0, 0, imageBitmap!!.width, imageBitmap!!.height)
+
+        for (pixel in pixels) {
+            //luminance formula
+            sum += (0.299 * Color.red(pixel) + 0.587 * Color.green(pixel) + 0.114 * Color.blue(pixel)).toInt()
+        }
+
+        return sum.toDouble() / totalPixels.toDouble()
+    }
+
+    ////////////////////
 
     fun startFrameAvg() {
         //Start capturing a picture with frame average
@@ -195,6 +247,8 @@ class MultiPurposeAnalyzer(private val activity: AppCompatActivity, private val 
         }
     }
 
+    ////////////////////
+
     //Initialize the PoseDetector for smart delay
     private fun mlPoseDetection(){
         val options = AccuratePoseDetectorOptions.Builder()
@@ -204,12 +258,12 @@ class MultiPurposeAnalyzer(private val activity: AppCompatActivity, private val 
     }
 
     //Listener for smart delay
-    fun addListener(ls: MyListener) {
+    fun addListener(ls: SmartDelayListener) {
         listener = ls
     }
 
     private fun notifyActivity(){
-        listener.onEventCall(this)
+        listener.onPersonDetected(this)
     }
 
     @ExperimentalGetImage
@@ -231,70 +285,26 @@ class MultiPurposeAnalyzer(private val activity: AppCompatActivity, private val 
 
                 Log.d("PoseDetection: ", "Pose detected: $detectionLikelihood")
 
-                if (detectionLikelihood >= 27.0) {
-                    smartDelayTimesRecognized++
-                    Log.d("PoseDetection: ", "OK $smartDelayTimesRecognized")
+                if (detectionLikelihood >= 27.0) {  //27.0 is a good value from various tests
+                    smartDelayFramesWithPerson++
+                    Log.d("PoseDetection: ", "Person in $smartDelayFramesWithPerson frames")
                 } else {
                     //Reset counter if for one frame the person is not detected
-                    smartDelayTimesRecognized = 0
+                    smartDelayFramesWithPerson = 0
                 }
 
                 //Person recognized multiple times. It should be a real person
-                if (smartDelayTimesRecognized == 3) {
+                if (smartDelayFramesWithPerson == 3) {
                     Log.d("PoseDetection: ", "Taking picture in few seconds")
-                    smartDelayTimesRecognized = 0
+                    smartDelayFramesWithPerson = 0
                     notifyActivity()
                 }
-                image.close()
+
+                image.close()  //The ImageProxy MUST be closed here
             }
             .addOnFailureListener {
-                Log.d(ContentValues.TAG, "Error from analyzer")
                 image.close()
+                Log.d(ContentValues.TAG, "Error from analyzer")
             }
     }
-
-    private fun isNightModeActive()
-    {
-        var isDark = false
-        if(getAverageBrightness() < 80)
-            isDark = true
-
-        object : CountDownTimer(1000, 1000) {
-
-            // Callback function, fired on regular interval
-            override fun onTick(millisUntilFinished: Long) {}
-
-            override fun onFinish() {
-                val brightness = getAverageBrightness()
-                if(isDark && brightness < 80) {
-                    val nighModeButton: ImageButton = activity.findViewById(R.id.night_mode_button)
-                    nighModeButton.setColorFilter(activity.getColor(R.color.night_mode_is_on_color))
-                    isNightModeOn = true
-                }
-                else if (!isDark && brightness >= 80)
-                {
-                    val nighModeButton: ImageButton = activity.findViewById(R.id.night_mode_button)
-                    nighModeButton.setColorFilter(activity.getColor(R.color.white))
-                    isNightModeOn = false
-                }
-            }
-        }.start()
-
-    }
-
-    private fun getAverageBrightness(): Double
-    {
-        var sum = 0
-        val totalPixels = imageBitmap!!.width * imageBitmap!!.height
-        val pixels = IntArray(totalPixels)
-        imageBitmap!!.getPixels(pixels, 0, imageBitmap!!.width, 0, 0, imageBitmap!!.width, imageBitmap!!.height)
-
-        for (pixel in pixels) {
-            //luminance formula
-            sum += (0.299 * Color.red(pixel) + 0.587 * Color.green(pixel) + 0.114 * Color.blue(pixel)).toInt()
-        }
-
-        return sum.toDouble() / totalPixels.toDouble()
-    }
-
 }

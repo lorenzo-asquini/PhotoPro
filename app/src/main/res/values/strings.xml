@@ -53,9 +53,9 @@
     <string name="invalid_input">Invalid input. Ignored</string>
 
     <!--PRO mode-->
-    <string name="white_balance">White Balance (WB)</string>
+    <string name="white_balance">White Balance</string>
     <string name="iso">ISO</string>
-    <string name="shutter_speed">Shutter Speed (S)</string>
+    <string name="shutter_speed">Shutter Speed</string>
     <string name="hide_pro_mode_text">HIDE</string>
     <string name="reset_pro_mode_text">RESET</string>
     <string name="reset_pro_mode_button_description">Button to reset values of pro mode</string>

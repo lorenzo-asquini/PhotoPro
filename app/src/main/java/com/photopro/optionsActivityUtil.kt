@@ -95,24 +95,24 @@ fun retrieveOptionsValue(activity: AppCompatActivity, preferences: SharedPrefere
     //Set the switches to the saved value
     //HDR
     activity.findViewById<SwitchMaterial>(R.id.HDR_front_camera_switch).isChecked =
-        preferences.getInt(SharedPrefs.HDR_FRONT_KEY, Constant.HDR_FRONT_OFF) == Constant.HDR_FRONT_ON
+        preferences.getInt(SharedPrefs.HDR_FRONT_KEY, Constant.HDR_OFF) == Constant.HDR_ON
 
     activity.findViewById<SwitchMaterial>(R.id.HDR_back_camera_switch).isChecked =
-        preferences.getInt(SharedPrefs.HDR_BACK_KEY, Constant.HDR_BACK_OFF) == Constant.HDR_BACK_ON
+        preferences.getInt(SharedPrefs.HDR_BACK_KEY, Constant.HDR_OFF) == Constant.HDR_ON
 
     //Bokeh
     activity.findViewById<SwitchMaterial>(R.id.bokeh_front_camera_switch).isChecked =
-        preferences.getInt(SharedPrefs.BOKEH_FRONT_KEY, Constant.BOKEH_FRONT_OFF) == Constant.BOKEH_FRONT_ON
+        preferences.getInt(SharedPrefs.BOKEH_FRONT_KEY, Constant.BOKEH_OFF) == Constant.BOKEH_ON
 
     activity.findViewById<SwitchMaterial>(R.id.bokeh_back_camera_switch).isChecked =
-        preferences.getInt(SharedPrefs.BOKEH_BACK_KEY, Constant.BOKEH_BACK_OFF) == Constant.BOKEH_BACK_ON
+        preferences.getInt(SharedPrefs.BOKEH_BACK_KEY, Constant.BOKEH_OFF) == Constant.BOKEH_ON
 
     //Face retouch
     activity.findViewById<SwitchMaterial>(R.id.face_retouch_front_camera_switch).isChecked =
-        preferences.getInt(SharedPrefs.FACE_RETOUCH_FRONT_KEY, Constant.FACE_RETOUCH_FRONT_OFF) == Constant.FACE_RETOUCH_FRONT_ON
+        preferences.getInt(SharedPrefs.FACE_RETOUCH_FRONT_KEY, Constant.FACE_RETOUCH_OFF) == Constant.FACE_RETOUCH_ON
 
     activity.findViewById<SwitchMaterial>(R.id.face_retouch_back_camera_switch).isChecked =
-        preferences.getInt(SharedPrefs.FACE_RETOUCH_BACK_KEY, Constant.FACE_RETOUCH_BACK_OFF) == Constant.FACE_RETOUCH_BACK_ON
+        preferences.getInt(SharedPrefs.FACE_RETOUCH_BACK_KEY, Constant.FACE_RETOUCH_OFF) == Constant.FACE_RETOUCH_ON
 
     //Smart delay seconds
     activity.findViewById<EditText>(R.id.smart_delay_seconds_editText).setText(
@@ -148,17 +148,17 @@ fun setValueChangeListeners(activity: AppCompatActivity, preferences: SharedPref
         val editor = preferences.edit()
 
         if(isChecked) {
-            editor.putInt(SharedPrefs.HDR_BACK_KEY, Constant.HDR_BACK_ON)
-            //TODO: Is it possible to have multiple extensions at the same time? If so, remove
+            editor.putInt(SharedPrefs.HDR_BACK_KEY, Constant.HDR_ON)
+
             //Only one switch at a time can be enabled
             bokehBackSwitch.isChecked = false
-            editor.putInt(SharedPrefs.BOKEH_BACK_KEY, Constant.BOKEH_BACK_OFF)
+            editor.putInt(SharedPrefs.BOKEH_BACK_KEY, Constant.BOKEH_OFF)
 
             faceRetouchBackSwitch.isChecked = false
-            editor.putInt(SharedPrefs.FACE_RETOUCH_BACK_KEY, Constant.FACE_RETOUCH_BACK_OFF)
+            editor.putInt(SharedPrefs.FACE_RETOUCH_BACK_KEY, Constant.FACE_RETOUCH_OFF)
 
         }else{
-            editor.putInt(SharedPrefs.HDR_BACK_KEY, Constant.HDR_BACK_OFF)
+            editor.putInt(SharedPrefs.HDR_BACK_KEY, Constant.HDR_OFF)
         }
 
         editor.apply()
@@ -168,17 +168,17 @@ fun setValueChangeListeners(activity: AppCompatActivity, preferences: SharedPref
         val editor = preferences.edit()
 
         if(isChecked) {
-            editor.putInt(SharedPrefs.HDR_FRONT_KEY, Constant.HDR_FRONT_ON)
-            //TODO: Is it possible to have multiple extensions at the same time? If so, remove
+            editor.putInt(SharedPrefs.HDR_FRONT_KEY, Constant.HDR_ON)
+
             //Only one switch at a time can be enabled
             bokehFrontSwitch.isChecked = false
-            editor.putInt(SharedPrefs.BOKEH_FRONT_KEY, Constant.BOKEH_FRONT_OFF)
+            editor.putInt(SharedPrefs.BOKEH_FRONT_KEY, Constant.BOKEH_OFF)
 
             faceRetouchFrontSwitch.isChecked = false
-            editor.putInt(SharedPrefs.FACE_RETOUCH_FRONT_KEY, Constant.FACE_RETOUCH_FRONT_OFF)
+            editor.putInt(SharedPrefs.FACE_RETOUCH_FRONT_KEY, Constant.FACE_RETOUCH_OFF)
 
         }else{
-            editor.putInt(SharedPrefs.HDR_FRONT_KEY, Constant.HDR_FRONT_OFF)
+            editor.putInt(SharedPrefs.HDR_FRONT_KEY, Constant.HDR_OFF)
         }
 
         editor.apply()
@@ -189,17 +189,17 @@ fun setValueChangeListeners(activity: AppCompatActivity, preferences: SharedPref
         val editor = preferences.edit()
 
         if(isChecked) {
-            editor.putInt(SharedPrefs.BOKEH_BACK_KEY, Constant.BOKEH_BACK_ON)
-            //TODO: Is it possible to have multiple extensions at the same time? If so, remove
+            editor.putInt(SharedPrefs.BOKEH_BACK_KEY, Constant.BOKEH_ON)
+
             //Only one switch at a time can be enabled
             HDRBackSwitch.isChecked = false
-            editor.putInt(SharedPrefs.HDR_BACK_KEY, Constant.HDR_BACK_OFF)
+            editor.putInt(SharedPrefs.HDR_BACK_KEY, Constant.HDR_OFF)
 
             faceRetouchBackSwitch.isChecked = false
-            editor.putInt(SharedPrefs.FACE_RETOUCH_BACK_KEY, Constant.FACE_RETOUCH_BACK_OFF)
+            editor.putInt(SharedPrefs.FACE_RETOUCH_BACK_KEY, Constant.FACE_RETOUCH_OFF)
 
         }else{
-            editor.putInt(SharedPrefs.BOKEH_BACK_KEY, Constant.BOKEH_BACK_OFF)
+            editor.putInt(SharedPrefs.BOKEH_BACK_KEY, Constant.BOKEH_OFF)
         }
 
         editor.apply()
@@ -209,17 +209,17 @@ fun setValueChangeListeners(activity: AppCompatActivity, preferences: SharedPref
         val editor = preferences.edit()
 
         if(isChecked) {
-            editor.putInt(SharedPrefs.BOKEH_FRONT_KEY, Constant.BOKEH_FRONT_ON)
-            //TODO: Is it possible to have multiple extensions at the same time? If so, remove
+            editor.putInt(SharedPrefs.BOKEH_FRONT_KEY, Constant.BOKEH_ON)
+
             //Only one switch at a time can be enabled
             HDRFrontSwitch.isChecked = false
-            editor.putInt(SharedPrefs.HDR_FRONT_KEY, Constant.HDR_FRONT_OFF)
+            editor.putInt(SharedPrefs.HDR_FRONT_KEY, Constant.HDR_OFF)
 
             faceRetouchFrontSwitch.isChecked = false
-            editor.putInt(SharedPrefs.FACE_RETOUCH_FRONT_KEY, Constant.FACE_RETOUCH_FRONT_OFF)
+            editor.putInt(SharedPrefs.FACE_RETOUCH_FRONT_KEY, Constant.FACE_RETOUCH_OFF)
 
         }else{
-            editor.putInt(SharedPrefs.BOKEH_FRONT_KEY, Constant.BOKEH_FRONT_OFF)
+            editor.putInt(SharedPrefs.BOKEH_FRONT_KEY, Constant.BOKEH_OFF)
         }
 
         editor.apply()
@@ -230,17 +230,17 @@ fun setValueChangeListeners(activity: AppCompatActivity, preferences: SharedPref
         val editor = preferences.edit()
 
         if(isChecked) {
-            editor.putInt(SharedPrefs.FACE_RETOUCH_BACK_KEY, Constant.FACE_RETOUCH_BACK_ON)
-            //TODO: Is it possible to have multiple extensions at the same time? If so, remove
+            editor.putInt(SharedPrefs.FACE_RETOUCH_BACK_KEY, Constant.FACE_RETOUCH_ON)
+
             //Only one switch at a time can be enabled
             HDRBackSwitch.isChecked = false
-            editor.putInt(SharedPrefs.HDR_BACK_KEY, Constant.HDR_BACK_OFF)
+            editor.putInt(SharedPrefs.HDR_BACK_KEY, Constant.HDR_OFF)
 
             bokehBackSwitch.isChecked = false
-            editor.putInt(SharedPrefs.BOKEH_BACK_KEY, Constant.BOKEH_BACK_OFF)
+            editor.putInt(SharedPrefs.BOKEH_BACK_KEY, Constant.BOKEH_OFF)
 
         }else{
-            editor.putInt(SharedPrefs.FACE_RETOUCH_BACK_KEY, Constant.FACE_RETOUCH_BACK_OFF)
+            editor.putInt(SharedPrefs.FACE_RETOUCH_BACK_KEY, Constant.FACE_RETOUCH_OFF)
         }
 
         editor.apply()
@@ -250,17 +250,17 @@ fun setValueChangeListeners(activity: AppCompatActivity, preferences: SharedPref
         val editor = preferences.edit()
 
         if(isChecked) {
-            editor.putInt(SharedPrefs.FACE_RETOUCH_FRONT_KEY, Constant.FACE_RETOUCH_FRONT_ON)
-            //TODO: Is it possible to have multiple extensions at the same time? If so, remove
+            editor.putInt(SharedPrefs.FACE_RETOUCH_FRONT_KEY, Constant.FACE_RETOUCH_ON)
+
             //Only one switch at a time can be enabled
             HDRFrontSwitch.isChecked = false
-            editor.putInt(SharedPrefs.HDR_FRONT_KEY, Constant.HDR_FRONT_OFF)
+            editor.putInt(SharedPrefs.HDR_FRONT_KEY, Constant.HDR_OFF)
 
             bokehFrontSwitch.isChecked = false
-            editor.putInt(SharedPrefs.BOKEH_FRONT_KEY, Constant.BOKEH_FRONT_OFF)
+            editor.putInt(SharedPrefs.BOKEH_FRONT_KEY, Constant.BOKEH_OFF)
 
         }else{
-            editor.putInt(SharedPrefs.FACE_RETOUCH_FRONT_KEY, Constant.FACE_RETOUCH_FRONT_OFF)
+            editor.putInt(SharedPrefs.FACE_RETOUCH_FRONT_KEY, Constant.FACE_RETOUCH_OFF)
         }
 
         editor.apply()
