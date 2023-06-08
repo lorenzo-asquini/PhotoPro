@@ -7,6 +7,8 @@ import androidx.camera.core.CameraSelector
 import androidx.camera.core.ImageAnalysis
 import androidx.camera.core.ImageCapture
 import androidx.camera.core.Preview
+import androidx.camera.extensions.ExtensionMode
+import androidx.camera.extensions.ExtensionsManager
 import androidx.camera.lifecycle.ProcessCameraProvider
 import androidx.camera.view.PreviewView
 import androidx.core.content.ContextCompat
@@ -54,12 +56,21 @@ fun startCamera(activity: MainActivity, preferences: SharedPreferences, savedIns
             // Unbind use cases before rebinding
             cameraProvider.unbindAll()
 
+            val night_pref = preferences.getInt(SharedPrefs.NIGHT_MODE_KEY, Constant.NIGHT_MODE_OFF);
+
             // Bind use cases to camera
 
             val camera =
                 if(imageAnalysis == null){
                     cameraProvider.bindToLifecycle(activity, cameraSelector, preview, imageCapture)
-                }else{
+                }
+                else if(night_pref == Constant.NIGHT_MODE_ON || (night_pref == Constant.NIGHT_MODE_AUTO && analyzer!!.isNightModeOn) ){
+                    val extensionsManagerFuture = ExtensionsManager.getInstanceAsync(activity, cameraProvider)
+                    val extensionsManager = extensionsManagerFuture.get()
+                    val nightCameraSelector = extensionsManager.getExtensionEnabledCameraSelector(cameraSelector, ExtensionMode.NIGHT)
+                    cameraProvider.bindToLifecycle(activity, nightCameraSelector, preview, imageCapture)
+                }
+                else{
                     cameraProvider.bindToLifecycle(activity, cameraSelector, preview, imageCapture, imageAnalysis)
                 }
 
