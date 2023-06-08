@@ -219,38 +219,40 @@ class MultiPurposeAnalyzer(private val activity: AppCompatActivity, private val 
         val inImage = InputImage.fromMediaImage(image.image!!, image.imageInfo.rotationDegrees)
 
         smartDelayRecognizer.process(inImage)
-            .addOnSuccessListener{posList ->
+            .addOnSuccessListener { posList ->
 
                 var detectionLikelihood = 0F
 
-                for(landmark in posList.allPoseLandmarks){
-                    if(!landmark.equals(null)) {
+                for (landmark in posList.allPoseLandmarks) {
+                    if (!landmark.equals(null)) {
                         detectionLikelihood += landmark.inFrameLikelihood
                     }
                 }
 
                 Log.d("PoseDetection: ", "Pose detected: $detectionLikelihood")
 
-                if(detectionLikelihood>=27.0){
+                if (detectionLikelihood >= 27.0) {
                     smartDelayTimesRecognized++
                     Log.d("PoseDetection: ", "OK $smartDelayTimesRecognized")
-                }else{
+                } else {
                     //Reset counter if for one frame the person is not detected
                     smartDelayTimesRecognized = 0
                 }
 
                 //Person recognized multiple times. It should be a real person
-                if(smartDelayTimesRecognized == 3){
+                if (smartDelayTimesRecognized == 3) {
                     Log.d("PoseDetection: ", "Taking picture in few seconds")
                     smartDelayTimesRecognized = 0
                     notifyActivity()
                 }
                 image.close()
             }
-            .addOnFailureListener{
-                Log.d(ContentValues.TAG,"Error from analyzer")
+            .addOnFailureListener {
+                Log.d(ContentValues.TAG, "Error from analyzer")
                 image.close()
             }
+    }
+
     private fun isNightModeActive()
     {
         var isDark = false
@@ -294,4 +296,5 @@ class MultiPurposeAnalyzer(private val activity: AppCompatActivity, private val 
 
         return sum.toDouble() / totalPixels.toDouble()
     }
+
 }

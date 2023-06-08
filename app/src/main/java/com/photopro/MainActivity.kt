@@ -14,6 +14,8 @@ import android.util.Log
 import android.view.View
 import android.widget.Button
 import android.widget.ImageButton
+import android.widget.LinearLayout
+import android.widget.Switch
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
@@ -22,6 +24,8 @@ import androidx.camera.core.ImageCapture
 import androidx.camera.core.ImageCaptureException
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
+import androidx.core.graphics.drawable.toDrawable
+import com.google.android.material.slider.Slider
 import java.util.concurrent.ExecutorService
 import java.util.concurrent.Executors
 
@@ -53,6 +57,9 @@ class MainActivity : AppCompatActivity(), MyListener {
 
     //Avoid opening the options menu multiple times when spamming button
     private var isOptionsButtonClicked = false
+
+    //Initial value of Pro Mode
+    private var isProModeOn = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -186,6 +193,68 @@ class MainActivity : AppCompatActivity(), MyListener {
             imageAnalyzer = startCameraResult.second
             drawAllButtons(this, preferences, features)  //When changing camera the available features change
         }
+
+        //Add listener to PRO mode camera button
+        val proModeButton : ImageButton = findViewById(R.id.pro_mode_button)
+        val proModeComponent: LinearLayout = findViewById(R.id.pro_mode_component)
+        //Initially pro mode is disactivated
+        proModeComponent.setVisibility(View.INVISIBLE);
+        proModeButton.setOnClickListener{
+            if(!isProModeOn) {
+                proModeComponent.setVisibility(View.VISIBLE);
+                proModeButton.setImageResource(R.drawable.normal)
+                isProModeOn = true
+            }
+            else {
+                proModeComponent.setVisibility(View.INVISIBLE);
+                proModeButton.setImageResource(R.drawable.pro)
+                isProModeOn = false
+            }
+        }
+
+        //Add listener to hide and show pro mode sliders
+        val hideProModeSwitch : com.google.android.material.switchmaterial.SwitchMaterial = findViewById(R.id.hide_pro_mode_switch)
+        val proModeSliders: LinearLayout = findViewById(R.id.pro_mode_sliders)
+        hideProModeSwitch.setOnCheckedChangeListener { _, isChecked ->
+
+            if(isChecked) {
+                proModeSliders.setVisibility(View.GONE)
+            }
+            else{
+                proModeSliders.setVisibility(View.VISIBLE)
+            }
+        }
+
+        //Add listener to reset the pro mode values
+        val resetProModeButton : ImageButton = findViewById(R.id.reset_pro_mode_button)
+        resetProModeButton.setOnClickListener{
+            //reset values
+        }
+
+        //Listener to White Balance Slider change value
+        val whiteBalanceSlider : com.google.android.material.slider.Slider = findViewById(R.id.white_balance_slider)
+        val whiteBalanceTextView : TextView = findViewById(R.id.white_balance_slider_value)
+        whiteBalanceTextView.text = whiteBalanceSlider.value.toInt().toString()
+        whiteBalanceSlider.addOnChangeListener { slider, value, fromUser ->
+            whiteBalanceTextView.text = value.toInt().toString()
+        }
+
+        //Listener to ISO Slider change value
+        val isoSlider : com.google.android.material.slider.Slider = findViewById(R.id.iso_slider)
+        val isoTextView : TextView = findViewById(R.id.iso_slider_value)
+        isoTextView.text = isoSlider.value.toInt().toString()
+        isoSlider.addOnChangeListener { slider, value, fromUser ->
+            isoTextView.text = value.toInt().toString()
+        }
+
+        //Listener to Shutter Speed Slider change value
+        val shutterSpeedSlider : com.google.android.material.slider.Slider = findViewById(R.id.shutter_speed_slider)
+        val shutterSpeedTextView : TextView = findViewById(R.id.shutter_speed_slider_value)
+        shutterSpeedTextView.text = shutterSpeedSlider.value.toString()
+        shutterSpeedSlider.addOnChangeListener { slider, value, fromUser ->
+            shutterSpeedTextView.text = value.toString()
+        }
+
 
         //Add listener to the camera preview that will allow zoom
         //Zoom is maintained when changing to landscape
