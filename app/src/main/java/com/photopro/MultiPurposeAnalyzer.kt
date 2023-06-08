@@ -3,8 +3,10 @@ package com.photopro
 import android.content.ContentValues
 import android.content.SharedPreferences
 import android.graphics.Bitmap
+import android.graphics.Color
 import android.graphics.Matrix
 import android.net.Uri
+import android.os.CountDownTimer
 import android.provider.MediaStore
 import android.util.Log
 import android.view.Surface
@@ -15,6 +17,8 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.camera.core.ExperimentalGetImage
 import androidx.camera.core.ImageAnalysis
 import androidx.camera.core.ImageProxy
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.runBlocking
 import org.opencv.android.OpenCVLoader
 import org.opencv.android.Utils.bitmapToMat
 import org.opencv.android.Utils.matToBitmap
@@ -53,6 +57,9 @@ class MultiPurposeAnalyzer(private val activity: AppCompatActivity, private val 
     //Global variable so it can be accessed without passing it as a parameter
     private var imageBitmap : Bitmap? = null
 
+    var isNightModeOn : Boolean = false
+        private set
+
     //Running result of frame avg
     private var frameAvgResult : Mat? = null
 
@@ -70,7 +77,7 @@ class MultiPurposeAnalyzer(private val activity: AppCompatActivity, private val 
         val nightModeValue = preferences.getInt(SharedPrefs.NIGHT_MODE_KEY, Constant.NIGHT_MODE_OFF)
         val frameAvgValue = preferences.getInt(SharedPrefs.FRAME_AVG_KEY, Constant.FRAME_AVG_OFF)
 
-        val isImageBitmapNeeded = smartDelayValue == Constant.SMART_DELAY_ON || nightModeValue == Constant.NIGHT_MODE_ON
+        val isImageBitmapNeeded = smartDelayValue == Constant.SMART_DELAY_ON || nightModeValue == Constant.NIGHT_MODE_AUTO
 
         //Create only one copy of the image that will be used by everyone
         imageBitmap =
@@ -85,8 +92,9 @@ class MultiPurposeAnalyzer(private val activity: AppCompatActivity, private val 
             smartDelay(image)
         }
 
-        if(nightModeValue == Constant.NIGHT_MODE_ON){
+        if(nightModeValue == Constant.NIGHT_MODE_AUTO){
             //TODO: run function. Create function inside this class and access the imageBitmap directly as class variable
+            isNightModeActive()
         }
         if(frameAvgValue == Constant.FRAME_AVG_ON){
             //If averaging is happening, create imageBitmap if not already created
@@ -243,5 +251,47 @@ class MultiPurposeAnalyzer(private val activity: AppCompatActivity, private val 
                 Log.d(ContentValues.TAG,"Error from analyzer")
                 image.close()
             }
+    private fun isNightModeActive()
+    {
+        var isDark = false
+        if(getAverageBrightness() < 80)
+            isDark = true
+
+        object : CountDownTimer(1000, 1000) {
+
+            // Callback function, fired on regular interval
+            override fun onTick(millisUntilFinished: Long) {}
+
+            override fun onFinish() {
+                val brightness = getAverageBrightness()
+                if(isDark && brightness < 80) {
+                    val nighModeButton: ImageButton = activity.findViewById(R.id.night_mode_button)
+                    nighModeButton.setColorFilter(activity.getColor(R.color.night_mode_is_on_color))
+                    isNightModeOn = true
+                }
+                else if (!isDark && brightness >= 80)
+                {
+                    val nighModeButton: ImageButton = activity.findViewById(R.id.night_mode_button)
+                    nighModeButton.setColorFilter(activity.getColor(R.color.white))
+                    isNightModeOn = false
+                }
+            }
+        }.start()
+
+    }
+
+    private fun getAverageBrightness(): Double
+    {
+        var sum = 0
+        val totalPixels = imageBitmap!!.width * imageBitmap!!.height
+        val pixels = IntArray(totalPixels)
+        imageBitmap!!.getPixels(pixels, 0, imageBitmap!!.width, 0, 0, imageBitmap!!.width, imageBitmap!!.height)
+
+        for (pixel in pixels) {
+            //luminance formula
+            sum += (0.299 * Color.red(pixel) + 0.587 * Color.green(pixel) + 0.114 * Color.blue(pixel)).toInt()
+        }
+
+        return sum.toDouble() / totalPixels.toDouble()
     }
 }
