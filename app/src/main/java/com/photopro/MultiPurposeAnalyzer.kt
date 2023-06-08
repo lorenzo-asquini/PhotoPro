@@ -60,7 +60,7 @@ class MultiPurposeAnalyzer(private val activity: MainActivity, private val rotat
     //Global variable so it can be accessed without passing it as a parameter
     private var imageBitmap : Bitmap? = null
 
-    privat var forceNightMode = false
+    private var forceNightMode = false
 
     //Running result of frame avg
     private var frameAvgResult : Mat? = null
