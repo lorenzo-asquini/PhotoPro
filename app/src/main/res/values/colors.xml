@@ -13,4 +13,5 @@
     <color name="error_color">#FFFF3333</color>
     <color name="active_frame_avg_color">#FF005B96</color>
     <color name="night_mode_is_on_color">#FF00eaff</color>
+    <color name="faded_black">#22000000</color>
 </resources>

@@ -37,4 +37,14 @@
 
     <dimen name="grid_edit_text_percentage">40</dimen>
 
+    <!--PRO MODE-->
+    <dimen name="pro_mode_font_size">14sp</dimen>
+    <dimen name="pro_mode_padding">10dp</dimen>
+    <dimen name="pro_mode_elements_padding">2dp</dimen>
+    <dimen  name="slider_percentage">8.5</dimen>
+    <dimen  name="slider_value_percentage">1.5</dimen>
+    <dimen  name="slider_value_padding">5dp</dimen>
+
+    <dimen name="mtrl_slider_widget_height">30dp</dimen>
+
 </resources>
