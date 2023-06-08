@@ -25,23 +25,18 @@ object Constant{
     const val CAMERA_FRONT = 1
     const val CAMERA_STATES = 2  //Number of states the camera can be
 
-    const val HDR_FRONT_OFF = 0
-    const val HDR_FRONT_ON = 1
+    const val PRO_MODE_OFF = 0  //So normal mode is on
+    const val PRO_MODE_ON = 1  //So normal mode is off
+    const val PRO_MODE_STATES = 2
 
-    const val HDR_BACK_OFF = 0
-    const val HDR_BACK_ON = 1
+    const val HDR_OFF = 0
+    const val HDR_ON = 1
 
-    const val BOKEH_FRONT_OFF = 0
-    const val BOKEH_FRONT_ON = 1
+    const val BOKEH_OFF = 0
+    const val BOKEH_ON = 1
 
-    const val BOKEH_BACK_OFF = 0
-    const val BOKEH_BACK_ON = 1
-
-    const val FACE_RETOUCH_FRONT_OFF = 0
-    const val FACE_RETOUCH_FRONT_ON = 1
-
-    const val FACE_RETOUCH_BACK_OFF = 0
-    const val FACE_RETOUCH_BACK_ON = 1
+    const val FACE_RETOUCH_OFF = 0
+    const val FACE_RETOUCH_ON = 1
 
     const val DEFAULT_SMART_DELAY_SECONDS = 3
     const val DEFAULT_FRAMES_TO_AVERAGE = 5
@@ -60,9 +55,6 @@ object Constant{
 
     //Key for saving zoom in Bundle
     const val ZOOM_VALUE_KEY = "zoom_value"
-
-    //To which camera is the zoom value attached to
-    const val ZOOM_VALUE_CAMERA_KEY = "zoom_value_camera_key"
 }
 
 object SharedPrefs{
@@ -87,4 +79,6 @@ object SharedPrefs{
     const val SMART_DELAY_NOTIFICATION_KEY = "smart_delay_notification"
 
     const val CAMERA_FACING_KEY = "camera_orientation"
+
+    const val PRO_MODE_KEY = "pro_mode"
 }

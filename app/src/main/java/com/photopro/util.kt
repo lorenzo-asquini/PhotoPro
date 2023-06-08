@@ -85,7 +85,7 @@ fun getAvailableFeatures(activity: AppCompatActivity, cameraManager: CameraManag
                 val extensionsManager = extensionsManagerFuture.get()
                 val cameraSelector = CameraSelector.DEFAULT_BACK_CAMERA
 
-                availableFeatures.isBackNightModeAvailable =  extensionsManager.isExtensionAvailable(cameraSelector, ExtensionMode.NIGHT)
+                availableFeatures.isBackNightModeAvailable = extensionsManager.isExtensionAvailable(cameraSelector, ExtensionMode.NIGHT)
                 availableFeatures.isBackHDRAvailable =  extensionsManager.isExtensionAvailable(cameraSelector, ExtensionMode.HDR)
                 availableFeatures.isBackBokehAvailable =  extensionsManager.isExtensionAvailable(cameraSelector, ExtensionMode.BOKEH)
                 availableFeatures.isBackFaceRetouchAvailable =  extensionsManager.isExtensionAvailable(cameraSelector, ExtensionMode.FACE_RETOUCH)

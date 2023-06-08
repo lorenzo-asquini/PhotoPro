@@ -8,11 +8,9 @@ import android.content.Context.VIBRATOR_MANAGER_SERVICE
 import android.content.Context.VIBRATOR_SERVICE
 import android.content.SharedPreferences
 import android.content.pm.PackageManager
-import android.graphics.ImageFormat
 import android.hardware.camera2.CameraCharacteristics
 import android.hardware.camera2.CameraManager
 import android.hardware.camera2.CameraMetadata
-import android.hardware.camera2.params.StreamConfigurationMap
 import android.os.Build
 import android.os.Handler
 import android.os.Looper
@@ -20,24 +18,23 @@ import android.os.VibrationEffect
 import android.os.Vibrator
 import android.os.VibratorManager
 import android.provider.MediaStore
-import android.util.Size
 import android.view.MotionEvent
 import android.view.ScaleGestureDetector
-import android.view.Surface
 import android.view.View
 import android.widget.ImageView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.camera.core.FocusMeteringAction
-import androidx.camera.core.ImageAnalysis
-import androidx.camera.core.resolutionselector.ResolutionSelector
-import androidx.camera.core.resolutionselector.ResolutionSelector.HIGH_RESOLUTION_FLAG_ON
-import androidx.camera.core.resolutionselector.ResolutionStrategy
 import androidx.camera.view.PreviewView
 import androidx.core.content.ContextCompat
 import java.text.SimpleDateFormat
 import java.util.*
+import java.util.concurrent.TimeUnit
 
 //Functions useful for both normal camera and PRO camera
+
+interface SmartDelayListener {
+    fun onPersonDetected(analyzer : MultiPurposeAnalyzer)
+}
 
 fun cameraPermissionGranted(baseContext : Context) =
     ContextCompat.checkSelfPermission(baseContext, Manifest.permission.CAMERA) == PackageManager.PERMISSION_GRANTED
@@ -111,78 +108,8 @@ fun getSaveImageContentValues() : ContentValues {
     }
 }
 
-fun createImageAnalysis(activity: AppCompatActivity, preferences: SharedPreferences) : Pair<ImageAnalysis?, MultiPurposeAnalyzer?>{
-
-    val nightModeValue = preferences.getInt(SharedPrefs.NIGHT_MODE_KEY, Constant.NIGHT_MODE_OFF)
-    val smartDelayValue = preferences.getInt(SharedPrefs.SMART_DELAY_KEY, Constant.SMART_DELAY_OFF)
-    val frameAvgValue = preferences.getInt(SharedPrefs.FRAME_AVG_KEY, Constant.FRAME_AVG_OFF)
-
-    if(frameAvgValue == Constant.FRAME_AVG_ON ||
-        nightModeValue == Constant.NIGHT_MODE_AUTO ||
-        smartDelayValue == Constant.SMART_DELAY_ON){
-
-        val cameraManager = activity.getSystemService(Context.CAMERA_SERVICE) as CameraManager
-
-        var cameraId = getBackCameraId(cameraManager)
-
-        //Change only if not camera back
-        if(preferences.getInt(SharedPrefs.CAMERA_FACING_KEY, Constant.CAMERA_BACK) == Constant.CAMERA_FRONT) {
-            cameraId = getFrontCameraId(cameraManager)
-        }
-
-        //Select the max available size for the analyzer. Not necessary for night mode auto and smart delay, but necessary for frame avg
-
-        //If at least one camera is present, cameraId cannot be null. The other variables should not be null
-        val cameraCharacteristics: CameraCharacteristics = cameraManager.getCameraCharacteristics(cameraId!!)
-        val cameraConfigs: StreamConfigurationMap? = cameraCharacteristics[CameraCharacteristics.SCALER_STREAM_CONFIGURATION_MAP]
-        val supportedSizes = cameraConfigs!!.getOutputSizes(ImageFormat.YUV_420_888)!!.toList()  //YUV_420_888 is commonly supported in Android
-
-        //Select the size with the maximum resolution. Necessary to make good photos with frame averaging
-        var currentMaxSize = supportedSizes[0]
-        for (size in supportedSizes) {
-            if (size.width * size.height > currentMaxSize.width * currentMaxSize.height) {
-                currentMaxSize = size
-            }
-        }
-
-        //Rotation of the default display
-        @Suppress("DEPRECATION")
-        val currentRotation =
-            if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.R){
-                activity.display!!.rotation
-            }else{
-                activity.windowManager.defaultDisplay.rotation  //Used for API < 30
-            }
-
-        //Change width with height for portrait (currentMaxSize refers to landscape resolution)
-        if(currentRotation == Surface.ROTATION_0){
-            currentMaxSize = Size(currentMaxSize.height, currentMaxSize.width)
-        }
-
-        //This will use the maximum resolution supported by the analyzer. This may be lower than the maximum resolution of the camera
-        val resStrategy = ResolutionStrategy(currentMaxSize, ResolutionStrategy.FALLBACK_RULE_CLOSEST_HIGHER_THEN_LOWER)
-        val resSelector = ResolutionSelector.Builder()
-            .setHighResolutionEnabledFlag(HIGH_RESOLUTION_FLAG_ON)
-            .setResolutionStrategy(resStrategy).build()
-
-        val analyzer = MultiPurposeAnalyzer(activity, currentRotation)
-        analyzer.addListener(activity as MyListener) //Adding analyzer listener for smart delay
-
-        //This is a UseCase
-        val imageAnalysis = ImageAnalysis.Builder()
-            .setResolutionSelector(resSelector)
-            .build().also{
-                it.setAnalyzer(ContextCompat.getMainExecutor(activity), analyzer)
-            }
-
-        return Pair(imageAnalysis, analyzer)
-    }
-
-    return Pair(null, null)
-}
-
 //Variable used to be sure that the circle is set to invisible depending on the last tap
-var startTime : Long = 0
+private var startTimeAutoFocus : Long = 0
 @SuppressLint("ClickableViewAccessibility")
 fun setPreviewGestures(activity: MainActivity, preferences: SharedPreferences, features: AvailableFeatures){
 
@@ -190,7 +117,7 @@ fun setPreviewGestures(activity: MainActivity, preferences: SharedPreferences, f
     val listener = object : ScaleGestureDetector.SimpleOnScaleGestureListener() {
         override fun onScale(detector: ScaleGestureDetector): Boolean {
             // Get the camera's current zoom ratio
-            val currentZoomRatio = activity.camera?.cameraInfo?.zoomState?.value?.zoomRatio ?: 0F
+            val currentZoomRatio = activity.camera?.cameraInfo?.zoomState?.value?.zoomRatio ?: 1.0F
 
             // Get the pinch gesture's scaling factor
             val delta = detector.scaleFactor
@@ -248,22 +175,23 @@ fun setPreviewGestures(activity: MainActivity, preferences: SharedPreferences, f
                 focusCircle.y = motionEvent.y - focusCircle.height/2
 
                 focusCircle.visibility = View.VISIBLE
-                val timeTillInvisible : Long = 2000
+                val autoFocusDuration : Long = 5000  //How long the current focus point will maintained
 
                 //Reset the time of the last tap
-                startTime = Calendar.getInstance().timeInMillis
+                startTimeAutoFocus = Calendar.getInstance().timeInMillis
 
                 //Make the circle disappear after a few seconds
                 Handler(Looper.getMainLooper()).postDelayed({
                     //If the delayed action is referring to the last tap
-                    if(Calendar.getInstance().timeInMillis - startTime >= timeTillInvisible) {
+                    if(Calendar.getInstance().timeInMillis - startTimeAutoFocus >= autoFocusDuration) {
                         focusCircle.visibility = View.INVISIBLE
                     }
-                }, timeTillInvisible)
+                }, autoFocusDuration)
 
                 // Create a MeteringAction from the MeteringPoint
                 // All actions are performed: AF(Auto Focus), AE(Auto Exposure) and AWB(Auto White Balance)
-                val action = FocusMeteringAction.Builder(point).build()
+                val action = FocusMeteringAction.Builder(point)
+                    .setAutoCancelDuration(autoFocusDuration, TimeUnit.MILLISECONDS).build()
 
                 // Trigger the focus and metering
                 activity.camera?.cameraControl?.startFocusAndMetering(action)

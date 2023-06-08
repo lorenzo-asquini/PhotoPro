@@ -43,6 +43,7 @@ fun drawAllButtons(activity: AppCompatActivity, preferences: SharedPreferences, 
 
     drawFrameAvgButton(activity, preferences, true)
     drawSmartDelayButton(activity, preferences, true)
+    drawProModeMenu(activity, preferences, true)  //Present in another file
 
 }
 
