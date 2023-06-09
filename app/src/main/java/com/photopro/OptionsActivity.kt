@@ -1,6 +1,7 @@
 package com.photopro
 
 import android.content.Context
+import android.content.Intent
 import android.content.SharedPreferences
 import android.hardware.camera2.CameraManager
 import android.os.Bundle
@@ -10,6 +11,8 @@ import android.widget.EditText
 import android.widget.ImageButton
 import androidx.appcompat.app.AppCompatActivity
 
+//Avoid opening the info menu multiple times when spamming button
+private var isInfoButtonClicked = false
 class OptionsActivity : AppCompatActivity() {
 
     //Necessary lateinit because the SharedPreferences need the activity to be created
@@ -36,10 +39,23 @@ class OptionsActivity : AppCompatActivity() {
         backArrowButton.setOnClickListener{
             finish()
         }
+
+        //Add listener to button to open the options menu
+        val infoButton: ImageButton = findViewById(R.id.info_image_button)
+        infoButton.setOnClickListener{
+            if(!isInfoButtonClicked) {
+                val openSettingsIntent = Intent(this, InfoActivity::class.java)
+                startActivity(openSettingsIntent)
+                isInfoButtonClicked = true
+            }
+        }
     }
 
     override fun onPause() {
         super.onPause()
+
+        //Reset the value when pausing the current activity
+        isInfoButtonClicked = false
 
         //Validate inputs even when pausing the activity
         val framesToAverageEditText = findViewById<EditText>(R.id.frame_avg_frame_number_editText)

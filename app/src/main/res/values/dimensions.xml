@@ -46,5 +46,6 @@
     <dimen  name="slider_value_padding">5dp</dimen>
 
     <dimen name="mtrl_slider_widget_height">30dp</dimen>
+    <dimen name="pro_titles_left_padding">10dp</dimen>
 
 </resources>

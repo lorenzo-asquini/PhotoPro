@@ -155,9 +155,8 @@ class MainActivity : AppCompatActivity(), SmartDelayListener {
         //Add listener to button to change to pro mode and back
         val proModeButton: ImageButton = findViewById(R.id.pro_mode_button)
         proModeButton.setOnClickListener {
-            //TODO: Crash without landscape layout
-            //changeProModeValue(preferences)
-            //drawProModeMenu(this, preferences, true)
+            changeProModeValue(preferences)
+            drawProModeMenu(this, preferences, true)
         }
 
         //Add listener to button to make it take photos
