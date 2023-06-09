@@ -45,7 +45,6 @@ fun getAvailableFeatures(activity: CameraAppCompactActivity){
 
     //Used to execute the Runnable used to check if the extensions are available
     val executorService = Executors.newCachedThreadPool()
-
     //Value used to see if all the necessary features have been considered, for front and back camera
     var camerasConsidered = 0
 
@@ -76,6 +75,7 @@ fun getAvailableFeatures(activity: CameraAppCompactActivity){
                 activity.features.isFrontFaceRetouchAvailable = extensionsManager.isExtensionAvailable(cameraSelector, ExtensionMode.FACE_RETOUCH)
 
                 camerasConsidered++
+
             }, executorService)
         }, executorService)
     }else {
@@ -107,6 +107,7 @@ fun getAvailableFeatures(activity: CameraAppCompactActivity){
                 activity.features.isBackFaceRetouchAvailable =  extensionsManager.isExtensionAvailable(cameraSelector, ExtensionMode.FACE_RETOUCH)
 
                 camerasConsidered++
+
             }, executorService)
         }, executorService)
     }else {
@@ -115,7 +116,7 @@ fun getAvailableFeatures(activity: CameraAppCompactActivity){
 
     //Waits for all the features to be determined (both cameras)
     while(camerasConsidered < 2){
-        //This is similar to polling, 50 times a second. The user usually does not see this little latency
+        //This is similar to polling, 50 times a second. The user usually does not perceive this little latency
         executorService.awaitTermination(20, TimeUnit.MILLISECONDS)
     }
     executorService.shutdown()
