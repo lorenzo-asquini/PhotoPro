@@ -25,10 +25,11 @@ import androidx.core.content.ContextCompat
 import java.util.Calendar
 import java.util.concurrent.ExecutorService
 import java.util.concurrent.Executors
+import java.util.concurrent.TimeUnit
 
 
 //Implements also SmartDelayListener
-class MainActivity : AppCompatActivity(), SmartDelayListener {
+class MainActivity : CameraAppCompactActivity(), SmartDelayListener{
     //Object that becomes not null when (and if) the camera is started
     private var imageCapture: ImageCapture? = null
 
@@ -46,6 +47,9 @@ class MainActivity : AppCompatActivity(), SmartDelayListener {
     //Necessary lateinit because the SharedPreferences need the activity to be created
     private lateinit var preferences : SharedPreferences
 
+    //Necessary global and public because some values as set asynchronously and they may not be available with a return
+    override val features : AvailableFeatures = AvailableFeatures()
+
     //Avoid opening the options menu multiple times when spamming button
     private var isOptionsButtonClicked = false
 
@@ -58,8 +62,9 @@ class MainActivity : AppCompatActivity(), SmartDelayListener {
         setContentView(R.layout.activity_main)
 
         preferences = getSharedPreferences(SharedPrefs.SHARED_PREFERENCES_KEY, MODE_PRIVATE)
-        val cameraManager = getSystemService(Context.CAMERA_SERVICE) as CameraManager
-        val features = getAvailableFeatures(this, cameraManager)
+
+        //Program waits untill all the features have been determined
+        getAvailableFeatures(this)
 
         //Draw from preferences
         drawAllButtons(this, preferences, features)
@@ -297,6 +302,7 @@ class MainActivity : AppCompatActivity(), SmartDelayListener {
 
         //Keep zoom value if it was saved
         val zoomValue= intent.getFloatExtra(Constant.ZOOM_VALUE_KEY, 1.0F)
+        //Necessary to restart camera in case a new extension was selected in the options menu
         startCameraWrapper(zoomValue)  //Force saved zoom
     }
 
