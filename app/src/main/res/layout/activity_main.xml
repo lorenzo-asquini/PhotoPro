@@ -176,7 +176,7 @@
         android:padding="@dimen/pro_mode_padding"
         android:layout_margin="@dimen/pro_mode_padding"
         android:orientation="vertical"
-        android:visibility="invisible">
+        android:visibility="visible">
 
         <LinearLayout
             android:id = "@+id/pro_mode_sliders"
@@ -190,6 +190,7 @@
                 android:id="@+id/white_balance_title_textView"
                 android:text="@string/white_balance"
                 android:textSize="@dimen/pro_mode_font_size"
+                android:paddingStart="@dimen/pro_titles_left_padding"
 
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -244,6 +245,7 @@
                 android:id="@+id/iso_title_textView"
                 android:text="@string/iso"
                 android:textSize="@dimen/pro_mode_font_size"
+                android:paddingStart="@dimen/pro_titles_left_padding"
 
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -296,6 +298,7 @@
                 android:id="@+id/shutter_speed_title_textView"
                 android:text="@string/shutter_speed"
                 android:textSize="@dimen/pro_mode_font_size"
+                android:paddingStart="@dimen/pro_titles_left_padding"
 
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
