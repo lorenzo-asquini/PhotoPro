@@ -1,0 +1,413 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".OptionsActivity"
+
+    android:background="@color/black"
+
+    android:clickable="true"
+    android:focusable="true"
+    android:focusableInTouchMode="true">
+
+    <!--Top toolbar containing the back button-->
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/options_toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/option_toolbar_height"
+
+        app:contentInsetLeft="0dp"
+        app:contentInsetStart="0dp"
+        app:layout_constraintBottom_toTopOf="@+id/options_scroll_view"
+        app:layout_constraintTop_toTopOf="parent"
+        app:titleMarginTop="0dp">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="start">
+
+            <ImageButton
+                android:id="@+id/info_to_settings_back_arrow_button"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+
+                android:background="@null"
+                android:contentDescription="@string/info_to_settings_back_arrow_button_description"
+                android:padding="@dimen/back_padding"
+                android:scaleType="fitStart"
+                android:src="@drawable/back_arrow"
+                app:layout_constraintBottom_toBottomOf="parent"
+
+                app:layout_constraintDimensionRatio="1:1"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:id="@+id/info_title_textView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+
+                android:text="@string/info_text"
+                android:textColor="@color/white"
+                android:textSize="@dimen/main_title_font_size"
+
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </androidx.appcompat.widget.Toolbar>
+
+    <!--List of extensions available. Easier than using recyclerView because of the difference in behavior of the buttons-->
+    <ScrollView
+        android:id="@+id/options_scroll_view"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:paddingStart="@dimen/start_end_padding"
+        android:paddingTop="@dimen/top_bottom_padding"
+        android:paddingEnd="@dimen/start_end_padding"
+
+        android:paddingBottom="@dimen/top_bottom_padding"
+        app:layout_constraintTop_toBottomOf="@+id/options_toolbar"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent">
+
+        <!--LinearLayout containing every feature description-->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+                <!--Section: Flash-->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+                    <ImageView
+                        android:id="@+id/flash_logo"
+
+                        android:layout_width="@dimen/grid_icon_dimensions"
+                        android:layout_height="@dimen/grid_icon_dimensions"
+
+                        android:layout_columnWeight="@dimen/grid_icon_percentage"
+                        android:layout_gravity="center"
+                        android:background="@null"
+                        android:padding="@dimen/grid_icon_padding"
+                        android:src="@drawable/flash_on" />
+
+                    <TextView
+                        android:id="@+id/flash_title_textView"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+
+                        android:backgroundTint="@color/darkGray"
+                        android:padding="@dimen/titles_padding"
+                        android:text="@string/flash_text"
+
+                        android:textColor="@color/white"
+                        android:textSize="@dimen/titles_font_size"
+
+                        android:textStyle="bold"
+                        android:layout_gravity="center"/>
+                </LinearLayout>
+                <TextView
+                    android:id="@+id/flash_description_text_view"
+
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+
+                    android:text="@string/flash_description_text"
+                    android:textColor="@color/white"
+                    android:textSize="@dimen/text_font_size" />
+                <Space
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/spaces" />
+
+            <!--Section: Image Averaging-->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+                <ImageView
+                    android:id="@+id/image_average_logo"
+
+                    android:layout_width="@dimen/grid_icon_dimensions"
+                    android:layout_height="@dimen/grid_icon_dimensions"
+
+                    android:layout_columnWeight="@dimen/grid_icon_percentage"
+                    android:layout_gravity="center"
+                    android:background="@null"
+                    android:padding="@dimen/grid_icon_padding"
+                    android:src="@drawable/frame_avg_on" />
+
+                <TextView
+                    android:id="@+id/image_averaging_title_textView"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+
+                    android:backgroundTint="@color/darkGray"
+                    android:padding="@dimen/titles_padding"
+                    android:text="@string/image_averaging_text"
+
+                    android:textColor="@color/white"
+                    android:textSize="@dimen/titles_font_size"
+
+                    android:textStyle="bold"
+                    android:layout_gravity="center"/>
+            </LinearLayout>
+            <TextView
+                android:id="@+id/image_averaging_description_text_view"
+
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+
+                android:text="@string/image_averaging_description_text"
+                android:textColor="@color/white"
+                android:textSize="@dimen/text_font_size" />
+            <Space
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/spaces" />
+
+            <!--Section: Smart Delay-->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+                <ImageView
+                    android:id="@+id/smart_delay_logo"
+
+                    android:layout_width="@dimen/grid_icon_dimensions"
+                    android:layout_height="@dimen/grid_icon_dimensions"
+
+                    android:layout_columnWeight="@dimen/grid_icon_percentage"
+                    android:layout_gravity="center"
+                    android:background="@null"
+                    android:padding="@dimen/grid_icon_padding"
+                    android:src="@drawable/smart_delay_on" />
+
+                <TextView
+                    android:id="@+id/smart_delay_title_textView"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+
+                    android:backgroundTint="@color/darkGray"
+                    android:padding="@dimen/titles_padding"
+                    android:text="@string/smart_delay_text"
+
+                    android:textColor="@color/white"
+                    android:textSize="@dimen/titles_font_size"
+
+                    android:textStyle="bold"
+                    android:layout_gravity="center"/>
+            </LinearLayout>
+            <TextView
+                android:id="@+id/smart_delay_description_text_view"
+
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+
+                android:text="@string/smart_delay_description_text"
+                android:textColor="@color/white"
+                android:textSize="@dimen/text_font_size" />
+            <Space
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/spaces" />
+
+            <!--Section: night Mode-->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+                <ImageView
+                    android:id="@+id/night_mode_logo"
+
+                    android:layout_width="@dimen/grid_icon_dimensions"
+                    android:layout_height="@dimen/grid_icon_dimensions"
+
+                    android:layout_columnWeight="@dimen/grid_icon_percentage"
+                    android:layout_gravity="center"
+                    android:background="@null"
+                    android:padding="@dimen/grid_icon_padding"
+                    android:src="@drawable/night_mode_on" />
+
+                <TextView
+                    android:id="@+id/night_mode_title_textView"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+
+                    android:backgroundTint="@color/darkGray"
+                    android:padding="@dimen/titles_padding"
+                    android:text="@string/night_mode_text"
+
+                    android:textColor="@color/white"
+                    android:textSize="@dimen/titles_font_size"
+
+                    android:textStyle="bold"
+                    android:layout_gravity="center"/>
+            </LinearLayout>
+            <TextView
+                android:id="@+id/night_mode_description_text_view"
+
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+
+                android:text="@string/night_mode_description_text"
+                android:textColor="@color/white"
+                android:textSize="@dimen/text_font_size" />
+            <Space
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/spaces" />
+
+            <!--Section: HDR-->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+                <ImageView
+                    android:id="@+id/HDR_logo"
+
+                    android:layout_width="@dimen/grid_icon_dimensions"
+                    android:layout_height="@dimen/grid_icon_dimensions"
+
+                    android:layout_columnWeight="@dimen/grid_icon_percentage"
+                    android:layout_gravity="center"
+                    android:background="@null"
+                    android:padding="@dimen/grid_icon_padding"
+                    android:src="@drawable/hdr" />
+
+                <TextView
+                    android:id="@+id/HDR_title_textView"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+
+                    android:backgroundTint="@color/darkGray"
+                    android:padding="@dimen/titles_padding"
+                    android:text="@string/HDR_text"
+
+                    android:textColor="@color/white"
+                    android:textSize="@dimen/titles_font_size"
+
+                    android:textStyle="bold"
+                    android:layout_gravity="center"/>
+            </LinearLayout>
+            <TextView
+                android:id="@+id/HDR_description_text_view"
+
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+
+                android:text="@string/HDR_description_text"
+                android:textColor="@color/white"
+                android:textSize="@dimen/text_font_size" />
+            <Space
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/spaces" />
+
+            <!--Section: Bokeh-->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+                <ImageView
+                    android:id="@+id/bokeh_logo"
+
+                    android:layout_width="@dimen/grid_icon_dimensions"
+                    android:layout_height="@dimen/grid_icon_dimensions"
+
+                    android:layout_columnWeight="@dimen/grid_icon_percentage"
+                    android:layout_gravity="center"
+                    android:background="@null"
+                    android:padding="@dimen/grid_icon_padding"
+                    android:src="@drawable/bokeh" />
+
+                <TextView
+                    android:id="@+id/bokeh_title_textView"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+
+                    android:backgroundTint="@color/darkGray"
+                    android:padding="@dimen/titles_padding"
+                    android:text="@string/bokeh_text"
+
+                    android:textColor="@color/white"
+                    android:textSize="@dimen/titles_font_size"
+
+                    android:textStyle="bold"
+                    android:layout_gravity="center"/>
+            </LinearLayout>
+            <TextView
+                android:id="@+id/bokeh_description_text_view"
+
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+
+                android:text="@string/bokeh_description_text"
+                android:textColor="@color/white"
+                android:textSize="@dimen/text_font_size" />
+            <Space
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/spaces" />
+
+            <!--Section: Face Retouch-->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+                <ImageView
+                    android:id="@+id/face_retouch_logo"
+
+                    android:layout_width="@dimen/grid_icon_dimensions"
+                    android:layout_height="@dimen/grid_icon_dimensions"
+
+                    android:layout_columnWeight="@dimen/grid_icon_percentage"
+                    android:layout_gravity="center"
+                    android:background="@null"
+                    android:padding="@dimen/grid_icon_padding"
+                    android:src="@drawable/face_retouch" />
+
+                <TextView
+                    android:id="@+id/face_retouch_title_textView"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+
+                    android:backgroundTint="@color/darkGray"
+                    android:padding="@dimen/titles_padding"
+                    android:text="@string/face_retouch_text"
+
+                    android:textColor="@color/white"
+                    android:textSize="@dimen/titles_font_size"
+
+                    android:textStyle="bold"
+                    android:layout_gravity="center"/>
+            </LinearLayout>
+            <TextView
+                android:id="@+id/face_retouch_description_text_view"
+
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+
+                android:text="@string/face_retouch_description_text"
+                android:textColor="@color/white"
+                android:textSize="@dimen/text_font_size" />
+            <Space
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/spaces" />
+
+            </LinearLayout>
+    </ScrollView>
+
+</androidx.constraintlayout.widget.ConstraintLayout>
