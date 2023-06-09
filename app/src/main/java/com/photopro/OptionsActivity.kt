@@ -13,16 +13,18 @@ import androidx.appcompat.app.AppCompatActivity
 
 //Avoid opening the info menu multiple times when spamming button
 private var isInfoButtonClicked = false
-class OptionsActivity : AppCompatActivity() {
+class OptionsActivity : CameraAppCompactActivity() {
 
     //Necessary lateinit because the SharedPreferences need the activity to be created
     private lateinit var preferences : SharedPreferences
+
+    //Necessary global and public because some values as set asynchronously and they may not be available with a return
+    override val features : AvailableFeatures = AvailableFeatures()
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_options)
 
-        val cameraManager = getSystemService(Context.CAMERA_SERVICE) as CameraManager
-        val features = getAvailableFeatures(this, cameraManager)
+        getAvailableFeatures(this)
 
         preferences = getSharedPreferences(SharedPrefs.SHARED_PREFERENCES_KEY, MODE_PRIVATE)
 
