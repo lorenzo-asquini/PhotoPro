@@ -11,9 +11,10 @@ import android.widget.EditText
 import android.widget.ImageButton
 import androidx.appcompat.app.AppCompatActivity
 
-//Avoid opening the info menu multiple times when spamming button
-private var isInfoButtonClicked = false
 class OptionsActivity : CameraAppCompactActivity() {
+
+    //Avoid opening the info menu multiple times when spamming button
+    private var isInfoButtonClicked = false
 
     //Necessary lateinit because the SharedPreferences need the activity to be created
     private lateinit var preferences : SharedPreferences

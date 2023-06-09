@@ -57,7 +57,7 @@ fun startCamera(activity: MainActivity, preferences: SharedPreferences, zoomValu
             //Get extension values for back camera
             var isHDRSelected = preferences.getInt(SharedPrefs.HDR_BACK_KEY, Constant.HDR_OFF) == Constant.HDR_ON
             var isBokehSelected = preferences.getInt(SharedPrefs.BOKEH_BACK_KEY, Constant.BOKEH_OFF) == Constant.BOKEH_ON
-            var isFaceRotouchSelected = preferences.getInt(SharedPrefs.FACE_RETOUCH_BACK_KEY, Constant.FACE_RETOUCH_OFF) == Constant.FACE_RETOUCH_ON
+            var isFaceRetouchSelected = preferences.getInt(SharedPrefs.FACE_RETOUCH_BACK_KEY, Constant.FACE_RETOUCH_OFF) == Constant.FACE_RETOUCH_ON
 
             //Change only if not camera back (default value
             if (preferences.getInt(SharedPrefs.CAMERA_FACING_KEY, Constant.CAMERA_BACK) == Constant.CAMERA_FRONT) {
@@ -66,7 +66,7 @@ fun startCamera(activity: MainActivity, preferences: SharedPreferences, zoomValu
                 //Get extension values for front camera
                 isHDRSelected = preferences.getInt(SharedPrefs.HDR_FRONT_KEY, Constant.HDR_OFF) == Constant.HDR_ON
                 isBokehSelected = preferences.getInt(SharedPrefs.BOKEH_FRONT_KEY, Constant.BOKEH_OFF) == Constant.BOKEH_ON
-                isFaceRotouchSelected = preferences.getInt(SharedPrefs.FACE_RETOUCH_FRONT_KEY, Constant.FACE_RETOUCH_OFF)  == Constant.FACE_RETOUCH_ON
+                isFaceRetouchSelected = preferences.getInt(SharedPrefs.FACE_RETOUCH_FRONT_KEY, Constant.FACE_RETOUCH_OFF)  == Constant.FACE_RETOUCH_ON
             }
 
             //Only one value for front and back camera
@@ -112,7 +112,7 @@ fun startCamera(activity: MainActivity, preferences: SharedPreferences, zoomValu
                                     ExtensionMode.BOKEH
                                 )
                         }
-                    }else if(isFaceRotouchSelected){
+                    }else if(isFaceRetouchSelected){
                         //Check again if it is really available
                         if (extensionsManager.isExtensionAvailable(cameraSelector, ExtensionMode.FACE_RETOUCH)) {
                             cameraSelector =
@@ -205,8 +205,7 @@ fun createImageAnalysis(activity: MainActivity, preferences: SharedPreferences)
             cameraManager.getCameraCharacteristics(cameraId!!)
         val cameraConfigs: StreamConfigurationMap? =
             cameraCharacteristics[CameraCharacteristics.SCALER_STREAM_CONFIGURATION_MAP]
-        val supportedSizes = cameraConfigs!!.getOutputSizes(ImageFormat.YUV_420_888)!!
-            .toList()  //YUV_420_888 is commonly supported in Android
+        val supportedSizes = cameraConfigs!!.getOutputSizes(ImageFormat.YUV_420_888)!!.toList()  //YUV_420_888 is commonly supported in Android
 
         //Select the size with the maximum resolution. Necessary to make good photos with frame averaging
         var currentMaxSize = supportedSizes[0]
@@ -236,7 +235,6 @@ fun createImageAnalysis(activity: MainActivity, preferences: SharedPreferences)
             ResolutionStrategy.FALLBACK_RULE_CLOSEST_HIGHER_THEN_LOWER
         )
         val resSelector = ResolutionSelector.Builder()
-            .setHighResolutionEnabledFlag(ResolutionSelector.HIGH_RESOLUTION_FLAG_ON)
             .setResolutionStrategy(resStrategy).build()
 
         val analyzer = MultiPurposeAnalyzer(activity, currentRotation)
