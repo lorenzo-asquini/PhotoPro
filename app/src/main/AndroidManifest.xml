@@ -5,7 +5,7 @@
     <uses-feature android:name="android.hardware.camera.any" />
 
     <uses-permission android:name="android.permission.CAMERA" />
-    <uses-permission android:name="android.permission.VIBRATE"/>
+    <uses-permission android:name="android.permission.VIBRATE" />
 
     <application
         android:allowBackup="true"
@@ -16,6 +16,9 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.PhotoProNoActionBar"
         tools:targetApi="31">
+        <activity
+            android:name=".InfoActivity"
+            android:exported="false" />
         <activity
             android:name=".OptionsActivity"
             android:exported="false" />
