@@ -53,27 +53,10 @@
     <string name="invalid_input">Invalid input. Ignored</string>
 
     <!--PRO mode-->
-    <string name="white_balance">White Balance</string>
     <string name="iso">ISO</string>
     <string name="shutter_speed">Shutter Speed</string>
     <string name="hide_pro_mode_text">HIDE</string>
     <string name="reset_pro_mode_text">RESET</string>
     <string name="reset_pro_mode_button_description">Button to reset values of pro mode</string>
 
-    <!--Info layout-->
-    <string name="info_to_settings_back_arrow_button_description">Button to go from Info Activity to Options Activity</string>
-    <string name="flash_text">Flash</string>
-    <string name="flash_description_text"> Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</string>
-    <string name="image_averaging_text">Image Averaging</string>
-    <string name="image_averaging_description_text"> Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</string>
-    <string name="smart_delay_text">Smart Delay</string>
-    <string name="smart_delay_description_text"> Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</string>
-    <string name="night_mode_text">Night Mode</string>
-    <string name="night_mode_description_text"> Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</string>
-    <!--<string name="hdr_text">HDR</string>-->
-    <string name="HDR_description_text"> Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</string>
-    <!--<string name="bokeh_text">Bokeh</string>-->
-    <string name="bokeh_description_text"> Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</string>
-    <!--<string name="face_retouch_text">Face Retouch</string>-->
-    <string name="face_retouch_description_text"> Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</string>
 </resources>

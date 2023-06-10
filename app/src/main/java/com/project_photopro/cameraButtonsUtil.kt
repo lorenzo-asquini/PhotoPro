@@ -25,6 +25,12 @@ fun drawAllButtons(activity: AppCompatActivity, preferences: SharedPreferences, 
         }else{
             drawNightModeButton(activity, preferences, false)
         }
+
+        if(features.isFrontProModeAvailable){
+            drawProModeMenu(activity, preferences, true)  //Present in another file
+        }else{
+            drawProModeMenu(activity, preferences, false)  //Present in another file
+        }
     }
 
     if(preferences.getInt(SharedPrefs.CAMERA_FACING_KEY, Constant.CAMERA_BACK) == Constant.CAMERA_BACK) {
@@ -39,12 +45,16 @@ fun drawAllButtons(activity: AppCompatActivity, preferences: SharedPreferences, 
         }else{
             drawNightModeButton(activity, preferences, false)
         }
+
+        if(features.isBackProModeAvailable){
+            drawProModeMenu(activity, preferences, true)  //Present in another file
+        }else{
+            drawProModeMenu(activity, preferences, false)  //Present in another file
+        }
     }
 
     drawFrameAvgButton(activity, preferences, true)
     drawSmartDelayButton(activity, preferences, true)
-    drawProModeMenu(activity, preferences, true)  //Present in another file
-
 }
 
 fun drawFlashButton(activity: AppCompatActivity, preferences: SharedPreferences, show : Boolean){

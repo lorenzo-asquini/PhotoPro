@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!--Info layout-->
+    <string name="info_to_settings_back_arrow_button_description">Button to go from Info Activity to Options Activity</string>
+    <string name="flash_text">Flash</string>
+    <string name="flash_description_text"> Decide the way the camera flash behaves. \n ON: taking pictures with the flash \n OFF: disable the flash \n AUTOMATIC: the app decides when to activate the flash \n ALWAYS ON: constant illumination.</string>
+    <string name="image_averaging_text">Image Averaging</string>
+    <string name="image_averaging_description_text"> Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</string>
+    <string name="smart_delay_text">Smart Delay</string>
+    <string name="smart_delay_description_text"> Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</string>
+    <string name="night_mode_text">Night Mode</string>
+    <string name="night_mode_description_text"> Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</string>
+    <!--<string name="hdr_text">HDR</string>-->
+    <string name="HDR_description_text"> Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</string>
+    <!--<string name="bokeh_text">Bokeh</string>-->
+    <string name="bokeh_description_text"> Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</string>
+    <!--<string name="face_retouch_text">Face Retouch</string>-->
+    <string name="face_retouch_description_text"> Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</string>
+</resources>
