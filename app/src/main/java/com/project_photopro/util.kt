@@ -11,10 +11,6 @@ import androidx.camera.lifecycle.ProcessCameraProvider
 import java.util.concurrent.Executors
 import java.util.concurrent.TimeUnit
 
-abstract class CameraAppCompactActivity: AppCompatActivity(){
-    abstract val features : AvailableFeatures
-}
-
 data class AvailableFeatures(
     var isBackCameraAvailable : Boolean = false,
     var isFrontCameraAvailable : Boolean = false,
@@ -36,12 +32,14 @@ data class AvailableFeatures(
     var isBackAutoFocusAvailable : Boolean = false
 )
 
-fun getAvailableFeatures(activity: CameraAppCompactActivity){
+fun getAvailableFeatures(activity: AppCompatActivity) : AvailableFeatures{
 
     val cameraManager = activity.getSystemService(Context.CAMERA_SERVICE) as CameraManager
 
     val frontCameraId = getFrontCameraId(cameraManager)
     val backCameraId = getBackCameraId(cameraManager)
+
+    val features = AvailableFeatures()
 
     //Used to execute the Runnable used to check if the extensions are available
     val executorService = Executors.newCachedThreadPool()
@@ -49,13 +47,13 @@ fun getAvailableFeatures(activity: CameraAppCompactActivity){
     var camerasConsidered = 0
 
     if(frontCameraId != null) {
-        activity.features.isFrontCameraAvailable = true
+        features.isFrontCameraAvailable = true
 
         val cameraCharacteristics = cameraManager.getCameraCharacteristics(frontCameraId)
-        activity.features.isFrontFlashAvailable = cameraCharacteristics.get(CameraCharacteristics.FLASH_INFO_AVAILABLE)!!
+        features.isFrontFlashAvailable = cameraCharacteristics.get(CameraCharacteristics.FLASH_INFO_AVAILABLE)!!
 
         //If the number of maximum AutoFocus regions is greater than 0, AutoFocus can work
-        activity.features.isFrontAutoFocusAvailable = (cameraCharacteristics.get(CameraCharacteristics.CONTROL_MAX_REGIONS_AF)!! > 0)
+        features.isFrontAutoFocusAvailable = (cameraCharacteristics.get(CameraCharacteristics.CONTROL_MAX_REGIONS_AF)!! > 0)
 
         //cameraManager.getCameraExtensionCharacteristics could be used, but it requires higher API levels
         //It becomes uselessly difficult to handle each case. For this reason the extensionManager is used
@@ -69,10 +67,10 @@ fun getAvailableFeatures(activity: CameraAppCompactActivity){
                 val extensionsManager = extensionsManagerFuture.get()
                 val cameraSelector = CameraSelector.DEFAULT_FRONT_CAMERA
 
-                activity.features.isFrontNightModeAvailable = extensionsManager.isExtensionAvailable(cameraSelector, ExtensionMode.NIGHT)
-                activity.features.isFrontHDRAvailable = extensionsManager.isExtensionAvailable(cameraSelector, ExtensionMode.HDR)
-                activity.features.isFrontBokehAvailable = extensionsManager.isExtensionAvailable(cameraSelector, ExtensionMode.BOKEH)
-                activity.features.isFrontFaceRetouchAvailable = extensionsManager.isExtensionAvailable(cameraSelector, ExtensionMode.FACE_RETOUCH)
+                features.isFrontNightModeAvailable = extensionsManager.isExtensionAvailable(cameraSelector, ExtensionMode.NIGHT)
+                features.isFrontHDRAvailable = extensionsManager.isExtensionAvailable(cameraSelector, ExtensionMode.HDR)
+                features.isFrontBokehAvailable = extensionsManager.isExtensionAvailable(cameraSelector, ExtensionMode.BOKEH)
+                features.isFrontFaceRetouchAvailable = extensionsManager.isExtensionAvailable(cameraSelector, ExtensionMode.FACE_RETOUCH)
 
                 camerasConsidered++
 
@@ -83,13 +81,13 @@ fun getAvailableFeatures(activity: CameraAppCompactActivity){
     }
 
     if(backCameraId != null){
-        activity.features.isBackCameraAvailable = true
+        features.isBackCameraAvailable = true
 
         val cameraCharacteristics = cameraManager.getCameraCharacteristics(backCameraId)
-        activity.features.isBackFlashAvailable =  cameraCharacteristics.get(CameraCharacteristics.FLASH_INFO_AVAILABLE)!!
+        features.isBackFlashAvailable =  cameraCharacteristics.get(CameraCharacteristics.FLASH_INFO_AVAILABLE)!!
 
         //If the number of maximum AutoFocus regions is greater than 0, AutoFocus can work
-        activity.features.isBackAutoFocusAvailable = (cameraCharacteristics.get(CameraCharacteristics.CONTROL_MAX_REGIONS_AF)!! > 0)
+        features.isBackAutoFocusAvailable = (cameraCharacteristics.get(CameraCharacteristics.CONTROL_MAX_REGIONS_AF)!! > 0)
 
         val cameraProviderFuture = ProcessCameraProvider.getInstance(activity)
         cameraProviderFuture.addListener({
@@ -101,10 +99,10 @@ fun getAvailableFeatures(activity: CameraAppCompactActivity){
                 val extensionsManager = extensionsManagerFuture.get()
                 val cameraSelector = CameraSelector.DEFAULT_BACK_CAMERA
 
-                activity.features.isBackNightModeAvailable = extensionsManager.isExtensionAvailable(cameraSelector, ExtensionMode.NIGHT)
-                activity.features.isBackHDRAvailable =  extensionsManager.isExtensionAvailable(cameraSelector, ExtensionMode.HDR)
-                activity.features.isBackBokehAvailable =  extensionsManager.isExtensionAvailable(cameraSelector, ExtensionMode.BOKEH)
-                activity.features.isBackFaceRetouchAvailable =  extensionsManager.isExtensionAvailable(cameraSelector, ExtensionMode.FACE_RETOUCH)
+                features.isBackNightModeAvailable = extensionsManager.isExtensionAvailable(cameraSelector, ExtensionMode.NIGHT)
+                features.isBackHDRAvailable =  extensionsManager.isExtensionAvailable(cameraSelector, ExtensionMode.HDR)
+                features.isBackBokehAvailable =  extensionsManager.isExtensionAvailable(cameraSelector, ExtensionMode.BOKEH)
+                features.isBackFaceRetouchAvailable =  extensionsManager.isExtensionAvailable(cameraSelector, ExtensionMode.FACE_RETOUCH)
 
                 camerasConsidered++
 
@@ -120,4 +118,6 @@ fun getAvailableFeatures(activity: CameraAppCompactActivity){
         executorService.awaitTermination(20, TimeUnit.MILLISECONDS)
     }
     executorService.shutdown()
+
+    return features
 }

@@ -14,6 +14,7 @@ import android.widget.Button
 import android.widget.ImageButton
 import android.widget.TextView
 import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
 import androidx.camera.core.Camera
 import androidx.camera.core.ImageCapture
 import androidx.camera.core.ImageCaptureException
@@ -25,7 +26,7 @@ import java.util.concurrent.Executors
 
 
 //Implements also SmartDelayListener
-class MainActivity : CameraAppCompactActivity(), SmartDelayListener{
+class MainActivity : AppCompatActivity(), SmartDelayListener{
     //Object that becomes not null when (and if) the camera is started
     private var imageCapture: ImageCapture? = null
 
@@ -43,9 +44,6 @@ class MainActivity : CameraAppCompactActivity(), SmartDelayListener{
     //Necessary lateinit because the SharedPreferences need the activity to be created
     private lateinit var preferences : SharedPreferences
 
-    //Necessary global and public because some values as set asynchronously and they may not be available with a return
-    override val features : AvailableFeatures = AvailableFeatures()
-
     //Avoid opening the options menu multiple times when spamming button
     private var isOptionsButtonClicked = false
 
@@ -59,8 +57,8 @@ class MainActivity : CameraAppCompactActivity(), SmartDelayListener{
 
         preferences = getSharedPreferences(SharedPrefs.SHARED_PREFERENCES_KEY, MODE_PRIVATE)
 
-        //Program waits untill all the features have been determined
-        getAvailableFeatures(this)
+        //Program waits until all the features have been determined
+        val features = getAvailableFeatures(this)
 
         //Draw from preferences
         drawAllButtons(this, preferences, features)

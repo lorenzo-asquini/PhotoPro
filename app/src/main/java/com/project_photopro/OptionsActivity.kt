@@ -3,13 +3,15 @@ package com.project_photopro
 import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
+import android.content.res.ColorStateList
 import android.os.Bundle
 import android.view.MotionEvent
 import android.view.inputmethod.InputMethodManager
 import android.widget.EditText
 import android.widget.ImageButton
+import androidx.appcompat.app.AppCompatActivity
 
-class OptionsActivity : CameraAppCompactActivity() {
+class OptionsActivity : AppCompatActivity() {
 
     //Avoid opening the info menu multiple times when spamming button
     private var isInfoButtonClicked = false
@@ -17,13 +19,12 @@ class OptionsActivity : CameraAppCompactActivity() {
     //Necessary lateinit because the SharedPreferences need the activity to be created
     private lateinit var preferences : SharedPreferences
 
-    //Necessary global and public because some values as set asynchronously and they may not be available with a return
-    override val features : AvailableFeatures = AvailableFeatures()
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_options)
 
-        getAvailableFeatures(this)
+        //Program waits until all the features have been determined
+        val features = getAvailableFeatures(this)
 
         preferences = getSharedPreferences(SharedPrefs.SHARED_PREFERENCES_KEY, MODE_PRIVATE)
 
@@ -50,6 +51,22 @@ class OptionsActivity : CameraAppCompactActivity() {
                 isInfoButtonClicked = true
             }
         }
+    }
+
+    override fun onResume() {
+        super.onResume()
+
+        //Retrieve the saved preferences and show them. Necessary when coming back from info activity
+        retrieveOptionsValue(this, preferences)
+
+        //Valid values because just retrieved
+        val framesToAverageEditText = findViewById<EditText>(R.id.frame_avg_frame_number_editText)
+        framesToAverageEditText.backgroundTintList = ColorStateList.valueOf(getColor(R.color.white))
+        framesToAverageEditText.setTextColor(getColor(R.color.white))
+
+        val smartDelaySecondsEditText = findViewById<EditText>(R.id.smart_delay_seconds_editText)
+        smartDelaySecondsEditText.backgroundTintList = ColorStateList.valueOf(getColor(R.color.white))
+        smartDelaySecondsEditText.setTextColor(getColor(R.color.white))
     }
 
     override fun onPause() {
