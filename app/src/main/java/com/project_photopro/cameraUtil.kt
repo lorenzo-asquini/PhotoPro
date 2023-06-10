@@ -1,4 +1,4 @@
-package com.photopro
+package com.project_photopro
 
 import android.Manifest
 import android.annotation.SuppressLint
