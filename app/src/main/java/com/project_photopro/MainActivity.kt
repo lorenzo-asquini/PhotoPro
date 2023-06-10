@@ -1,10 +1,8 @@
-package com.photopro
+package com.project_photopro
 
 import android.Manifest
-import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
-import android.hardware.camera2.CameraManager
 import android.media.AudioManager
 import android.media.ToneGenerator
 import android.os.Bundle
@@ -16,7 +14,6 @@ import android.widget.Button
 import android.widget.ImageButton
 import android.widget.TextView
 import android.widget.Toast
-import androidx.appcompat.app.AppCompatActivity
 import androidx.camera.core.Camera
 import androidx.camera.core.ImageCapture
 import androidx.camera.core.ImageCaptureException
@@ -25,7 +22,6 @@ import androidx.core.content.ContextCompat
 import java.util.Calendar
 import java.util.concurrent.ExecutorService
 import java.util.concurrent.Executors
-import java.util.concurrent.TimeUnit
 
 
 //Implements also SmartDelayListener

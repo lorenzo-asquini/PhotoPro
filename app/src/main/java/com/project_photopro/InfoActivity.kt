@@ -1,4 +1,4 @@
-package com.photopro
+package com.project_photopro
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle

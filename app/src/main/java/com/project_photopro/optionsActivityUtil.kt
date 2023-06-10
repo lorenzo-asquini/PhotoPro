@@ -1,4 +1,4 @@
-package com.photopro
+package com.project_photopro
 
 import android.content.Context
 import android.content.SharedPreferences
