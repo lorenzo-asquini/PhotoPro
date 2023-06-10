@@ -3,6 +3,9 @@ package com.project_photopro
 import android.content.Context
 import android.hardware.camera2.CameraCharacteristics
 import android.hardware.camera2.CameraManager
+import android.os.Build
+import android.util.Log
+import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import androidx.camera.core.CameraSelector
 import androidx.camera.extensions.ExtensionMode
@@ -29,7 +32,10 @@ data class AvailableFeatures(
     var isBackFaceRetouchAvailable : Boolean = false,
 
     var isFrontAutoFocusAvailable : Boolean = false,
-    var isBackAutoFocusAvailable : Boolean = false
+    var isBackAutoFocusAvailable : Boolean = false,
+
+    var isFrontProModeAvailable : Boolean = false,
+    var isBackProModeAvailable :Boolean = false
 )
 
 fun getAvailableFeatures(activity: AppCompatActivity) : AvailableFeatures{
@@ -50,10 +56,23 @@ fun getAvailableFeatures(activity: AppCompatActivity) : AvailableFeatures{
         features.isFrontCameraAvailable = true
 
         val cameraCharacteristics = cameraManager.getCameraCharacteristics(frontCameraId)
+
         features.isFrontFlashAvailable = cameraCharacteristics.get(CameraCharacteristics.FLASH_INFO_AVAILABLE)!!
 
         //If the number of maximum AutoFocus regions is greater than 0, AutoFocus can work
         features.isFrontAutoFocusAvailable = (cameraCharacteristics.get(CameraCharacteristics.CONTROL_MAX_REGIONS_AF)!! > 0)
+
+        //Check if hardware level is enough to support Pro Mode (FULL or 3)
+        val frontCameraHardwareLevel = cameraCharacteristics.get(CameraCharacteristics.INFO_SUPPORTED_HARDWARE_LEVEL)
+
+        if(frontCameraHardwareLevel == CameraCharacteristics.INFO_SUPPORTED_HARDWARE_LEVEL_FULL) {
+            features.isFrontProModeAvailable = true
+        }
+        if(frontCameraHardwareLevel == CameraCharacteristics.INFO_SUPPORTED_HARDWARE_LEVEL_3
+            && Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+
+            features.isFrontProModeAvailable = true
+        }
 
         //cameraManager.getCameraExtensionCharacteristics could be used, but it requires higher API levels
         //It becomes uselessly difficult to handle each case. For this reason the extensionManager is used
@@ -88,6 +107,18 @@ fun getAvailableFeatures(activity: AppCompatActivity) : AvailableFeatures{
 
         //If the number of maximum AutoFocus regions is greater than 0, AutoFocus can work
         features.isBackAutoFocusAvailable = (cameraCharacteristics.get(CameraCharacteristics.CONTROL_MAX_REGIONS_AF)!! > 0)
+
+        //Check if hardware level is enough to support Pro Mode (FULL or 3)
+        val backCameraHardwareLevel = cameraCharacteristics.get(CameraCharacteristics.INFO_SUPPORTED_HARDWARE_LEVEL)
+
+        if(backCameraHardwareLevel == CameraCharacteristics.INFO_SUPPORTED_HARDWARE_LEVEL_FULL) {
+            features.isBackProModeAvailable = true
+        }
+        if(backCameraHardwareLevel == CameraCharacteristics.INFO_SUPPORTED_HARDWARE_LEVEL_3
+            && Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+
+            features.isBackProModeAvailable = true
+        }
 
         val cameraProviderFuture = ProcessCameraProvider.getInstance(activity)
         cameraProviderFuture.addListener({

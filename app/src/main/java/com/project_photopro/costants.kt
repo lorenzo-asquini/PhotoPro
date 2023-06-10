@@ -29,6 +29,8 @@ object Constant{
     const val PRO_MODE_ON = 1  //So normal mode is off
     const val PRO_MODE_STATES = 2
 
+    const val PRO_MODE_AUTO_VALUE = -1  //If auto, set an invalid value
+
     const val HDR_OFF = 0
     const val HDR_ON = 1
 
@@ -81,4 +83,10 @@ object SharedPrefs{
     const val CAMERA_FACING_KEY = "camera_orientation"
 
     const val PRO_MODE_KEY = "pro_mode"
+
+    const val ISO_FRONT_KEY = "iso_front"
+    const val ISO_BACK_KEY = "iso_back"
+
+    const val SHUTTER_SPEED_FRONT_KEY = "shutter_speed_front"
+    const val SHUTTER_SPEED_BACK_KEY = "shutter_speed_back"
 }
