@@ -157,6 +157,9 @@ fun drawNightModeButton(activity: AppCompatActivity, preferences: SharedPreferen
 
     val nightMode = preferences.getInt(SharedPrefs.NIGHT_MODE_KEY, Constant.NIGHT_MODE_OFF)
 
+    //From any state, the final color after touching the icon should be white
+    nightModeButton.setColorFilter(activity.getColor(R.color.white))
+
     when(nightMode){
         Constant.NIGHT_MODE_OFF -> nightModeButton.setImageResource(R.drawable.night_mode_off)
         Constant.NIGHT_MODE_ON -> nightModeButton.setImageResource(R.drawable.night_mode_on)

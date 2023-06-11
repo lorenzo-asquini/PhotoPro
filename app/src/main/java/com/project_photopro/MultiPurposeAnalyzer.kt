@@ -60,7 +60,7 @@ class MultiPurposeAnalyzer(private val activity: MainActivity, private val rotat
     //Global variable so it can be accessed without passing it as a parameter
     private var imageBitmap : Bitmap? = null
 
-    private var forceNightMode = false
+    private var isNightModeTimerRunning = false
 
     //Running result of frame avg
     private var frameAvgResult : Mat? = null
@@ -115,9 +115,15 @@ class MultiPurposeAnalyzer(private val activity: MainActivity, private val rotat
 
     private fun isNightModeActive()
     {
+        //Do not create multiple timers
+        if(isNightModeTimerRunning){
+            return
+        }
+
         val isDark = (getAverageBrightness() < 80)
 
         //Check after one second if the brightness level has changed
+        isNightModeTimerRunning = true
         object : CountDownTimer(1000, 1000) {
             override fun onTick(millisUntilFinished: Long) {}
 
@@ -140,6 +146,8 @@ class MultiPurposeAnalyzer(private val activity: MainActivity, private val rotat
                     forceNightMode = false
                     activity.startCameraWrapper(forceNightMode = false)
                 }
+
+                isNightModeTimerRunning = false
             }
         }.start()
     }
@@ -305,5 +313,10 @@ class MultiPurposeAnalyzer(private val activity: MainActivity, private val rotat
                 image.close()
                 Log.d(ContentValues.TAG, "Error from analyzer")
             }
+    }
+
+    companion object{
+        //Necessary to have this value be persistent also when starting Camera (and creating new Analyzer)
+        private var forceNightMode = false
     }
 }
