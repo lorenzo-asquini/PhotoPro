@@ -156,6 +156,9 @@ class MainActivity : AppCompatActivity(), SmartDelayListener{
         proModeButton.setOnClickListener {
             changeProModeValue(preferences)
             drawProModeMenu(this, preferences, true)
+
+            //Restart camera to reset Pro settings
+            startCameraWrapper()
         }
 
         //Add listener to button to make it take photos

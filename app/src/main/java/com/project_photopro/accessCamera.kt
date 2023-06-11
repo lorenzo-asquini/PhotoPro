@@ -190,11 +190,7 @@ fun createImageAnalysis(activity: MainActivity, preferences: SharedPreferences)
         var cameraId = getBackCameraId(cameraManager)
 
         //Change only if not camera back
-        if (preferences.getInt(
-                SharedPrefs.CAMERA_FACING_KEY,
-                Constant.CAMERA_BACK
-            ) == Constant.CAMERA_FRONT
-        ) {
+        if (preferences.getInt(SharedPrefs.CAMERA_FACING_KEY, Constant.CAMERA_BACK) == Constant.CAMERA_FRONT) {
             cameraId = getFrontCameraId(cameraManager)
         }
 

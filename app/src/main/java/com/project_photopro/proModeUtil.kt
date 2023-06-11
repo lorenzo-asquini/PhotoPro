@@ -2,18 +2,21 @@ package com.project_photopro
 
 import android.content.Context
 import android.content.SharedPreferences
+import android.graphics.Paint.Cap
 import android.hardware.camera2.CameraCharacteristics
 import android.hardware.camera2.CameraManager
+import android.hardware.camera2.CaptureRequest
 import android.util.Log
 import android.util.Range
-import android.view.View
 import android.view.View.GONE
 import android.view.View.VISIBLE
 import android.widget.ImageButton
 import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
-import java.lang.Math.round
+import androidx.camera.camera2.interop.Camera2CameraControl
+import androidx.camera.camera2.interop.CaptureRequestOptions
+import com.google.android.material.switchmaterial.SwitchMaterial
 import kotlin.math.roundToInt
 
 data class ProModeRanges(
@@ -28,7 +31,6 @@ data class ProModeRanges(
 )
 
 fun drawProModeMenu(activity: AppCompatActivity, preferences: SharedPreferences, show : Boolean){
-
     val proModeMenu: LinearLayout = activity.findViewById(R.id.pro_mode_menu)
     val proModeButton: ImageButton = activity.findViewById(R.id.pro_mode_button)
 
@@ -40,20 +42,26 @@ fun drawProModeMenu(activity: AppCompatActivity, preferences: SharedPreferences,
     }
 
     //Set new ranges
-    handleProModeCommands(activity, preferences)
+    handleProModeCommands(activity as MainActivity, preferences)
 
     proModeButton.visibility = VISIBLE
 
-    val proMode = preferences.getInt(SharedPrefs.PRO_MODE_KEY, Constant.PRO_MODE_OFF)
+    val proModeValue = preferences.getInt(SharedPrefs.PRO_MODE_KEY, Constant.PRO_MODE_OFF)
 
-    when(proMode){
+    when(proModeValue){
         Constant.PRO_MODE_OFF -> {
             proModeMenu.visibility = GONE
             proModeButton.setImageResource(R.drawable.pro)
+
+            //Set everything to auto
+            handleSetProSettingsThread(activity, preferences, false)
         }
         Constant.PRO_MODE_ON -> {
             proModeMenu.visibility = VISIBLE
             proModeButton.setImageResource(R.drawable.normal)
+
+            //Adjust settings in near real time
+            handleSetProSettingsThread(activity, preferences, true)
         }
     }
 }
@@ -69,10 +77,10 @@ fun changeProModeValue(preferences: SharedPreferences){
 }
 
 //At least one of the two sliders is considered available if the Pro Mode menu is shown
-fun handleProModeCommands(activity: AppCompatActivity, preferences: SharedPreferences) {
+fun handleProModeCommands(activity: MainActivity, preferences: SharedPreferences) {
 
     //Add listener to hide and show pro mode sliders
-    val hideProModeSwitch: com.google.android.material.switchmaterial.SwitchMaterial =
+    val hideProModeSwitch: SwitchMaterial =
         activity.findViewById(R.id.hide_pro_mode_switch)
 
     val proModeSliders: LinearLayout = activity.findViewById(R.id.pro_mode_sliders)
@@ -86,39 +94,10 @@ fun handleProModeCommands(activity: AppCompatActivity, preferences: SharedPrefer
 
     handleISOSlider(activity, preferences)
     handleShutterSpeedSlider(activity, preferences)
-
-    //Add listener to reset the pro mode values
-    val resetProModeButton: ImageButton = activity.findViewById(R.id.reset_pro_mode_button)
-    resetProModeButton.setOnClickListener {
-        val editor = preferences.edit()
-        if(preferences.getInt(SharedPrefs.CAMERA_FACING_KEY, Constant.CAMERA_BACK) == Constant.CAMERA_BACK) {
-            editor.putInt(SharedPrefs.ISO_BACK_KEY, Constant.PRO_MODE_AUTO_VALUE)
-            editor.putFloat(SharedPrefs.SHUTTER_SPEED_BACK_KEY, Constant.PRO_MODE_AUTO_VALUE.toFloat())
-        }
-
-        if(preferences.getInt(SharedPrefs.CAMERA_FACING_KEY, Constant.CAMERA_BACK) == Constant.CAMERA_FRONT) {
-            editor.putInt(SharedPrefs.ISO_FRONT_KEY, Constant.PRO_MODE_AUTO_VALUE)
-            editor.putFloat(SharedPrefs.SHUTTER_SPEED_FRONT_KEY, Constant.PRO_MODE_AUTO_VALUE.toFloat())
-        }
-        editor.apply()
-
-        //Set values for the slider to auto
-        val isoSlider: com.google.android.material.slider.Slider = activity.findViewById(R.id.iso_slider)
-        val isoTextView: TextView = activity.findViewById(R.id.iso_slider_value)
-        isoSlider.value = isoSlider.valueFrom //If auto, set slider to the left
-        isoTextView.text = "A"
-
-        val shutterSpeedSlider: com.google.android.material.slider.Slider = activity.findViewById(R.id.shutter_speed_slider)
-        val shutterSpeedTextView: TextView = activity.findViewById(R.id.shutter_speed_slider_value)
-        shutterSpeedSlider.value = shutterSpeedSlider.valueFrom  //If auto, set slider to the left
-        shutterSpeedTextView.text = "A"
-
-        //TODO:Change camera settings
-    }
 }
 
-fun handleISOSlider(activity: AppCompatActivity, preferences: SharedPreferences){
-    val proRanges = getSliderRanges(activity)
+fun handleISOSlider(activity: MainActivity, preferences: SharedPreferences){
+    val proRanges = getProModeSliderRanges(activity)
 
     //Listener to ISO Slider change value
     val isoSlider: com.google.android.material.slider.Slider = activity.findViewById(R.id.iso_slider)
@@ -145,21 +124,16 @@ fun handleISOSlider(activity: AppCompatActivity, preferences: SharedPreferences)
         }
     }
 
-    //View the selected value
+    //View the selected value restoring saved one
     val savedISOValue =
         if(preferences.getInt(SharedPrefs.CAMERA_FACING_KEY, Constant.CAMERA_BACK) == Constant.CAMERA_BACK) {
-            preferences.getInt(SharedPrefs.ISO_BACK_KEY, Constant.PRO_MODE_AUTO_VALUE)
+            preferences.getInt(SharedPrefs.ISO_BACK_KEY, 0)
         }else{
-            preferences.getInt(SharedPrefs.ISO_FRONT_KEY, Constant.PRO_MODE_AUTO_VALUE)
+            preferences.getInt(SharedPrefs.ISO_FRONT_KEY, 0)
         }
 
-    if(savedISOValue == Constant.PRO_MODE_AUTO_VALUE) {
-        isoSlider.value = isoSlider.valueFrom //If auto, set slider to the left
-        isoTextView.text = "A"
-    }else{
-        isoTextView.text = savedISOValue.toString()
-        isoSlider.value = savedISOValue.toFloat()
-    }
+    isoTextView.text = savedISOValue.toString()
+    isoSlider.value = savedISOValue.toFloat()
 
     //Add listener
     isoSlider.addOnChangeListener { _, value, _ ->
@@ -167,19 +141,17 @@ fun handleISOSlider(activity: AppCompatActivity, preferences: SharedPreferences)
 
         //Save new value
         val editor = preferences.edit()
-        if(preferences.getInt(SharedPrefs.CAMERA_FACING_KEY, Constant.CAMERA_BACK) == Constant.CAMERA_BACK) {
+        if (preferences.getInt(SharedPrefs.CAMERA_FACING_KEY, Constant.CAMERA_BACK) == Constant.CAMERA_BACK) {
             editor.putInt(SharedPrefs.ISO_BACK_KEY, value.toInt())
-        }else{
+        } else {
             editor.putInt(SharedPrefs.ISO_FRONT_KEY, value.toInt())
         }
         editor.apply()
-
-        //TODO: Set camera setting
     }
 }
 
-fun handleShutterSpeedSlider(activity: AppCompatActivity, preferences: SharedPreferences){
-    val proRanges = getSliderRanges(activity)
+fun handleShutterSpeedSlider(activity: MainActivity, preferences: SharedPreferences){
+    val proRanges = getProModeSliderRanges(activity)
 
     //Listener to Shutter Speed Slider change value
     val shutterSpeedSlider: com.google.android.material.slider.Slider = activity.findViewById(R.id.shutter_speed_slider)
@@ -206,40 +178,99 @@ fun handleShutterSpeedSlider(activity: AppCompatActivity, preferences: SharedPre
         }
     }
 
-    //View the selected value
+    //View the selected value restoring saved one
     val savedShutterSpeedValue =
         if(preferences.getInt(SharedPrefs.CAMERA_FACING_KEY, Constant.CAMERA_BACK) == Constant.CAMERA_BACK) {
-            preferences.getFloat(SharedPrefs.SHUTTER_SPEED_BACK_KEY, Constant.PRO_MODE_AUTO_VALUE.toFloat())
+            preferences.getFloat(SharedPrefs.SHUTTER_SPEED_BACK_KEY, 0F)
         }else{
-            preferences.getFloat(SharedPrefs.SHUTTER_SPEED_FRONT_KEY, Constant.PRO_MODE_AUTO_VALUE.toFloat())
+            preferences.getFloat(SharedPrefs.SHUTTER_SPEED_FRONT_KEY, 0F)
         }
 
-    if(savedShutterSpeedValue == Constant.PRO_MODE_AUTO_VALUE.toFloat()) {
-        shutterSpeedSlider.value = shutterSpeedSlider.valueFrom  //If auto, set slider to the left
-        shutterSpeedTextView.text = "A"
-    }else{
-        shutterSpeedTextView.text = convertNanosecondsToReadableTime(savedShutterSpeedValue)
-        shutterSpeedSlider.value = savedShutterSpeedValue
-    }
+    shutterSpeedTextView.text = convertNanosecondsToReadableTime(savedShutterSpeedValue)
+    shutterSpeedSlider.value = savedShutterSpeedValue
 
     //Add the listener
     shutterSpeedSlider.addOnChangeListener { _, value, _ ->
         shutterSpeedTextView.text = convertNanosecondsToReadableTime(value)
-
         //Save new value
         val editor = preferences.edit()
-        if(preferences.getInt(SharedPrefs.CAMERA_FACING_KEY, Constant.CAMERA_BACK) == Constant.CAMERA_BACK) {
+        if (preferences.getInt(SharedPrefs.CAMERA_FACING_KEY, Constant.CAMERA_BACK) == Constant.CAMERA_BACK) {
             editor.putFloat(SharedPrefs.SHUTTER_SPEED_BACK_KEY, value)
-        }else{
+        } else {
             editor.putFloat(SharedPrefs.SHUTTER_SPEED_FRONT_KEY, value)
         }
         editor.apply()
-
-        //TODO: Set camera setting
     }
 }
 
-fun getSliderRanges(activity: AppCompatActivity) : ProModeRanges{
+private var proModeSettingsThread : Thread? = null
+@androidx.annotation.OptIn(androidx.camera.camera2.interop.ExperimentalCamera2Interop::class)
+fun handleSetProSettingsThread(activity: MainActivity, preferences: SharedPreferences, run : Boolean){
+
+    //Stop the last thread
+    proModeSettingsThread?.interrupt()
+
+    //If the mode is normal, it is not necessary to restart the thread
+    //All settings will return to normal because a new camera will be started
+    if(!run){
+        return
+    }
+
+    //Create a new thread because Pro Mode is activated
+    proModeSettingsThread = Thread {
+
+        //Wait until camera has started
+        while (activity.camera == null) {
+            Thread.sleep(5)
+        }
+
+        try {
+            while (!Thread.currentThread().isInterrupted) {
+
+                val camera2CameraControl = Camera2CameraControl.from(activity.camera!!.cameraControl)
+
+                val captureRequestOptions = CaptureRequestOptions.Builder()
+                    .setCaptureRequestOption(CaptureRequest.CONTROL_AE_MODE, CaptureRequest.CONTROL_AE_MODE_ON)
+                    .build()
+
+                camera2CameraControl.addCaptureRequestOptions(captureRequestOptions)
+
+                var savedISOValue: Int
+                var savedShutterSpeedValue: Float
+
+                if (preferences.getInt(SharedPrefs.CAMERA_FACING_KEY, Constant.CAMERA_BACK) == Constant.CAMERA_BACK) {
+                    savedISOValue =
+                        preferences.getInt(SharedPrefs.ISO_BACK_KEY, 0)
+                    savedShutterSpeedValue =
+                        preferences.getFloat(SharedPrefs.SHUTTER_SPEED_BACK_KEY, 0F)
+
+                } else {  //Front camera
+                    savedISOValue =
+                        preferences.getInt(SharedPrefs.ISO_FRONT_KEY, 0)
+                    savedShutterSpeedValue =
+                        preferences.getFloat(SharedPrefs.SHUTTER_SPEED_FRONT_KEY, 0F)
+                }
+
+                //Disable automatic AE and set pro values (necessary to set all 3 values that are not automatic anymore)
+                val newCaptureRequestOptions = CaptureRequestOptions.Builder()
+                    .setCaptureRequestOption(CaptureRequest.CONTROL_AE_MODE, CaptureRequest.CONTROL_AE_MODE_OFF)
+                    .setCaptureRequestOption(CaptureRequest.SENSOR_SENSITIVITY, savedISOValue)
+                    .setCaptureRequestOption(CaptureRequest.SENSOR_FRAME_DURATION, 16666666)  //60 fps
+                    .setCaptureRequestOption(CaptureRequest.SENSOR_EXPOSURE_TIME, savedShutterSpeedValue.toLong())
+                    .build()
+
+                camera2CameraControl.addCaptureRequestOptions(newCaptureRequestOptions)
+
+                Thread.sleep(100)
+            }
+        } catch (e: InterruptedException) {
+            Log.e(Constant.TAG, e.toString())
+        }
+    }
+    proModeSettingsThread?.start()
+}
+
+fun getProModeSliderRanges(activity: AppCompatActivity) : ProModeRanges{
     val cameraManager = activity.getSystemService(Context.CAMERA_SERVICE) as CameraManager
 
     val frontCameraId = getFrontCameraId(cameraManager)
