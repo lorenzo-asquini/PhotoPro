@@ -4,8 +4,6 @@ import android.content.Context
 import android.hardware.camera2.CameraCharacteristics
 import android.hardware.camera2.CameraManager
 import android.os.Build
-import android.util.Log
-import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import androidx.camera.core.CameraSelector
 import androidx.camera.extensions.ExtensionMode
@@ -45,6 +43,8 @@ fun getAvailableFeatures(activity: AppCompatActivity) : AvailableFeatures{
     val frontCameraId = getFrontCameraId(cameraManager)
     val backCameraId = getBackCameraId(cameraManager)
 
+    val proModeRanges = getProModeSliderRanges(activity)
+
     val features = AvailableFeatures()
 
     //Used to execute the Runnable used to check if the extensions are available
@@ -72,6 +72,10 @@ fun getAvailableFeatures(activity: AppCompatActivity) : AvailableFeatures{
             && Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
 
             features.isFrontProModeAvailable = true
+        }
+        //Even if the hardware level is high enough, still ISO and Exposure Time may not be available
+        if(proModeRanges.frontISORange == null && proModeRanges.frontExposureTimeRange == null){
+            features.isFrontProModeAvailable = false
         }
 
         //cameraManager.getCameraExtensionCharacteristics could be used, but it requires higher API levels
@@ -118,6 +122,10 @@ fun getAvailableFeatures(activity: AppCompatActivity) : AvailableFeatures{
             && Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
 
             features.isBackProModeAvailable = true
+        }
+        //Even if the hardware level is high enough, still ISO and Exposure Time may not be available
+        if(proModeRanges.backISORange == null && proModeRanges.backExposureTimeRange == null){
+            features.isBackProModeAvailable = false
         }
 
         val cameraProviderFuture = ProcessCameraProvider.getInstance(activity)

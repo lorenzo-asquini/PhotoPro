@@ -142,7 +142,6 @@ class MultiPurposeAnalyzer(private val activity: MainActivity, private val rotat
                 }
             }
         }.start()
-
     }
 
     private fun getAverageBrightness(): Double

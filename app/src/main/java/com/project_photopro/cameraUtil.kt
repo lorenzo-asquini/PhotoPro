@@ -152,9 +152,7 @@ fun setPreviewGestures(activity: MainActivity, preferences: SharedPreferences, f
                     if(!features.isFrontAutoFocusAvailable){
                         return@setOnTouchListener true
                     }
-                }
-
-                if(preferences.getInt(SharedPrefs.CAMERA_FACING_KEY, Constant.CAMERA_BACK) == Constant.CAMERA_BACK){
+                }else{  //Back camera
                     if(!features.isBackAutoFocusAvailable){
                         return@setOnTouchListener true
                     }

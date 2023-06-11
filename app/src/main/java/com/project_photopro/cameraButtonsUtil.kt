@@ -31,9 +31,7 @@ fun drawAllButtons(activity: AppCompatActivity, preferences: SharedPreferences, 
         }else{
             drawProModeMenu(activity, preferences, false)  //Present in another file
         }
-    }
-
-    if(preferences.getInt(SharedPrefs.CAMERA_FACING_KEY, Constant.CAMERA_BACK) == Constant.CAMERA_BACK) {
+    }else{  //Back camera
         if(features.isBackFlashAvailable){
             drawFlashButton(activity, preferences, true)
         }else{

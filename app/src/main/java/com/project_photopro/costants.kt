@@ -29,8 +29,6 @@ object Constant{
     const val PRO_MODE_ON = 1  //So normal mode is off
     const val PRO_MODE_STATES = 2
 
-    const val PRO_MODE_AUTO_VALUE = -1  //If auto, set an invalid value
-
     const val HDR_OFF = 0
     const val HDR_ON = 1
 
