@@ -112,9 +112,7 @@ fun handleISOSlider(activity: MainActivity, preferences: SharedPreferences){
             isoSlider.valueFrom = proRanges.backISORange!!.lower.toFloat()
             isoSlider.valueTo = proRanges.backISORange!!.upper.toFloat()
         }
-    }
-
-    if(preferences.getInt(SharedPrefs.CAMERA_FACING_KEY, Constant.CAMERA_FRONT) == Constant.CAMERA_FRONT) {
+    }else{  //Front
         if(proRanges.frontISORange == null){
             activity.findViewById<LinearLayout>(R.id.iso_slider_block).visibility = GONE
         }else{
@@ -127,9 +125,9 @@ fun handleISOSlider(activity: MainActivity, preferences: SharedPreferences){
     //View the selected value restoring saved one
     val savedISOValue =
         if(preferences.getInt(SharedPrefs.CAMERA_FACING_KEY, Constant.CAMERA_BACK) == Constant.CAMERA_BACK) {
-            preferences.getInt(SharedPrefs.ISO_BACK_KEY, 0)
+            preferences.getInt(SharedPrefs.ISO_BACK_KEY, proRanges.backISORange!!.lower)
         }else{
-            preferences.getInt(SharedPrefs.ISO_FRONT_KEY, 0)
+            preferences.getInt(SharedPrefs.ISO_FRONT_KEY, proRanges.frontISORange!!.lower)
         }
 
     isoTextView.text = savedISOValue.toString()
@@ -166,9 +164,7 @@ fun handleShutterSpeedSlider(activity: MainActivity, preferences: SharedPreferen
             shutterSpeedSlider.valueFrom = proRanges.backExposureTimeRange!!.lower.toFloat()
             shutterSpeedSlider.valueTo = proRanges.backExposureTimeRange!!.upper.toFloat()
         }
-    }
-
-    if(preferences.getInt(SharedPrefs.CAMERA_FACING_KEY, Constant.CAMERA_FRONT) == Constant.CAMERA_FRONT) {
+    }else{  //Front
         if(proRanges.frontExposureTimeRange == null){
             activity.findViewById<LinearLayout>(R.id.shutter_speed_slider_block).visibility = GONE
         }else{
@@ -181,9 +177,9 @@ fun handleShutterSpeedSlider(activity: MainActivity, preferences: SharedPreferen
     //View the selected value restoring saved one
     val savedShutterSpeedValue =
         if(preferences.getInt(SharedPrefs.CAMERA_FACING_KEY, Constant.CAMERA_BACK) == Constant.CAMERA_BACK) {
-            preferences.getFloat(SharedPrefs.SHUTTER_SPEED_BACK_KEY, 0F)
+            preferences.getFloat(SharedPrefs.SHUTTER_SPEED_BACK_KEY, proRanges.backExposureTimeRange!!.lower.toFloat())
         }else{
-            preferences.getFloat(SharedPrefs.SHUTTER_SPEED_FRONT_KEY, 0F)
+            preferences.getFloat(SharedPrefs.SHUTTER_SPEED_FRONT_KEY, proRanges.frontExposureTimeRange!!.lower.toFloat())
         }
 
     shutterSpeedTextView.text = convertNanosecondsToReadableTime(savedShutterSpeedValue)
@@ -215,6 +211,7 @@ fun handleSetProSettingsThread(activity: MainActivity, preferences: SharedPrefer
     if(!run){
         return
     }
+    val proRanges = getProModeSliderRanges(activity)
 
     //Create a new thread because Pro Mode is activated
     proModeSettingsThread = Thread {
@@ -238,24 +235,27 @@ fun handleSetProSettingsThread(activity: MainActivity, preferences: SharedPrefer
                 var savedISOValue: Int
                 var savedShutterSpeedValue: Float
 
+                //TODO:Handle range = null
+
                 if (preferences.getInt(SharedPrefs.CAMERA_FACING_KEY, Constant.CAMERA_BACK) == Constant.CAMERA_BACK) {
                     savedISOValue =
-                        preferences.getInt(SharedPrefs.ISO_BACK_KEY, 0)
+                        preferences.getInt(SharedPrefs.ISO_BACK_KEY, proRanges.backISORange!!.lower)
                     savedShutterSpeedValue =
-                        preferences.getFloat(SharedPrefs.SHUTTER_SPEED_BACK_KEY, 0F)
+                        preferences.getFloat(SharedPrefs.SHUTTER_SPEED_BACK_KEY, proRanges.backExposureTimeRange!!.lower.toFloat())
 
                 } else {  //Front camera
                     savedISOValue =
-                        preferences.getInt(SharedPrefs.ISO_FRONT_KEY, 0)
+                        preferences.getInt(SharedPrefs.ISO_FRONT_KEY, proRanges.frontISORange!!.lower)
                     savedShutterSpeedValue =
-                        preferences.getFloat(SharedPrefs.SHUTTER_SPEED_FRONT_KEY, 0F)
+                        preferences.getFloat(SharedPrefs.SHUTTER_SPEED_FRONT_KEY, proRanges.frontExposureTimeRange!!.lower.toFloat())
                 }
 
                 //Disable automatic AE and set pro values (necessary to set all 3 values that are not automatic anymore)
                 val newCaptureRequestOptions = CaptureRequestOptions.Builder()
                     .setCaptureRequestOption(CaptureRequest.CONTROL_AE_MODE, CaptureRequest.CONTROL_AE_MODE_OFF)
                     .setCaptureRequestOption(CaptureRequest.SENSOR_SENSITIVITY, savedISOValue)
-                    .setCaptureRequestOption(CaptureRequest.SENSOR_FRAME_DURATION, 16666666)  //60 fps
+                    //Target is 60fps. If exposure time is greater than frame duration, it is automatically adjusted
+                    .setCaptureRequestOption(CaptureRequest.SENSOR_FRAME_DURATION, 16666666)
                     .setCaptureRequestOption(CaptureRequest.SENSOR_EXPOSURE_TIME, savedShutterSpeedValue.toLong())
                     .build()
 
