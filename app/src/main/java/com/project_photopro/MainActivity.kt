@@ -24,13 +24,16 @@ import java.util.Calendar
 import java.util.concurrent.ExecutorService
 import java.util.concurrent.Executors
 
+//TODO: Front camera photo with image averaging is reversed
+//TODO: If smart delay has a countdown, smart delay is disabled and enabled again, the photo is still taken
+//TODO: Check the behaviour of night mode auto when onPause/onResume
 
 //Implements also SmartDelayListener
 class MainActivity : AppCompatActivity(), SmartDelayListener{
     //Object that becomes not null when (and if) the camera is started
     private var imageCapture: ImageCapture? = null
 
-    //Variable used to start frame averaging when needed
+    //Variable used to communicate with the analyzer if necessary
     private var imageAnalyzer : MultiPurposeAnalyzer? = null
 
     //Public variable set when the camera is initialised.
@@ -61,6 +64,7 @@ class MainActivity : AppCompatActivity(), SmartDelayListener{
         val features = getAvailableFeatures(this)
 
         //Draw from preferences
+        //If features are not available, the buttons are not present
         drawAllButtons(this, preferences, features)
 
         // Request camera permissions if not already granted
@@ -95,9 +99,8 @@ class MainActivity : AppCompatActivity(), SmartDelayListener{
             //No need to create new imageCapture. Change the flash mode in imageCapture
             val savedFlashValue = preferences.getInt(SharedPrefs.FLASH_KEY, Constant.FLASH_OFF)
 
-            //To switch to and from always on flash it is necessary to start th camera
             //If cameraControl is not defined, that means that the camera has not started,
-            //so the correct status of the torch will be set when the initialisation will be finished
+            //so the correct status of the torch will be set when the initialisation has finished
             when(savedFlashValue){
                 Constant.FLASH_OFF -> {
                     camera?.cameraControl?.enableTorch(false)
@@ -115,6 +118,7 @@ class MainActivity : AppCompatActivity(), SmartDelayListener{
                 }
 
                 Constant.FLASH_ALWAYS_ON -> {
+                    imageCapture!!.flashMode = ImageCapture.FLASH_MODE_OFF
                     camera?.cameraControl?.enableTorch(true)
                 }
 
@@ -129,13 +133,13 @@ class MainActivity : AppCompatActivity(), SmartDelayListener{
         frameAvgButton.setOnClickListener{
             changeFrameAvgValue(preferences)
             drawFrameAvgButton(this, preferences, true)
-            startCameraWrapper()
+            startCameraWrapper()  //Start camera to start analyzer
         }
 
         //Add listener to button to change smart delay mode
         val smartDelayButton: ImageButton = findViewById(R.id.smart_delay_button)
         val smartDelayTimer : TextView = findViewById(R.id.smart_delay_timer)
-        smartDelayTimer.visibility = View.INVISIBLE
+        smartDelayTimer.visibility = View.INVISIBLE  //Timer always invisible when button clicked
 
         smartDelayButton.setOnClickListener{
             changeSmartDelayValue(preferences)
@@ -148,17 +152,14 @@ class MainActivity : AppCompatActivity(), SmartDelayListener{
         nightModeButton.setOnClickListener{
             changeNightModeValue(preferences)
             drawNightModeButton(this, preferences, true)
-            startCameraWrapper()
+            startCameraWrapper()  //Start camera to start analyzer
         }
 
         //Add listener to button to change to pro mode and back
         val proModeButton: ImageButton = findViewById(R.id.pro_mode_button)
         proModeButton.setOnClickListener {
             changeProModeValue(preferences)
-            drawProModeMenu(this, preferences, true)
-
-            //Restart camera to reset Pro settings
-            //startCameraWrapper()
+            drawProModeMenu(this, preferences, true)  //Also the sliders are drawn
         }
 
         //Add listener to button to make it take photos
@@ -181,7 +182,7 @@ class MainActivity : AppCompatActivity(), SmartDelayListener{
         //If button is present and pressed, then both cameras are available
         changeCameraButton.setOnClickListener{
             changeCameraFacingValue(preferences)
-            startCameraWrapper(0F)  //Force zoom reset
+            startCameraWrapper(1.0F)  //Force zoom reset
             drawAllButtons(this, preferences, features)  //When changing camera the available features change
         }
 
@@ -196,20 +197,19 @@ class MainActivity : AppCompatActivity(), SmartDelayListener{
     }
 
     //Wrapper for startCamera, simplifies function call
-    //Restart the camera with current zoom value if not told otherwise (and if the value is available)
     fun startCameraWrapper(zoomValue : Float = camera?.cameraInfo?.zoomState?.value?.zoomRatio ?: 1.0F, forceNightMode : Boolean = false){
-
+        //Restart the camera with current zoom value if not told otherwise (and if the value is available)
         val startCameraResult = startCamera(this, preferences, zoomValue, forceNightMode)  //Start camera if permission already granted
         imageCapture = startCameraResult.first
         imageAnalyzer = startCameraResult.second
     }
 
-    @androidx.annotation.OptIn(androidx.camera.camera2.interop.ExperimentalCamera2Interop::class)
     private fun takePhoto() {
 
         //Vibrate when photo is taken
         vibratePhone(this, 100)
 
+        //If a photo is taken using frame averaging, it is handled by the analyzer
         if(preferences.getInt(SharedPrefs.FRAME_AVG_KEY, Constant.FRAME_AVG_OFF) == Constant.FRAME_AVG_ON){
             //Check to see if a frame average is happening right now. Do not start a new one
             if(imageAnalyzer!!.framesAveraged == -1) {
@@ -219,7 +219,7 @@ class MainActivity : AppCompatActivity(), SmartDelayListener{
         }
 
         // Get a stable reference of the modifiable image capture use case
-        //If the camera did not start successfully, imageCapture is still null
+        // If the camera did not start successfully, imageCapture is still null
         val imageCapture = imageCapture ?: return
 
         val contentValues = getSaveImageContentValues()
@@ -230,8 +230,7 @@ class MainActivity : AppCompatActivity(), SmartDelayListener{
             .Builder(contentResolver, MediaStore.Images.Media.EXTERNAL_CONTENT_URI, contentValues)
             .build()
 
-        // Set up image capture listener, which is triggered after photo has
-        // been taken
+        // Set up image capture listener, which is triggered after photo has been taken
         imageCapture.takePicture(
             outputOptions,
             ContextCompat.getMainExecutor(this),

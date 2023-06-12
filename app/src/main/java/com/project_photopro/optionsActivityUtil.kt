@@ -150,7 +150,7 @@ fun setValueChangeListeners(activity: AppCompatActivity, preferences: SharedPref
         if(isChecked) {
             editor.putInt(SharedPrefs.HDR_BACK_KEY, Constant.HDR_ON)
 
-            //Only one switch at a time can be enabled
+            //Only one switch at a time can be enabled per camera
             bokehBackSwitch.isChecked = false
             editor.putInt(SharedPrefs.BOKEH_BACK_KEY, Constant.BOKEH_OFF)
 
@@ -170,7 +170,7 @@ fun setValueChangeListeners(activity: AppCompatActivity, preferences: SharedPref
         if(isChecked) {
             editor.putInt(SharedPrefs.HDR_FRONT_KEY, Constant.HDR_ON)
 
-            //Only one switch at a time can be enabled
+            //Only one switch at a time can be enabled per camera
             bokehFrontSwitch.isChecked = false
             editor.putInt(SharedPrefs.BOKEH_FRONT_KEY, Constant.BOKEH_OFF)
 
@@ -191,7 +191,7 @@ fun setValueChangeListeners(activity: AppCompatActivity, preferences: SharedPref
         if(isChecked) {
             editor.putInt(SharedPrefs.BOKEH_BACK_KEY, Constant.BOKEH_ON)
 
-            //Only one switch at a time can be enabled
+            //Only one switch at a time can be enabled per camera
             HDRBackSwitch.isChecked = false
             editor.putInt(SharedPrefs.HDR_BACK_KEY, Constant.HDR_OFF)
 
@@ -211,7 +211,7 @@ fun setValueChangeListeners(activity: AppCompatActivity, preferences: SharedPref
         if(isChecked) {
             editor.putInt(SharedPrefs.BOKEH_FRONT_KEY, Constant.BOKEH_ON)
 
-            //Only one switch at a time can be enabled
+            //Only one switch at a time can be enabled per camera
             HDRFrontSwitch.isChecked = false
             editor.putInt(SharedPrefs.HDR_FRONT_KEY, Constant.HDR_OFF)
 
@@ -232,7 +232,7 @@ fun setValueChangeListeners(activity: AppCompatActivity, preferences: SharedPref
         if(isChecked) {
             editor.putInt(SharedPrefs.FACE_RETOUCH_BACK_KEY, Constant.FACE_RETOUCH_ON)
 
-            //Only one switch at a time can be enabled
+            //Only one switch at a time can be enabled per camera
             HDRBackSwitch.isChecked = false
             editor.putInt(SharedPrefs.HDR_BACK_KEY, Constant.HDR_OFF)
 
@@ -252,7 +252,7 @@ fun setValueChangeListeners(activity: AppCompatActivity, preferences: SharedPref
         if(isChecked) {
             editor.putInt(SharedPrefs.FACE_RETOUCH_FRONT_KEY, Constant.FACE_RETOUCH_ON)
 
-            //Only one switch at a time can be enabled
+            //Only one switch at a time can be enabled per camera
             HDRFrontSwitch.isChecked = false
             editor.putInt(SharedPrefs.HDR_FRONT_KEY, Constant.HDR_OFF)
 

@@ -109,6 +109,7 @@ fun getSaveImageContentValues() : ContentValues {
 }
 
 //Variable used to be sure that the circle is set to invisible depending on the last tap
+//Without using this, when doing multiple consecutive taps, the first tap may make invisible later taps before enough time has passed
 private var startTimeAutoFocus : Long = 0
 @SuppressLint("ClickableViewAccessibility")
 fun setPreviewGestures(activity: MainActivity, preferences: SharedPreferences, features: AvailableFeatures){

@@ -203,6 +203,7 @@ class MultiPurposeAnalyzer(private val activity: MainActivity, private val rotat
             val resultBitmap = imageBitmap!!.copy(imageBitmap!!.config, true)
             matToBitmap(frameAvgResult, resultBitmap)
 
+            //TODO
             //Reverse portrait is not supported by the app
             //Image delivered by the analyzer are not rotated correctly
             val rotationDegrees =

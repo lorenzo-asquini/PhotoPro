@@ -42,7 +42,7 @@ class OptionsActivity : AppCompatActivity() {
             finish()
         }
 
-        //Add listener to button to open the options menu
+        //Add listener to button to open the information activity
         val infoButton: ImageButton = findViewById(R.id.info_image_button)
         infoButton.setOnClickListener{
             if(!isInfoButtonClicked) {
@@ -56,7 +56,8 @@ class OptionsActivity : AppCompatActivity() {
     override fun onResume() {
         super.onResume()
 
-        //Retrieve the saved preferences and show them. Necessary when coming back from info activity
+        //Retrieve the saved preferences and show them
+        //Necessary when coming back from info activity and an invalid value was set
         retrieveOptionsValue(this, preferences)
 
         //Valid values because just retrieved
