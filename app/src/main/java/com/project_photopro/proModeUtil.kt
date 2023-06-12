@@ -5,7 +5,6 @@ import android.content.SharedPreferences
 import android.hardware.camera2.CameraCharacteristics
 import android.hardware.camera2.CameraManager
 import android.hardware.camera2.CaptureRequest
-import android.util.Log
 import android.util.Range
 import android.view.View.GONE
 import android.view.View.VISIBLE
@@ -56,18 +55,15 @@ fun drawProModeMenu(activity: AppCompatActivity, preferences: SharedPreferences,
         Constant.PRO_MODE_OFF -> {
             proModeMenu.visibility = GONE
             proModeButton.setImageResource(R.drawable.pro)
-
-            //Start the Pro Mode thread if necessary
-            handleSetProSettingsThread(activity, preferences)
         }
         Constant.PRO_MODE_ON -> {
             proModeMenu.visibility = VISIBLE
             proModeButton.setImageResource(R.drawable.normal)
-
-            //Start the Pro Mode thread if necessary
-            handleSetProSettingsThread(activity, preferences)
         }
     }
+
+    //Reset everything once
+    resetCameraOptions(activity)
 }
 
 fun changeProModeValue(preferences: SharedPreferences){
@@ -145,6 +141,9 @@ fun handleISOSlider(activity: MainActivity, preferences: SharedPreferences){
             editor.putInt(SharedPrefs.ISO_INDEX_FRONT_KEY, valueIndex.toInt())
         }
         editor.apply()
+
+        //Set new values
+        setProCameraOptions(activity, preferences)
     }
 }
 
@@ -193,78 +192,71 @@ fun handleShutterSpeedSlider(activity: MainActivity, preferences: SharedPreferen
             editor.putInt(SharedPrefs.SHUTTER_SPEED_INDEX_FRONT_KEY, valueIndex.toInt())
         }
         editor.apply()
+
+        //Set new values
+        setProCameraOptions(activity, preferences)
     }
 }
 
-private var proModeSettingsThread : Thread? = null
 @androidx.annotation.OptIn(androidx.camera.camera2.interop.ExperimentalCamera2Interop::class)
-fun handleSetProSettingsThread(activity: MainActivity, preferences: SharedPreferences){
+fun resetCameraOptions(activity: MainActivity){
 
-    //Start the thread only once
-    if(proModeSettingsThread != null){
-        return
-    }
+    //Wait until camera has started
+    //Used a thread only to be sure that the camera is available
+    Thread {
+        while (activity.camera == null) {
+            Thread.sleep(5)
+        }
 
+        val camera2CameraControl = Camera2CameraControl.from(activity.camera!!.cameraControl)
+
+        //Reset the settings to Auto
+        camera2CameraControl.clearCaptureRequestOptions()
+    }.start()
+}
+
+@androidx.annotation.OptIn(androidx.camera.camera2.interop.ExperimentalCamera2Interop::class)
+fun setProCameraOptions(activity: MainActivity, preferences: SharedPreferences){
     val proRanges = getProModeSliderRanges(activity)
 
-    //Create a new thread to handle Pro Mode
-    proModeSettingsThread = Thread {
-        try {
-            while (!Thread.currentThread().isInterrupted) {
-
-                //Wait until camera has started
-                //If a picture is being taken, do not change settings
-                while (activity.camera == null) {
-                    Thread.sleep(5)
-                }
-
-                val camera2CameraControl = Camera2CameraControl.from(activity.camera!!.cameraControl)
-
-                //Reset the settings to Auto
-                camera2CameraControl.clearCaptureRequestOptions()
-                //If Pro Mode is off, skip this loop
-                val proModeValue = preferences.getInt(SharedPrefs.PRO_MODE_KEY, Constant.PRO_MODE_OFF)
-                if(proModeValue == Constant.PRO_MODE_OFF){
-                    Thread.sleep(50)
-                    continue
-                }
-
-                //Pro Mode is on
-                var savedISOValueIndex: Int
-                var savedShutterSpeedValueIndex: Int
-
-                if (preferences.getInt(SharedPrefs.CAMERA_FACING_KEY, Constant.CAMERA_BACK) == Constant.CAMERA_BACK) {
-                    savedISOValueIndex =
-                        preferences.getInt(SharedPrefs.ISO_INDEX_BACK_KEY, proRanges.backISORangeInList!!.lower)
-                    savedShutterSpeedValueIndex =
-                        preferences.getInt(SharedPrefs.SHUTTER_SPEED_INDEX_BACK_KEY, proRanges.backExposureTimeRangeInList!!.lower)
-
-                } else {  //Front camera
-                    savedISOValueIndex =
-                        preferences.getInt(SharedPrefs.ISO_INDEX_FRONT_KEY, proRanges.frontISORangeInList!!.lower)
-                    savedShutterSpeedValueIndex =
-                        preferences.getInt(SharedPrefs.SHUTTER_SPEED_INDEX_FRONT_KEY, proRanges.frontExposureTimeRangeInList!!.lower)
-                }
-
-                //Disable automatic AE and set pro values (necessary to set all 3 values that are not automatic anymore)
-                //Values taken from the list of valid values
-                val newCaptureRequestOptions = CaptureRequestOptions.Builder()
-                    .setCaptureRequestOption(CaptureRequest.CONTROL_AE_MODE, CaptureRequest.CONTROL_AE_MODE_OFF)
-                    .setCaptureRequestOption(CaptureRequest.SENSOR_SENSITIVITY, Constant.ISO_VALUES[savedISOValueIndex])
-                    //Target is 60fps. If exposure time is greater than frame duration, it is automatically adjusted
-                    .setCaptureRequestOption(CaptureRequest.SENSOR_FRAME_DURATION, 16666666)
-                    .setCaptureRequestOption(CaptureRequest.SENSOR_EXPOSURE_TIME, Constant.SHUTTER_SPEED_VALUE[savedShutterSpeedValueIndex].toLong())
-                    .build()
-
-                camera2CameraControl.addCaptureRequestOptions(newCaptureRequestOptions)
-
-                Thread.sleep(10)
-            }
-        } catch (e: InterruptedException) {
-            Log.e(Constant.TAG, e.toString())
+    //Wait until camera has started
+    //Used a thread only to be sure that the camera is available
+    Thread {
+        while (activity.camera == null) {
+            Thread.sleep(5)
         }
-    }
-    proModeSettingsThread?.start()
+
+        val camera2CameraControl = Camera2CameraControl.from(activity.camera!!.cameraControl)
+
+        //Pro Mode is on
+        val savedISOValueIndex: Int
+        val savedShutterSpeedValueIndex: Int
+
+        if (preferences.getInt(SharedPrefs.CAMERA_FACING_KEY, Constant.CAMERA_BACK) == Constant.CAMERA_BACK) {
+            savedISOValueIndex =
+                preferences.getInt(SharedPrefs.ISO_INDEX_BACK_KEY, proRanges.backISORangeInList!!.lower)
+            savedShutterSpeedValueIndex =
+                preferences.getInt(SharedPrefs.SHUTTER_SPEED_INDEX_BACK_KEY, proRanges.backExposureTimeRangeInList!!.lower)
+
+        } else {  //Front camera
+            savedISOValueIndex =
+                preferences.getInt(SharedPrefs.ISO_INDEX_FRONT_KEY, proRanges.frontISORangeInList!!.lower)
+            savedShutterSpeedValueIndex =
+                preferences.getInt(SharedPrefs.SHUTTER_SPEED_INDEX_FRONT_KEY, proRanges.frontExposureTimeRangeInList!!.lower)
+        }
+
+        //Disable automatic AE and set pro values (necessary to set all 3 values that are not automatic anymore)
+        //Values taken from the list of valid values
+        val newCaptureRequestOptions = CaptureRequestOptions.Builder()
+            .setCaptureRequestOption(CaptureRequest.CONTROL_AE_MODE, CaptureRequest.CONTROL_AE_MODE_OFF)
+            .setCaptureRequestOption(CaptureRequest.SENSOR_SENSITIVITY, Constant.ISO_VALUES[savedISOValueIndex])
+            //Target is 60fps. If exposure time is greater than frame duration, it is automatically adjusted
+            .setCaptureRequestOption(CaptureRequest.SENSOR_FRAME_DURATION, 16666666)
+            .setCaptureRequestOption(CaptureRequest.SENSOR_EXPOSURE_TIME, Constant.SHUTTER_SPEED_VALUE[savedShutterSpeedValueIndex].toLong())
+            .build()
+
+        camera2CameraControl.addCaptureRequestOptions(newCaptureRequestOptions)
+    }.start()
 }
 
 //Get relative and absolute ranges of values supported in Pro Mode

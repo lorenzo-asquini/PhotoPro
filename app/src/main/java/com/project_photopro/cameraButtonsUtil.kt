@@ -8,8 +8,6 @@ import android.widget.ImageButton
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 
-//Functions useful for both normal camera and PRO camera
-
 fun drawAllButtons(activity: AppCompatActivity, preferences: SharedPreferences, features: AvailableFeatures){
 
     //Draw flash button and night mode button only if those features are available for the given camera
@@ -51,6 +49,7 @@ fun drawAllButtons(activity: AppCompatActivity, preferences: SharedPreferences, 
         }
     }
 
+    //Always present
     drawFrameAvgButton(activity, preferences, true)
     drawSmartDelayButton(activity, preferences, true)
 }
