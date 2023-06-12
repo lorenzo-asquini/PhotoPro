@@ -209,9 +209,9 @@
                         android:layout_height="wrap_content"
                         android:layout_weight="@dimen/slider_percentage"
 
-                        android:stepSize="0"
-                        android:valueFrom="200"
-                        android:valueTo="3200"
+                        android:stepSize="1"
+                        android:valueFrom="0"
+                        android:valueTo="10"
 
                         app:haloColor="@color/white"
                         app:haloRadius="2dp"
@@ -269,9 +269,9 @@
                         android:layout_height="wrap_content"
                         android:layout_weight="@dimen/slider_percentage"
 
-                        android:stepSize="0"
-                        android:valueFrom="0.5"
-                        android:valueTo="30"
+                        android:stepSize="1"
+                        android:valueFrom="0"
+                        android:valueTo="10"
 
                         app:haloColor="@color/white"
                         app:haloRadius="2dp"

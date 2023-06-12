@@ -158,7 +158,7 @@ class MainActivity : AppCompatActivity(), SmartDelayListener{
             drawProModeMenu(this, preferences, true)
 
             //Restart camera to reset Pro settings
-            startCameraWrapper()
+            //startCameraWrapper()
         }
 
         //Add listener to button to make it take photos
@@ -204,6 +204,7 @@ class MainActivity : AppCompatActivity(), SmartDelayListener{
         imageAnalyzer = startCameraResult.second
     }
 
+    @androidx.annotation.OptIn(androidx.camera.camera2.interop.ExperimentalCamera2Interop::class)
     private fun takePhoto() {
 
         //Vibrate when photo is taken

@@ -2,7 +2,6 @@ package com.project_photopro
 
 import android.content.Context
 import android.content.SharedPreferences
-import android.graphics.Paint.Cap
 import android.hardware.camera2.CameraCharacteristics
 import android.hardware.camera2.CameraManager
 import android.hardware.camera2.CaptureRequest
@@ -21,13 +20,18 @@ import kotlin.math.roundToInt
 
 data class ProModeRanges(
     //If values are still null, then that feature is not supported by the camera
+    //Determined both the absolute ranges and the relative ranges inside the constant lists
     //ISO
     var frontISORange : Range<Int>? = null,
+    var frontISORangeInList : Range<Int>? = null,
     var backISORange : Range<Int>? = null,
+    var backISORangeInList : Range<Int>? = null,
 
     //Exposure time (Shutter speed)
     var frontExposureTimeRange : Range<Long>? = null,
-    var backExposureTimeRange : Range<Long>? = null
+    var frontExposureTimeRangeInList : Range<Int>? = null,
+    var backExposureTimeRange : Range<Long>? = null,
+    var backExposureTimeRangeInList : Range<Int>? = null
 )
 
 fun drawProModeMenu(activity: AppCompatActivity, preferences: SharedPreferences, show : Boolean){
@@ -53,15 +57,15 @@ fun drawProModeMenu(activity: AppCompatActivity, preferences: SharedPreferences,
             proModeMenu.visibility = GONE
             proModeButton.setImageResource(R.drawable.pro)
 
-            //Set everything to auto
-            handleSetProSettingsThread(activity, preferences, false)
+            //Start the Pro Mode thread if necessary
+            handleSetProSettingsThread(activity, preferences)
         }
         Constant.PRO_MODE_ON -> {
             proModeMenu.visibility = VISIBLE
             proModeButton.setImageResource(R.drawable.normal)
 
-            //Adjust settings in near real time
-            handleSetProSettingsThread(activity, preferences, true)
+            //Start the Pro Mode thread if necessary
+            handleSetProSettingsThread(activity, preferences)
         }
     }
 }
@@ -76,7 +80,7 @@ fun changeProModeValue(preferences: SharedPreferences){
     editor.apply()
 }
 
-//At least one of the two sliders is considered available if the Pro Mode menu is shown
+//The slider are considered available if commands are shown
 fun handleProModeCommands(activity: MainActivity, preferences: SharedPreferences) {
 
     //Add listener to hide and show pro mode sliders
@@ -96,6 +100,8 @@ fun handleProModeCommands(activity: MainActivity, preferences: SharedPreferences
     handleShutterSpeedSlider(activity, preferences)
 }
 
+//Slider considered available, with non-null ranges
+//Values of the slider are the indexes of the values in the list
 fun handleISOSlider(activity: MainActivity, preferences: SharedPreferences){
     val proRanges = getProModeSliderRanges(activity)
 
@@ -105,49 +111,45 @@ fun handleISOSlider(activity: MainActivity, preferences: SharedPreferences){
 
     //Set ranges
     if(preferences.getInt(SharedPrefs.CAMERA_FACING_KEY, Constant.CAMERA_BACK) == Constant.CAMERA_BACK) {
-        if(proRanges.backISORange == null){
-            activity.findViewById<LinearLayout>(R.id.iso_slider_block).visibility = GONE
-        }else{
             activity.findViewById<LinearLayout>(R.id.iso_slider_block).visibility = VISIBLE
-            isoSlider.valueFrom = proRanges.backISORange!!.lower.toFloat()
-            isoSlider.valueTo = proRanges.backISORange!!.upper.toFloat()
-        }
+            isoSlider.valueFrom = proRanges.backISORangeInList!!.lower.toFloat()
+            isoSlider.valueTo = proRanges.backISORangeInList!!.upper.toFloat()
     }else{  //Front
-        if(proRanges.frontISORange == null){
-            activity.findViewById<LinearLayout>(R.id.iso_slider_block).visibility = GONE
-        }else{
             activity.findViewById<LinearLayout>(R.id.iso_slider_block).visibility = VISIBLE
-            isoSlider.valueFrom = proRanges.frontISORange!!.lower.toFloat()
-            isoSlider.valueTo = proRanges.frontISORange!!.upper.toFloat()
-        }
+            isoSlider.valueFrom = proRanges.frontISORangeInList!!.lower.toFloat()
+            isoSlider.valueTo = proRanges.frontISORangeInList!!.upper.toFloat()
     }
 
-    //View the selected value restoring saved one
-    val savedISOValue =
+    //View the selected value restoring saved one (indexes in list)
+    val savedISOValueIndex =
         if(preferences.getInt(SharedPrefs.CAMERA_FACING_KEY, Constant.CAMERA_BACK) == Constant.CAMERA_BACK) {
-            preferences.getInt(SharedPrefs.ISO_BACK_KEY, proRanges.backISORange!!.lower)
+            preferences.getInt(SharedPrefs.ISO_INDEX_BACK_KEY, proRanges.backISORangeInList!!.lower)
         }else{
-            preferences.getInt(SharedPrefs.ISO_FRONT_KEY, proRanges.frontISORange!!.lower)
+            preferences.getInt(SharedPrefs.ISO_INDEX_FRONT_KEY, proRanges.frontISORangeInList!!.lower)
         }
 
-    isoTextView.text = savedISOValue.toString()
-    isoSlider.value = savedISOValue.toFloat()
+    //Retrieve shown value from list
+    isoTextView.text = Constant.ISO_VALUES[savedISOValueIndex].toString()
+    isoSlider.value = savedISOValueIndex.toFloat()
 
     //Add listener
-    isoSlider.addOnChangeListener { _, value, _ ->
-        isoTextView.text = value.toInt().toString()
+    isoSlider.addOnChangeListener { _, valueIndex, _ ->
+        //Retrieve shown value from list
+        isoTextView.text = Constant.ISO_VALUES[valueIndex.toInt()].toString()
 
-        //Save new value
+        //Save new value (index)
         val editor = preferences.edit()
         if (preferences.getInt(SharedPrefs.CAMERA_FACING_KEY, Constant.CAMERA_BACK) == Constant.CAMERA_BACK) {
-            editor.putInt(SharedPrefs.ISO_BACK_KEY, value.toInt())
+            editor.putInt(SharedPrefs.ISO_INDEX_BACK_KEY, valueIndex.toInt())
         } else {
-            editor.putInt(SharedPrefs.ISO_FRONT_KEY, value.toInt())
+            editor.putInt(SharedPrefs.ISO_INDEX_FRONT_KEY, valueIndex.toInt())
         }
         editor.apply()
     }
 }
 
+//Slider considered available, with non-null ranges
+//Values of the slider are the indexes of the values in the list
 fun handleShutterSpeedSlider(activity: MainActivity, preferences: SharedPreferences){
     val proRanges = getProModeSliderRanges(activity)
 
@@ -157,43 +159,38 @@ fun handleShutterSpeedSlider(activity: MainActivity, preferences: SharedPreferen
 
     //Set ranges
     if(preferences.getInt(SharedPrefs.CAMERA_FACING_KEY, Constant.CAMERA_BACK) == Constant.CAMERA_BACK) {
-        if(proRanges.backExposureTimeRange == null){
-            activity.findViewById<LinearLayout>(R.id.shutter_speed_slider_block).visibility = GONE
-        }else{
             activity.findViewById<LinearLayout>(R.id.shutter_speed_slider_block).visibility = VISIBLE
-            shutterSpeedSlider.valueFrom = proRanges.backExposureTimeRange!!.lower.toFloat()
-            shutterSpeedSlider.valueTo = proRanges.backExposureTimeRange!!.upper.toFloat()
-        }
+            shutterSpeedSlider.valueFrom = proRanges.backExposureTimeRangeInList!!.lower.toFloat()
+            shutterSpeedSlider.valueTo = proRanges.backExposureTimeRangeInList!!.upper.toFloat()
     }else{  //Front
-        if(proRanges.frontExposureTimeRange == null){
-            activity.findViewById<LinearLayout>(R.id.shutter_speed_slider_block).visibility = GONE
-        }else{
             activity.findViewById<LinearLayout>(R.id.shutter_speed_slider_block).visibility = VISIBLE
-            shutterSpeedSlider.valueFrom = proRanges.frontExposureTimeRange!!.lower.toFloat()
-            shutterSpeedSlider.valueTo = proRanges.frontExposureTimeRange!!.upper.toFloat()
-        }
+            shutterSpeedSlider.valueFrom = proRanges.frontExposureTimeRangeInList!!.lower.toFloat()
+            shutterSpeedSlider.valueTo = proRanges.frontExposureTimeRangeInList!!.upper.toFloat()
     }
 
-    //View the selected value restoring saved one
-    val savedShutterSpeedValue =
+    //View the selected value restoring saved one (indexes in list)
+    val savedShutterSpeedValueIndex =
         if(preferences.getInt(SharedPrefs.CAMERA_FACING_KEY, Constant.CAMERA_BACK) == Constant.CAMERA_BACK) {
-            preferences.getFloat(SharedPrefs.SHUTTER_SPEED_BACK_KEY, proRanges.backExposureTimeRange!!.lower.toFloat())
+            preferences.getInt(SharedPrefs.SHUTTER_SPEED_INDEX_BACK_KEY, proRanges.backExposureTimeRangeInList!!.lower)
         }else{
-            preferences.getFloat(SharedPrefs.SHUTTER_SPEED_FRONT_KEY, proRanges.frontExposureTimeRange!!.lower.toFloat())
+            preferences.getInt(SharedPrefs.SHUTTER_SPEED_INDEX_FRONT_KEY, proRanges.frontExposureTimeRangeInList!!.lower)
         }
 
-    shutterSpeedTextView.text = convertNanosecondsToReadableTime(savedShutterSpeedValue)
-    shutterSpeedSlider.value = savedShutterSpeedValue
+    //Retrieve shown value from list
+    shutterSpeedTextView.text = convertNanosecondsToReadableTime(Constant.SHUTTER_SPEED_VALUE[savedShutterSpeedValueIndex])
+    shutterSpeedSlider.value = savedShutterSpeedValueIndex.toFloat()
 
     //Add the listener
-    shutterSpeedSlider.addOnChangeListener { _, value, _ ->
-        shutterSpeedTextView.text = convertNanosecondsToReadableTime(value)
-        //Save new value
+    shutterSpeedSlider.addOnChangeListener { _, valueIndex, _ ->
+        //Retrieve shown value from list
+        shutterSpeedTextView.text = convertNanosecondsToReadableTime(Constant.SHUTTER_SPEED_VALUE[valueIndex.toInt()])
+
+        //Save new value (index)
         val editor = preferences.edit()
         if (preferences.getInt(SharedPrefs.CAMERA_FACING_KEY, Constant.CAMERA_BACK) == Constant.CAMERA_BACK) {
-            editor.putFloat(SharedPrefs.SHUTTER_SPEED_BACK_KEY, value)
+            editor.putInt(SharedPrefs.SHUTTER_SPEED_INDEX_BACK_KEY, valueIndex.toInt())
         } else {
-            editor.putFloat(SharedPrefs.SHUTTER_SPEED_FRONT_KEY, value)
+            editor.putInt(SharedPrefs.SHUTTER_SPEED_INDEX_FRONT_KEY, valueIndex.toInt())
         }
         editor.apply()
     }
@@ -201,67 +198,67 @@ fun handleShutterSpeedSlider(activity: MainActivity, preferences: SharedPreferen
 
 private var proModeSettingsThread : Thread? = null
 @androidx.annotation.OptIn(androidx.camera.camera2.interop.ExperimentalCamera2Interop::class)
-fun handleSetProSettingsThread(activity: MainActivity, preferences: SharedPreferences, run : Boolean){
+fun handleSetProSettingsThread(activity: MainActivity, preferences: SharedPreferences){
 
-    //Stop the last thread
-    proModeSettingsThread?.interrupt()
-
-    //If the mode is normal, it is not necessary to restart the thread
-    //All settings will return to normal because a new camera will be started
-    if(!run){
+    //Start the thread only once
+    if(proModeSettingsThread != null){
         return
     }
+
     val proRanges = getProModeSliderRanges(activity)
 
-    //Create a new thread because Pro Mode is activated
+    //Create a new thread to handle Pro Mode
     proModeSettingsThread = Thread {
-
-        //Wait until camera has started
-        while (activity.camera == null) {
-            Thread.sleep(5)
-        }
-
         try {
             while (!Thread.currentThread().isInterrupted) {
 
+                //Wait until camera has started
+                //If a picture is being taken, do not change settings
+                while (activity.camera == null) {
+                    Thread.sleep(5)
+                }
+
                 val camera2CameraControl = Camera2CameraControl.from(activity.camera!!.cameraControl)
 
-                val captureRequestOptions = CaptureRequestOptions.Builder()
-                    .setCaptureRequestOption(CaptureRequest.CONTROL_AE_MODE, CaptureRequest.CONTROL_AE_MODE_ON)
-                    .build()
+                //Reset the settings to Auto
+                camera2CameraControl.clearCaptureRequestOptions()
+                //If Pro Mode is off, skip this loop
+                val proModeValue = preferences.getInt(SharedPrefs.PRO_MODE_KEY, Constant.PRO_MODE_OFF)
+                if(proModeValue == Constant.PRO_MODE_OFF){
+                    Thread.sleep(50)
+                    continue
+                }
 
-                camera2CameraControl.addCaptureRequestOptions(captureRequestOptions)
-
-                var savedISOValue: Int
-                var savedShutterSpeedValue: Float
-
-                //TODO:Handle range = null
+                //Pro Mode is on
+                var savedISOValueIndex: Int
+                var savedShutterSpeedValueIndex: Int
 
                 if (preferences.getInt(SharedPrefs.CAMERA_FACING_KEY, Constant.CAMERA_BACK) == Constant.CAMERA_BACK) {
-                    savedISOValue =
-                        preferences.getInt(SharedPrefs.ISO_BACK_KEY, proRanges.backISORange!!.lower)
-                    savedShutterSpeedValue =
-                        preferences.getFloat(SharedPrefs.SHUTTER_SPEED_BACK_KEY, proRanges.backExposureTimeRange!!.lower.toFloat())
+                    savedISOValueIndex =
+                        preferences.getInt(SharedPrefs.ISO_INDEX_BACK_KEY, proRanges.backISORangeInList!!.lower)
+                    savedShutterSpeedValueIndex =
+                        preferences.getInt(SharedPrefs.SHUTTER_SPEED_INDEX_BACK_KEY, proRanges.backExposureTimeRangeInList!!.lower)
 
                 } else {  //Front camera
-                    savedISOValue =
-                        preferences.getInt(SharedPrefs.ISO_FRONT_KEY, proRanges.frontISORange!!.lower)
-                    savedShutterSpeedValue =
-                        preferences.getFloat(SharedPrefs.SHUTTER_SPEED_FRONT_KEY, proRanges.frontExposureTimeRange!!.lower.toFloat())
+                    savedISOValueIndex =
+                        preferences.getInt(SharedPrefs.ISO_INDEX_FRONT_KEY, proRanges.frontISORangeInList!!.lower)
+                    savedShutterSpeedValueIndex =
+                        preferences.getInt(SharedPrefs.SHUTTER_SPEED_INDEX_FRONT_KEY, proRanges.frontExposureTimeRangeInList!!.lower)
                 }
 
                 //Disable automatic AE and set pro values (necessary to set all 3 values that are not automatic anymore)
+                //Values taken from the list of valid values
                 val newCaptureRequestOptions = CaptureRequestOptions.Builder()
                     .setCaptureRequestOption(CaptureRequest.CONTROL_AE_MODE, CaptureRequest.CONTROL_AE_MODE_OFF)
-                    .setCaptureRequestOption(CaptureRequest.SENSOR_SENSITIVITY, savedISOValue)
+                    .setCaptureRequestOption(CaptureRequest.SENSOR_SENSITIVITY, Constant.ISO_VALUES[savedISOValueIndex])
                     //Target is 60fps. If exposure time is greater than frame duration, it is automatically adjusted
                     .setCaptureRequestOption(CaptureRequest.SENSOR_FRAME_DURATION, 16666666)
-                    .setCaptureRequestOption(CaptureRequest.SENSOR_EXPOSURE_TIME, savedShutterSpeedValue.toLong())
+                    .setCaptureRequestOption(CaptureRequest.SENSOR_EXPOSURE_TIME, Constant.SHUTTER_SPEED_VALUE[savedShutterSpeedValueIndex].toLong())
                     .build()
 
                 camera2CameraControl.addCaptureRequestOptions(newCaptureRequestOptions)
 
-                Thread.sleep(100)
+                Thread.sleep(10)
             }
         } catch (e: InterruptedException) {
             Log.e(Constant.TAG, e.toString())
@@ -270,6 +267,8 @@ fun handleSetProSettingsThread(activity: MainActivity, preferences: SharedPrefer
     proModeSettingsThread?.start()
 }
 
+//Get relative and absolute ranges of values supported in Pro Mode
+//If relative ranges are null even if absolute ones are not, the feature is considered not available
 fun getProModeSliderRanges(activity: AppCompatActivity) : ProModeRanges{
     val cameraManager = activity.getSystemService(Context.CAMERA_SERVICE) as CameraManager
 
@@ -278,6 +277,7 @@ fun getProModeSliderRanges(activity: AppCompatActivity) : ProModeRanges{
 
     val ranges = ProModeRanges()
 
+    //Ranges in absolute values
     if(frontCameraId != null) {
         val cameraCharacteristics = cameraManager.getCameraCharacteristics(frontCameraId)
         ranges.frontISORange =
@@ -286,6 +286,11 @@ fun getProModeSliderRanges(activity: AppCompatActivity) : ProModeRanges{
             cameraCharacteristics.get(CameraCharacteristics.SENSOR_INFO_EXPOSURE_TIME_RANGE)
     }
 
+    //Ranges relative to the list of possible values
+    ranges.frontISORangeInList = getRangeInList_II(Constant.ISO_VALUES, ranges.frontISORange)
+    ranges.frontExposureTimeRangeInList = getRangeInList_FL(Constant.SHUTTER_SPEED_VALUE, ranges.frontExposureTimeRange)
+
+    //Ranges in absolute values
     if(backCameraId != null) {
         val cameraCharacteristics = cameraManager.getCameraCharacteristics(backCameraId)
         ranges.backISORange =
@@ -294,9 +299,78 @@ fun getProModeSliderRanges(activity: AppCompatActivity) : ProModeRanges{
             cameraCharacteristics.get(CameraCharacteristics.SENSOR_INFO_EXPOSURE_TIME_RANGE)
     }
 
+    //Ranges relative to the list of possible values
+    ranges.backISORangeInList = getRangeInList_II(Constant.ISO_VALUES, ranges.backISORange)
+    ranges.backExposureTimeRangeInList = getRangeInList_FL(Constant.SHUTTER_SPEED_VALUE, ranges.backExposureTimeRange)
+    
     return ranges
 }
 
+//List should be ordered (list of Int, range of Int)
+fun getRangeInList_II(list: List<Int>, range: Range<Int>?) : Range<Int>?{
+    if(range == null){
+        return null
+    }
+
+    //Check if the list has at list one value that is compatible with the range given
+    var rangeEmpty = true
+    for(value in list){
+        if(value in range){
+            rangeEmpty = false
+        }
+    }
+
+    if(rangeEmpty){
+        return null
+    }
+
+    //Find the indexes in the given list that have values inside the range
+    var low = 0
+    while(list[low] !in range){
+        low++
+    }
+
+    var high = list.size-1
+    while(list[high] !in range) {
+        high--
+    }
+
+    return Range(low, high)
+}
+
+//List should be ordered (list of Float, range of Long)
+fun getRangeInList_FL(list: List<Float>, range: Range<Long>?) : Range<Int>?{
+    if(range == null){
+        return null
+    }
+    
+    //Check if the list has at list one value that is compatible with the range given
+    var rangeEmpty = true
+    for(value in list){
+        if(value.toLong() in range){
+            rangeEmpty = false
+        }
+    }
+    
+    if(rangeEmpty){
+        return null
+    }
+    
+    //Find the indexes in the given list that have values inside the range
+    var low = 0
+    while(list[low].toLong() !in range){
+        low++
+    }
+
+    var high = list.size-1
+    while(list[high].toLong() !in range) {
+        high--
+    }
+
+    return Range(low, high)
+}
+
+//Write nanoseconds value in a form that is human readable
 fun convertNanosecondsToReadableTime(nanoseconds: Float) : String{
     val microseconds : Float = (nanoseconds / 1000.0 * 10).roundToInt() / 10F
     val milliseconds : Float = (nanoseconds / 1_000_000.0 * 10).roundToInt() / 10F
