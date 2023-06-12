@@ -64,17 +64,15 @@ fun getAvailableFeatures(activity: AppCompatActivity) : AvailableFeatures{
 
         //Check if hardware level is enough to support Pro Mode (FULL or 3)
         val frontCameraHardwareLevel = cameraCharacteristics.get(CameraCharacteristics.INFO_SUPPORTED_HARDWARE_LEVEL)
-
         if(frontCameraHardwareLevel == CameraCharacteristics.INFO_SUPPORTED_HARDWARE_LEVEL_FULL) {
             features.isFrontProModeAvailable = true
         }
         if(frontCameraHardwareLevel == CameraCharacteristics.INFO_SUPPORTED_HARDWARE_LEVEL_3
             && Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-
             features.isFrontProModeAvailable = true
         }
         //Even if the hardware level is high enough, still ISO and Exposure Time may not be available
-        if(proModeRanges.frontISORange == null && proModeRanges.frontExposureTimeRange == null){
+        if(proModeRanges.frontISORangeInList == null || proModeRanges.frontExposureTimeRangeInList == null){
             features.isFrontProModeAvailable = false
         }
 
@@ -114,17 +112,15 @@ fun getAvailableFeatures(activity: AppCompatActivity) : AvailableFeatures{
 
         //Check if hardware level is enough to support Pro Mode (FULL or 3)
         val backCameraHardwareLevel = cameraCharacteristics.get(CameraCharacteristics.INFO_SUPPORTED_HARDWARE_LEVEL)
-
         if(backCameraHardwareLevel == CameraCharacteristics.INFO_SUPPORTED_HARDWARE_LEVEL_FULL) {
             features.isBackProModeAvailable = true
         }
         if(backCameraHardwareLevel == CameraCharacteristics.INFO_SUPPORTED_HARDWARE_LEVEL_3
             && Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-
             features.isBackProModeAvailable = true
         }
         //Even if the hardware level is high enough, still ISO and Exposure Time may not be available
-        if(proModeRanges.backISORange == null && proModeRanges.backExposureTimeRange == null){
+        if(proModeRanges.backISORangeInList == null || proModeRanges.backExposureTimeRangeInList == null){
             features.isBackProModeAvailable = false
         }
 

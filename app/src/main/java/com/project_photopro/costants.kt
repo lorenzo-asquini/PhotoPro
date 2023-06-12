@@ -44,6 +44,18 @@ object Constant{
     const val SMART_DELAY_NOTIFICATION_OFF = 0
     const val SMART_DELAY_NOTIFICATION_ON = 1
 
+    //Supported values in the Pro Mode sliders
+    val ISO_VALUES = listOf(25, 50, 100, 200, 400, 800, 1600, 3200, 6400, 12800)
+
+    //Values in nanoseconds. The maximum value supported is the one that allows to have a usable experience
+    //A shutter speed greater than 500ms makes the app unusable
+    val SHUTTER_SPEED_VALUE =
+        listOf(100_000F, 250_000F, 300_000F, 400_000F, 500_000F, 600_000F, 750_000F,
+            1_000_000F, 1_250_000F, 1_500_000F, 1_750_000F, 2_000_000F, 3_000_000F,
+            4_000_000F, 5_000_000F, 7_500_000F, 10_000_000F, 12_500_000F, 15_000_000F,
+            20_000_000F, 25_000_000F, 30_000_000F, 40_000_000F, 50_000_000F, 75_000_000F,
+            100_000_000F, 125_000_000F, 200_000_000F, 250_000_000F, 500_000_000F)
+
     //TAG for debug
     const val TAG = "PhotoPro"
 
@@ -82,9 +94,10 @@ object SharedPrefs{
 
     const val PRO_MODE_KEY = "pro_mode"
 
-    const val ISO_FRONT_KEY = "iso_front"
-    const val ISO_BACK_KEY = "iso_back"
+    //These keys contain the indexes inside the list of possible values, not the absolute values
+    const val ISO_INDEX_FRONT_KEY = "iso_index_front"
+    const val ISO_INDEX_BACK_KEY = "iso_index_back"
 
-    const val SHUTTER_SPEED_FRONT_KEY = "shutter_speed_front"
-    const val SHUTTER_SPEED_BACK_KEY = "shutter_speed_back"
+    const val SHUTTER_SPEED_INDEX_FRONT_KEY = "shutter_speed_index_front"
+    const val SHUTTER_SPEED_INDEX_BACK_KEY = "shutter_speed_index_back"
 }
