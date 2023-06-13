@@ -7,7 +7,7 @@
     <string name="image_averaging_text">Image Averaging</string>
     <string name="image_averaging_description_text"> Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</string>
     <string name="smart_delay_text">Smart Delay</string>
-    <string name="smart_delay_description_text"> Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</string>
+    <string name="smart_delay_description_text">Turn on smart delay to take a photo when a person is detected from camera.\n Turn on notification sound to be aware when a person is spotted.\n Hint: is useful when you want to take a photo of yourself but you are alone.</string>
     <string name="night_mode_text">Night Mode</string>
     <string name="night_mode_description_text"> Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</string>
     <!--<string name="hdr_text">HDR</string>-->
