@@ -315,7 +315,7 @@ class MainActivity : AppCompatActivity(), SmartDelayListener{
         //Notify the user with a sound if a person was detected
         try {
             //Play the notification only if enabled
-            val smartDelayValue = preferences.getInt(SharedPrefs.SMART_DELAY_KEY, Constant.SMART_DELAY_OFF)
+            val smartDelayValue = preferences.getInt(SharedPrefs.SMART_DELAY_NOTIFICATION_KEY, Constant.SMART_DELAY_NOTIFICATION_ON)
             if(smartDelayValue == Constant.SMART_DELAY_NOTIFICATION_ON) {
                 //Generate a tone from the default ones present inside the system
                 val toneGenerator = ToneGenerator(AudioManager.STREAM_MUSIC, 100)
