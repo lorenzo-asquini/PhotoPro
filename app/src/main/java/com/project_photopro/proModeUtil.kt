@@ -265,7 +265,7 @@ fun setProCameraOptions(activity: MainActivity, preferences: SharedPreferences){
             .setCaptureRequestOption(CaptureRequest.SENSOR_EXPOSURE_TIME, Constant.SHUTTER_SPEED_VALUE[savedShutterSpeedValueIndex].toLong())
             .build()
 
-            camera2CameraControl.addCaptureRequestOptions(newCaptureRequestOptions)
+        camera2CameraControl.addCaptureRequestOptions(newCaptureRequestOptions)
     }.start()
 }
 
