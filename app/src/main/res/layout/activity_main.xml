@@ -156,7 +156,8 @@
         android:orientation="horizontal"
         android:text="@string/default_smart_delay_timer"
         android:visibility="invisible"
-        app:layout_constraintBottom_toTopOf="@+id/top_change_camera_button_guideline"
+        app:layout_constraintTop_toBottomOf="@id/features_toolbar"
+        android:paddingTop="8dp"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent" />
 
