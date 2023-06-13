@@ -5,6 +5,7 @@ import android.content.SharedPreferences
 import android.hardware.camera2.CameraCharacteristics
 import android.hardware.camera2.CameraManager
 import android.hardware.camera2.CaptureRequest
+import android.util.Log
 import android.util.Range
 import android.view.View.GONE
 import android.view.View.VISIBLE
@@ -55,15 +56,15 @@ fun drawProModeMenu(activity: AppCompatActivity, preferences: SharedPreferences,
         Constant.PRO_MODE_OFF -> {
             proModeMenu.visibility = GONE
             proModeButton.setImageResource(R.drawable.pro)
+
+            //Reset everything once
+            resetCameraOptions(activity)
         }
         Constant.PRO_MODE_ON -> {
             proModeMenu.visibility = VISIBLE
             proModeButton.setImageResource(R.drawable.normal)
         }
     }
-
-    //Reset everything once
-    resetCameraOptions(activity)
 }
 
 fun changeProModeValue(preferences: SharedPreferences){
@@ -92,8 +93,12 @@ fun handleProModeCommands(activity: MainActivity, preferences: SharedPreferences
         }
     }
 
-    handleISOSlider(activity, preferences)
-    handleShutterSpeedSlider(activity, preferences)
+    val proModeValue = preferences.getInt(SharedPrefs.PRO_MODE_KEY, Constant.PRO_MODE_OFF)
+
+    if(proModeValue == Constant.PRO_MODE_ON) {
+        handleISOSlider(activity, preferences)
+        handleShutterSpeedSlider(activity, preferences)
+    }
 }
 
 //Slider considered available, with non-null ranges
@@ -127,6 +132,9 @@ fun handleISOSlider(activity: MainActivity, preferences: SharedPreferences){
     //Retrieve shown value from list
     isoTextView.text = Constant.ISO_VALUES[savedISOValueIndex].toString()
     isoSlider.value = savedISOValueIndex.toFloat()
+
+    //Set saved values
+    setProCameraOptions(activity, preferences)
 
     //Add listener
     isoSlider.addOnChangeListener { _, valueIndex, _ ->
@@ -179,6 +187,9 @@ fun handleShutterSpeedSlider(activity: MainActivity, preferences: SharedPreferen
     shutterSpeedTextView.text = convertNanosecondsToReadableTime(Constant.SHUTTER_SPEED_VALUE[savedShutterSpeedValueIndex])
     shutterSpeedSlider.value = savedShutterSpeedValueIndex.toFloat()
 
+    //Set saved values
+    setProCameraOptions(activity, preferences)
+
     //Add the listener
     shutterSpeedSlider.addOnChangeListener { _, valueIndex, _ ->
         //Retrieve shown value from list
@@ -200,7 +211,6 @@ fun handleShutterSpeedSlider(activity: MainActivity, preferences: SharedPreferen
 
 @androidx.annotation.OptIn(androidx.camera.camera2.interop.ExperimentalCamera2Interop::class)
 fun resetCameraOptions(activity: MainActivity){
-
     //Wait until camera has started
     //Used a thread only to be sure that the camera is available
     Thread {
@@ -255,7 +265,7 @@ fun setProCameraOptions(activity: MainActivity, preferences: SharedPreferences){
             .setCaptureRequestOption(CaptureRequest.SENSOR_EXPOSURE_TIME, Constant.SHUTTER_SPEED_VALUE[savedShutterSpeedValueIndex].toLong())
             .build()
 
-        camera2CameraControl.addCaptureRequestOptions(newCaptureRequestOptions)
+            camera2CameraControl.addCaptureRequestOptions(newCaptureRequestOptions)
     }.start()
 }
 
