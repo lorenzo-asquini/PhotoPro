@@ -57,7 +57,7 @@ class MultiPurposeAnalyzer(private val activity: MainActivity, private val rotat
     //Wait a bit before starting to find a person again
     var smartDelayLastPhotoTaken : Long = 0
 
-    //Global variable so it can be accessed without passing it as a parameter
+    //Class variable so it can be accessed without passing it as a parameter
     private var imageBitmap : Bitmap? = null
 
     private var isNightModeTimerRunning = false
@@ -203,12 +203,18 @@ class MultiPurposeAnalyzer(private val activity: MainActivity, private val rotat
             val resultBitmap = imageBitmap!!.copy(imageBitmap!!.config, true)
             matToBitmap(frameAvgResult, resultBitmap)
 
-            //TODO
             //Reverse portrait is not supported by the app
             //Image delivered by the analyzer are not rotated correctly
             val rotationDegrees =
                 when(rotation){
-                    Surface.ROTATION_0 -> 90.0f
+                    Surface.ROTATION_0 -> {
+                        //Necessary a different rotation for portrait back and front
+                        if(preferences.getInt(SharedPrefs.CAMERA_FACING_KEY, Constant.CAMERA_BACK) == Constant.CAMERA_BACK) {
+                            90.0f
+                        }else{
+                            270.0f
+                        }
+                    }
                     Surface.ROTATION_90 -> 0.0f
                     Surface.ROTATION_270 -> 180.0f
                     else -> 0.0f

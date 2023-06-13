@@ -24,10 +24,6 @@ import java.util.Calendar
 import java.util.concurrent.ExecutorService
 import java.util.concurrent.Executors
 
-//TODO: Front camera photo with image averaging is reversed
-//TODO: If smart delay has a countdown, smart delay is disabled and enabled again, the photo is still taken
-//TODO: Check the behaviour of night mode auto when onPause/onResume
-
 //Implements also SmartDelayListener
 class MainActivity : AppCompatActivity(), SmartDelayListener{
     //Object that becomes not null when (and if) the camera is started
@@ -51,7 +47,7 @@ class MainActivity : AppCompatActivity(), SmartDelayListener{
     private var isOptionsButtonClicked = false
 
     //Timer for smart delay
-    private var timer : CountDownTimer? = null
+    private var smartDelayTimer : CountDownTimer? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -138,13 +134,16 @@ class MainActivity : AppCompatActivity(), SmartDelayListener{
 
         //Add listener to button to change smart delay mode
         val smartDelayButton: ImageButton = findViewById(R.id.smart_delay_button)
-        val smartDelayTimer : TextView = findViewById(R.id.smart_delay_timer)
-        smartDelayTimer.visibility = View.INVISIBLE  //Timer always invisible when button clicked
+        val smartDelayTimerText : TextView = findViewById(R.id.smart_delay_timer)
+        smartDelayTimerText.visibility = View.INVISIBLE  //Timer always invisible when button clicked
 
         smartDelayButton.setOnClickListener{
             changeSmartDelayValue(preferences)
             drawSmartDelayButton(this, preferences, true)
             startCameraWrapper()  //Start camera to start analyzer
+
+            //Stop in any case
+            smartDelayTimer?.cancel()
         }
 
         //Add listener to button to change night mode mode
@@ -198,6 +197,8 @@ class MainActivity : AppCompatActivity(), SmartDelayListener{
 
     //Wrapper for startCamera, simplifies function call
     fun startCameraWrapper(zoomValue : Float = camera?.cameraInfo?.zoomState?.value?.zoomRatio ?: 1.0F, forceNightMode : Boolean = false){
+        //Delete old camera to reset Pro settings
+        camera = null
         //Restart the camera with current zoom value if not told otherwise (and if the value is available)
         val startCameraResult = startCamera(this, preferences, zoomValue, forceNightMode)  //Start camera if permission already granted
         imageCapture = startCameraResult.first
@@ -272,7 +273,7 @@ class MainActivity : AppCompatActivity(), SmartDelayListener{
 
         //Make the person not detected anymore and cancel timer if it was set
         imageAnalyzer?.personDetected = false  //Also removes countdown
-        timer?.cancel()
+        smartDelayTimer?.cancel()
 
         //Change color to make visible that image averaging is stopped
         val frameAvgButton: ImageButton = findViewById(R.id.frame_avg_button)
@@ -331,7 +332,7 @@ class MainActivity : AppCompatActivity(), SmartDelayListener{
         smartDelayTimer.visibility = View.VISIBLE
 
         val timerSeconds = preferences.getInt(SharedPrefs.SMART_DELAY_SECONDS_KEY, Constant.DEFAULT_SMART_DELAY_SECONDS)
-        timer = object: CountDownTimer((timerSeconds * 1000).toLong(), 1000) {
+        this.smartDelayTimer = object: CountDownTimer((timerSeconds * 1000).toLong(), 1000) {
             override fun onTick(millisUntilFinished: Long) {
                 val timeLeft = (millisUntilFinished / 1000) + 1 //Seconds
                 smartDelayTimer.text = timeLeft.toString()
