@@ -2,6 +2,7 @@ package com.project_photopro
 
 import android.content.ContentValues
 import android.content.SharedPreferences
+import android.content.res.ColorStateList
 import android.graphics.Bitmap
 import android.graphics.Color
 import android.graphics.Matrix
@@ -11,6 +12,7 @@ import android.provider.MediaStore
 import android.util.Log
 import android.view.Surface
 import android.view.View
+import android.widget.Button
 import android.widget.ImageButton
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
@@ -87,6 +89,19 @@ class MultiPurposeAnalyzer(private val activity: MainActivity, private val rotat
             //If averaging is happening, create imageBitmap if not already created
             if(framesAveraged >= 0){
                 imageBitmap = imageBitmap ?: image.toBitmap()
+
+                //If it is just called, set the torch if needed
+                if(framesAveraged == 0){
+
+                    val savedFlashValue = preferences.getInt(SharedPrefs.FLASH_KEY, Constant.FLASH_OFF)
+                    //If the flash is auto and it is dark, or if the flash is on (always on doesn't need to be handled
+                    if((savedFlashValue == Constant.FLASH_AUTO && getAverageBrightness() < 80) ||
+                        savedFlashValue == Constant.FLASH_ON){
+
+                        setTorchState(activity, preferences, forceTorch = true)
+                    }
+                }
+
                 frameAvg()
             }
         }
@@ -241,9 +256,16 @@ class MultiPurposeAnalyzer(private val activity: MainActivity, private val rotat
             frameAvgResult = null
             framesAveraged = -1
 
+            //Reset torch state
+            setTorchState(activity, preferences)
+
             //Set the image color to white when not in used
             val frameAvgButton: ImageButton = activity.findViewById(R.id.frame_avg_button)
             frameAvgButton.setColorFilter(activity.getColor(R.color.white))
+
+            //Change also the take picture button back to white
+            val imageCaptureButton : Button = activity.findViewById(R.id.image_capture_button)
+            imageCaptureButton.backgroundTintList = ColorStateList.valueOf(activity.getColor(R.color.white))
 
             return
         }

@@ -22,10 +22,7 @@ import androidx.camera.lifecycle.ProcessCameraProvider
 import androidx.camera.view.PreviewView
 import androidx.core.content.ContextCompat
 
-//The savedInstanceState is passed only on the first camera initialization at the beginning of onCreate
-fun startCamera(activity: MainActivity, preferences: SharedPreferences, zoomValue: Float = 1.0F, forceNightMode : Boolean = false)
-        : Pair<ImageCapture, MultiPurposeAnalyzer?> {
-    var imageCapture: ImageCapture? = null
+fun startCamera(activity: MainActivity, preferences: SharedPreferences, zoomValue: Float = 1.0F, forceNightMode : Boolean = false) : MultiPurposeAnalyzer? {
 
     // This is used to bind the lifecycle of cameras to the lifecycle owner (the main activity).
     // This eliminates the task of opening and closing the camera since CameraX is lifecycle-aware.
@@ -120,15 +117,16 @@ fun startCamera(activity: MainActivity, preferences: SharedPreferences, zoomValu
                                 )
                         }
                     }
-
                 }
+
+                activity.imageCapture = ImageCapture.Builder().build()
 
                 // Bind use cases to camera
                 val camera =
                     if (imageAnalysis == null) {  //null because it is not needed by any feature
-                        cameraProvider.bindToLifecycle(activity, cameraSelector, preview, imageCapture)
+                        cameraProvider.bindToLifecycle(activity, cameraSelector, preview, activity.imageCapture)
                     } else {
-                        cameraProvider.bindToLifecycle(activity, cameraSelector, preview, imageCapture, imageAnalysis)
+                        cameraProvider.bindToLifecycle(activity, cameraSelector, preview, activity.imageCapture, imageAnalysis)
                     }
 
                 if (preferences.getInt(SharedPrefs.FLASH_KEY, Constant.FLASH_OFF) == Constant.FLASH_ALWAYS_ON) {
@@ -142,6 +140,8 @@ fun startCamera(activity: MainActivity, preferences: SharedPreferences, zoomValu
 
                 activity.camera = camera
 
+                setTorchState(activity, preferences)
+
             } catch (exc: Exception) {
                 Log.e(Constant.TAG, "Use case binding failed", exc)
             }
@@ -150,21 +150,7 @@ fun startCamera(activity: MainActivity, preferences: SharedPreferences, zoomValu
     }, ContextCompat.getMainExecutor(activity))
     //Main executor is used. Operations may end after the function has returned
 
-    //When starting the camera, build the ImageCapture object that will be able to take pictures
-
-    val savedFlashValue = preferences.getInt(SharedPrefs.FLASH_KEY, Constant.FLASH_OFF)
-    imageCapture = ImageCapture.Builder().build()
-
-    when (savedFlashValue) {
-        Constant.FLASH_OFF -> imageCapture.flashMode = ImageCapture.FLASH_MODE_OFF
-        Constant.FLASH_ON -> imageCapture.flashMode = ImageCapture.FLASH_MODE_ON
-        Constant.FLASH_AUTO -> imageCapture.flashMode = ImageCapture.FLASH_MODE_AUTO
-        Constant.FLASH_ALWAYS_ON -> imageCapture.flashMode = ImageCapture.FLASH_MODE_OFF  //Flash always on overrides the imageCapture flash mode
-
-        else -> imageCapture.flashMode = ImageCapture.FLASH_MODE_OFF
-    }
-
-    return Pair(imageCapture, analyzer)
+    return analyzer
 }
 
 fun createImageAnalysis(activity: MainActivity, preferences: SharedPreferences)

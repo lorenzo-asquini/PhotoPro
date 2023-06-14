@@ -24,6 +24,7 @@ import android.view.View
 import android.widget.ImageView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.camera.core.FocusMeteringAction
+import androidx.camera.core.ImageCapture
 import androidx.camera.view.PreviewView
 import androidx.core.content.ContextCompat
 import java.text.SimpleDateFormat
@@ -105,6 +106,48 @@ fun getSaveImageContentValues() : ContentValues {
         if(Build.VERSION.SDK_INT > Build.VERSION_CODES.P) {
             put(MediaStore.Images.Media.RELATIVE_PATH, "Pictures/PhotoPro")
         }
+    }
+}
+
+fun setTorchState(activity: MainActivity, preferences: SharedPreferences, forceTorch : Boolean = false){
+    //If the torch is forced on, the imageCapture is not needed
+    //Otherwise, the torch is turned off and controlled by the preferences
+    if(forceTorch){
+        activity.camera?.cameraControl?.enableTorch(true)
+        return
+    }else{
+        activity.camera?.cameraControl?.enableTorch(false)
+    }
+
+    //No need to create new imageCapture. Change the flash mode in imageCapture
+    val savedFlashValue = preferences.getInt(SharedPrefs.FLASH_KEY, Constant.FLASH_OFF)
+
+    //If cameraControl is not defined, that means that the camera has not started,
+    //so the correct status of the torch will be set when the initialisation has finished
+    when(savedFlashValue) {
+        Constant.FLASH_OFF -> {
+            activity.camera?.cameraControl?.enableTorch(false)
+            activity.imageCapture?.flashMode = ImageCapture.FLASH_MODE_OFF
+        }
+
+        Constant.FLASH_ON -> {
+            activity.camera?.cameraControl?.enableTorch(false)
+            activity.imageCapture?.flashMode = ImageCapture.FLASH_MODE_ON
+        }
+
+        Constant.FLASH_AUTO -> {
+            activity.camera?.cameraControl?.enableTorch(false)
+            activity.imageCapture?.flashMode = ImageCapture.FLASH_MODE_AUTO
+        }
+
+        Constant.FLASH_ALWAYS_ON -> {
+            activity.imageCapture?.flashMode = ImageCapture.FLASH_MODE_OFF
+            activity.camera?.cameraControl?.enableTorch(true)
+        }
+
+        else -> {
+            activity.imageCapture!!.flashMode = ImageCapture.FLASH_MODE_OFF
+        }  //If something goes wrong
     }
 }
 
