@@ -1,8 +1,10 @@
 package com.project_photopro
 
 import android.Manifest
+import android.app.ActivityManager
 import android.content.Intent
 import android.content.SharedPreferences
+import android.content.res.ColorStateList
 import android.media.AudioManager
 import android.media.ToneGenerator
 import android.os.Bundle
@@ -24,10 +26,11 @@ import java.util.Calendar
 import java.util.concurrent.ExecutorService
 import java.util.concurrent.Executors
 
+
 //Implements also SmartDelayListener
 class MainActivity : AppCompatActivity(), SmartDelayListener{
     //Object that becomes not null when (and if) the camera is started
-    private var imageCapture: ImageCapture? = null
+    var imageCapture: ImageCapture? = null
 
     //Variable used to communicate with the analyzer if necessary
     private var imageAnalyzer : MultiPurposeAnalyzer? = null
@@ -92,36 +95,7 @@ class MainActivity : AppCompatActivity(), SmartDelayListener{
             changeFlashValue(preferences)
             drawFlashButton(this, preferences, true)
 
-            //No need to create new imageCapture. Change the flash mode in imageCapture
-            val savedFlashValue = preferences.getInt(SharedPrefs.FLASH_KEY, Constant.FLASH_OFF)
-
-            //If cameraControl is not defined, that means that the camera has not started,
-            //so the correct status of the torch will be set when the initialisation has finished
-            when(savedFlashValue){
-                Constant.FLASH_OFF -> {
-                    camera?.cameraControl?.enableTorch(false)
-                    imageCapture!!.flashMode = ImageCapture.FLASH_MODE_OFF
-                }
-
-                Constant.FLASH_ON -> {
-                    camera?.cameraControl?.enableTorch(false)
-                    imageCapture!!.flashMode = ImageCapture.FLASH_MODE_ON
-                }
-
-                Constant.FLASH_AUTO -> {
-                    camera?.cameraControl?.enableTorch(false)
-                    imageCapture!!.flashMode = ImageCapture.FLASH_MODE_AUTO
-                }
-
-                Constant.FLASH_ALWAYS_ON -> {
-                    imageCapture!!.flashMode = ImageCapture.FLASH_MODE_OFF
-                    camera?.cameraControl?.enableTorch(true)
-                }
-
-                else -> {
-                    imageCapture!!.flashMode = ImageCapture.FLASH_MODE_OFF
-                }  //If something goes wrong
-            }
+            setTorchState(this, preferences)
         }
 
         //Add listener to button to change frame average mode
@@ -200,12 +174,14 @@ class MainActivity : AppCompatActivity(), SmartDelayListener{
         //Delete old camera to reset Pro settings
         camera = null
         //Restart the camera with current zoom value if not told otherwise (and if the value is available)
-        val startCameraResult = startCamera(this, preferences, zoomValue, forceNightMode)  //Start camera if permission already granted
-        imageCapture = startCameraResult.first
-        imageAnalyzer = startCameraResult.second
+        imageAnalyzer = startCamera(this, preferences, zoomValue, forceNightMode)  //Start camera if permission already granted
     }
 
     private fun takePhoto() {
+
+        //Change color of the button while taking a picture (also while using frame average)
+        val imageCaptureButton : Button = findViewById(R.id.image_capture_button)
+        imageCaptureButton.backgroundTintList = ColorStateList.valueOf(getColor(R.color.lightBlue))
 
         //Vibrate when photo is taken
         vibratePhone(this, 100)
@@ -238,9 +214,15 @@ class MainActivity : AppCompatActivity(), SmartDelayListener{
             object : ImageCapture.OnImageSavedCallback {
                 override fun onImageSaved(output: ImageCapture.OutputFileResults) {
                     Log.i(Constant.TAG, "Photo saved")
+
+                    //Reset take picture button color
+                    imageCaptureButton.backgroundTintList = ColorStateList.valueOf(getColor(R.color.white))
                 }
                 override fun onError(exc: ImageCaptureException) {
                     Log.e(Constant.TAG, "Photo capture failed: ${exc.message}", exc)
+
+                    //Reset take picture button color
+                    imageCaptureButton.backgroundTintList = ColorStateList.valueOf(getColor(R.color.white))
                 }
             }
         )
@@ -250,14 +232,18 @@ class MainActivity : AppCompatActivity(), SmartDelayListener{
     override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<String>, grantResults: IntArray) {
 
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
-
+        Log.e("aa", "aaa")
         if (requestCode == Constant.REQUEST_CODE_PERMISSIONS) {
             if (cameraPermissionGranted(this)) {
                 startCameraWrapper()
             } else {
                 //Show a message that explains why the app does not work (camera permission not granted) and exit the app
-                Toast.makeText(this, "Permissions for the camera granted by the user.", Toast.LENGTH_SHORT).show()
-                finish()
+                Toast.makeText(this, "Permissions for the camera not granted", Toast.LENGTH_SHORT).show()
+
+                //Continue to ask for permission everytime the app is opened if not granted
+                //Necessary to delete the data (and close the app) to make it ask every time
+                //Every data associated with the app is cancelled, but not the photos
+                (getSystemService(ACTIVITY_SERVICE) as ActivityManager).clearApplicationUserData()
             }
         }
     }
@@ -270,6 +256,8 @@ class MainActivity : AppCompatActivity(), SmartDelayListener{
 
         //Stop frame averaging if activity is stopped (if analyzer was initialised)
         imageAnalyzer?.framesAveraged = -1
+        //Reset torch state in any case if it was changed while frame averaging
+        setTorchState(this, preferences)
 
         //Make the person not detected anymore and cancel timer if it was set
         imageAnalyzer?.personDetected = false  //Also removes countdown
@@ -278,6 +266,9 @@ class MainActivity : AppCompatActivity(), SmartDelayListener{
         //Change color to make visible that image averaging is stopped
         val frameAvgButton: ImageButton = findViewById(R.id.frame_avg_button)
         frameAvgButton.setColorFilter(getColor(R.color.white))
+
+        val imageCaptureButton : Button = findViewById(R.id.image_capture_button)
+        imageCaptureButton.backgroundTintList = ColorStateList.valueOf(getColor(R.color.white))
 
         //Save current zoom value, used when maintaining the same camera but rotating the phone
         //Not used onSavedInstanceState because the value is needed both in onCreate and in onResume
@@ -294,7 +285,7 @@ class MainActivity : AppCompatActivity(), SmartDelayListener{
                 camera?.cameraControl?.enableTorch(true)
             }
             else -> {
-                imageCapture!!.flashMode = ImageCapture.FLASH_MODE_OFF
+                imageCapture?.flashMode = ImageCapture.FLASH_MODE_OFF
             }
         }
 
