@@ -14,6 +14,7 @@ import android.view.Surface
 import android.view.View
 import android.widget.Button
 import android.widget.ImageButton
+import android.widget.RelativeLayout
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.camera.core.ExperimentalGetImage
@@ -50,8 +51,8 @@ class MultiPurposeAnalyzer(private val activity: MainActivity, private val rotat
 
             if(!personDetected){
                 //Hide timer if person is not detected
-                val smartDelayTimer : TextView = activity.findViewById(R.id.smart_delay_timer)
-                smartDelayTimer.visibility = View.INVISIBLE
+                val smartDelayTimerView : TextView = activity.findViewById(R.id.smart_delay_timer)
+                smartDelayTimerView.visibility = View.INVISIBLE
             }
         }
 
@@ -75,6 +76,7 @@ class MultiPurposeAnalyzer(private val activity: MainActivity, private val rotat
 
     @ExperimentalGetImage
     override fun analyze(image: ImageProxy){
+        imageBitmap = null
 
         val smartDelayValue = preferences.getInt(SharedPrefs.SMART_DELAY_KEY, Constant.SMART_DELAY_OFF)
         val nightModeValue = preferences.getInt(SharedPrefs.NIGHT_MODE_KEY, Constant.NIGHT_MODE_OFF)
@@ -108,11 +110,12 @@ class MultiPurposeAnalyzer(private val activity: MainActivity, private val rotat
 
         //Necessary to call as the last one because it may close the ImageProxy
         //If a person is detected, do not search again until the photo is taken
+        //Do not search for a new person while doing frame average
 
         if(smartDelayValue == Constant.SMART_DELAY_ON && !personDetected){
 
             val timeBetweenDetections = 2000 //ms
-            if(Calendar.getInstance().timeInMillis - smartDelayLastPhotoTaken >= timeBetweenDetections) {
+            if(Calendar.getInstance().timeInMillis - smartDelayLastPhotoTaken >= timeBetweenDetections && framesAveraged == -1) {
                 smartDelay(image)
             }else{
                 image.close()  //Close to prevent blocking

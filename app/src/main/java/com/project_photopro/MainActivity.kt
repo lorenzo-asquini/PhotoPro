@@ -14,6 +14,7 @@ import android.util.Log
 import android.view.View
 import android.widget.Button
 import android.widget.ImageButton
+import android.widget.RelativeLayout
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
@@ -260,7 +261,9 @@ class MainActivity : AppCompatActivity(), SmartDelayListener{
         setTorchState(this, preferences)
 
         //Make the person not detected anymore and cancel timer if it was set
-        imageAnalyzer?.personDetected = false  //Also removes countdown
+        //Cannot just set personDetected to false because it would start a new search in the time the activity switches
+        val smartDelayTimerView : TextView = findViewById(R.id.smart_delay_timer)
+        smartDelayTimerView.visibility = View.INVISIBLE
         smartDelayTimer?.cancel()
 
         //Change color to make visible that image averaging is stopped
@@ -325,7 +328,7 @@ class MainActivity : AppCompatActivity(), SmartDelayListener{
         val timerSeconds = preferences.getInt(SharedPrefs.SMART_DELAY_SECONDS_KEY, Constant.DEFAULT_SMART_DELAY_SECONDS)
         this.smartDelayTimer = object: CountDownTimer((timerSeconds * 1000).toLong(), 1000) {
             override fun onTick(millisUntilFinished: Long) {
-                val timeLeft = (millisUntilFinished / 1000) + 1 //Seconds
+                val timeLeft = ((millisUntilFinished-1) / 1000) + 1 //Seconds
                 smartDelayTimer.text = timeLeft.toString()
             }
 

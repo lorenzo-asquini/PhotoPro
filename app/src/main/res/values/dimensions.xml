@@ -5,7 +5,9 @@
     <dimen name="gallery_button_toolbar_padding">22dp</dimen>
     <dimen name="image_capture_button_toolbar_margin">10dp</dimen>
 
+    <dimen name="smart_delay_timer_size">50dp</dimen>
     <dimen name="smart_delay_timer_font_size">25dp</dimen>
+    <dimen name="smart_delay_timer_margin_top">20dp</dimen>
 
     <dimen name="focus_circle_size">50dp</dimen>
 
