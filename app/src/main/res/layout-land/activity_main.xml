@@ -150,14 +150,21 @@
 
     <TextView
         android:id="@+id/smart_delay_timer"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:text="@string/default_smart_delay_timer"
-        android:textSize="@dimen/smart_delay_timer_font_size"
-        android:visibility="invisible"
+        android:layout_width="@dimen/smart_delay_timer_size"
+        android:layout_height="@dimen/smart_delay_timer_size"
+        android:layout_gravity="center"
+
+        android:layout_marginTop="@dimen/smart_delay_timer_margin_top"
+
         app:layout_constraintEnd_toStartOf="@+id/bottom_view_guideline"
-        app:layout_constraintStart_toStartOf="@+id/top_view_guideline" />
+        app:layout_constraintStart_toStartOf="@+id/top_view_guideline"
+        app:layout_constraintTop_toTopOf="parent"
+
+        android:gravity="center"
+        android:orientation="horizontal"
+        android:background="@drawable/round_button_opaque"
+        android:textSize="@dimen/smart_delay_timer_font_size"
+        android:text="@string/default_smart_delay_timer" />
 
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/top_change_camera_button_guideline"
@@ -378,7 +385,7 @@
 
         android:layout_height="0dp"
         android:layout_margin="@dimen/image_capture_button_toolbar_margin"
-        android:background="@drawable/round_button"
+        android:background="@drawable/round_button_white"
         android:contentDescription="@string/capture_button_description"
         app:backgroundTint="@color/white"
         app:layout_constraintBottom_toBottomOf="parent"

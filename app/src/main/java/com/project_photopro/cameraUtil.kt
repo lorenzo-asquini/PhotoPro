@@ -109,6 +109,7 @@ fun getSaveImageContentValues() : ContentValues {
     }
 }
 
+//Nothing happens if called on a camera without a flash
 fun setTorchState(activity: MainActivity, preferences: SharedPreferences, forceTorch : Boolean = false){
     //If the torch is forced on, the imageCapture is not needed
     //Otherwise, the torch is turned off and controlled by the preferences
