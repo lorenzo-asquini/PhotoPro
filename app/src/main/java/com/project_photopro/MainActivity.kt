@@ -233,7 +233,7 @@ class MainActivity : AppCompatActivity(), SmartDelayListener{
     override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<String>, grantResults: IntArray) {
 
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
-        Log.e("aa", "aaa")
+        
         if (requestCode == Constant.REQUEST_CODE_PERMISSIONS) {
             if (cameraPermissionGranted(this)) {
                 startCameraWrapper()
