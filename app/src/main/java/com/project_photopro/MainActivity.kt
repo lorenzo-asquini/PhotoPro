@@ -180,6 +180,10 @@ class MainActivity : AppCompatActivity(), SmartDelayListener{
 
     private fun takePhoto() {
 
+        // Get a stable reference of the modifiable image capture use case
+        // If the camera did not start successfully, imageCapture is still null
+        val imageCapture = imageCapture ?: return
+
         //Change color of the button while taking a picture (also while using frame average)
         val imageCaptureButton : Button = findViewById(R.id.image_capture_button)
         imageCaptureButton.backgroundTintList = ColorStateList.valueOf(getColor(R.color.lightBlue))
@@ -195,10 +199,6 @@ class MainActivity : AppCompatActivity(), SmartDelayListener{
             }
             return
         }
-
-        // Get a stable reference of the modifiable image capture use case
-        // If the camera did not start successfully, imageCapture is still null
-        val imageCapture = imageCapture ?: return
 
         val contentValues = getSaveImageContentValues()
 
@@ -283,14 +283,7 @@ class MainActivity : AppCompatActivity(), SmartDelayListener{
         super.onResume()
 
         //Necessary to set again always on flash when resuming activity
-        when(preferences.getInt(SharedPrefs.FLASH_KEY, Constant.FLASH_OFF)){
-            Constant.FLASH_ALWAYS_ON -> {
-                camera?.cameraControl?.enableTorch(true)
-            }
-            else -> {
-                imageCapture?.flashMode = ImageCapture.FLASH_MODE_OFF
-            }
-        }
+        setTorchState(this, preferences)
 
         //Keep zoom value if it was saved
         val zoomValue= intent.getFloatExtra(Constant.ZOOM_VALUE_KEY, 1.0F)
