@@ -1,7 +1,7 @@
 # PhotoPro
 
 - App available on the Google Play Store: [PhotoPro](https://play.google.com/store/apps/details?id=com.project_photopro).
-- The app was developed with the goal of utilizing the features provided by [CameraX]([https://developer.android.com/jetpack/androidx/releases/camera](https://developer.android.com/training/camerax)) and [Camera2](https://developer.android.com/training/camera2) on Android.
+- The app was developed with the goal of utilizing the features provided by [CameraX](https://developer.android.com/training/camerax) and [Camera2](https://developer.android.com/training/camera2) on Android.
 
 ## Features
 
