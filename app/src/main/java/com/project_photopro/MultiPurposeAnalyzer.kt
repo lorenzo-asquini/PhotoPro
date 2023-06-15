@@ -31,6 +31,7 @@ import com.google.mlkit.vision.pose.PoseDetection
 import com.google.mlkit.vision.pose.PoseDetector
 import com.google.mlkit.vision.pose.accurate.AccuratePoseDetectorOptions
 import com.google.mlkit.vision.common.InputImage
+import java.lang.NullPointerException
 import java.util.Calendar
 
 class MultiPurposeAnalyzer(private val activity: MainActivity, private val rotation: Int) : ImageAnalysis.Analyzer{
@@ -72,6 +73,13 @@ class MultiPurposeAnalyzer(private val activity: MainActivity, private val rotat
 
     init {
         OpenCVLoader.initDebug()
+
+        //Reset the value if it was not the auto night mode function who re-created the camera
+        if(!cameraRecreatedByAutoNightMode){
+            forceNightMode = false
+        }
+
+        cameraRecreatedByAutoNightMode = false
     }
 
     @ExperimentalGetImage
@@ -142,27 +150,35 @@ class MultiPurposeAnalyzer(private val activity: MainActivity, private val rotat
 
         //Check after one second if the brightness level has changed
         isNightModeTimerRunning = true
+
         object : CountDownTimer(1000, 1000) {
             override fun onTick(millisUntilFinished: Long) {}
 
             override fun onFinish() {
+
+                //The timer may be still running even if the mode has changed
+                if(preferences.getInt(SharedPrefs.NIGHT_MODE_KEY, Constant.NIGHT_MODE_OFF) != Constant.NIGHT_MODE_AUTO){
+                    return
+                }
+
                 val brightness = getAverageBrightness()
+                val nighModeButton: ImageButton = activity.findViewById(R.id.night_mode_button)
 
                 //It is still dark. Do not create a new camera if it is not necessary
                 if(isDark && brightness < 80 && !forceNightMode) {
-                    val nighModeButton: ImageButton = activity.findViewById(R.id.night_mode_button)
                     nighModeButton.setColorFilter(activity.getColor(R.color.night_mode_is_on_color))
                     forceNightMode = true
                     activity.startCameraWrapper(forceNightMode = true)
+                    cameraRecreatedByAutoNightMode = true
                 }
 
                 //It is still bright. Do not create a new camera if it is not necessary
                 else if (!isDark && brightness >= 80 && forceNightMode)
                 {
-                    val nighModeButton: ImageButton = activity.findViewById(R.id.night_mode_button)
                     nighModeButton.setColorFilter(activity.getColor(R.color.white))
                     forceNightMode = false
                     activity.startCameraWrapper(forceNightMode = false)
+                    cameraRecreatedByAutoNightMode = true
                 }
 
                 isNightModeTimerRunning = false
@@ -348,7 +364,12 @@ class MultiPurposeAnalyzer(private val activity: MainActivity, private val rotat
     }
 
     companion object{
-        //Necessary to have this value be persistent also when starting Camera (and creating new Analyzer)
+        //It is necessary to know, when the camera is re-created by the auto night mode, the previous state of night mode set
+        //This is useful to avoid creating continuously new camera
         private var forceNightMode = false
+
+        //The variable forceNightMode needs to be persistent only when the camera is created again by the auto night mode
+        //Otherwise its value should return to false. This variable is used to determine if the auto night mode recreated the camera
+        private var cameraRecreatedByAutoNightMode = false
     }
 }
