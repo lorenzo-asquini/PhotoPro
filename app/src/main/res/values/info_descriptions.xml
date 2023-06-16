@@ -3,17 +3,17 @@
     <!--Info layout-->
     <string name="info_to_settings_back_arrow_button_description">Button to go from Info Activity to Options Activity</string>
     <string name="flash_text">Flash</string>
-    <string name="flash_description_text"> Decide the way the camera flash behaves. \n ON: taking pictures with the flash \n OFF: disable the flash \n AUTOMATIC: the app decides when to activate the flash \n ALWAYS ON: constant illumination.</string>
+    <string name="flash_description_text">The camera flash can be ON, OFF, AUTOMATIC or ALWAYS ON, depending on your needs of light.</string>
     <string name="image_averaging_text">Image Averaging</string>
-    <string name="image_averaging_description_text"> Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</string>
+    <string name="image_averaging_description_text">Take a picture averaging multiple consecutive frames.\nThe number of frames to average in a single picture can be set in the settings.\nThe final resolution may be lower than the maximum supported by the camera sensor.</string>
     <string name="smart_delay_text">Smart Delay</string>
-    <string name="smart_delay_description_text">Turn on smart delay to take a photo when a person is detected from camera.\n Turn on notification sound to be aware when a person is spotted.\n Hint: is useful when you want to take a photo of yourself but you are alone.</string>
+    <string name="smart_delay_description_text">Start a timer to take a photo when a person is detected.\nThe notification sound, that can be turned on or off in the settings, notifies when a person is detected.\nHint: it is useful when you want to take a photo of yourself but you are alone.</string>
     <string name="night_mode_text">Night Mode</string>
-    <string name="night_mode_description_text"> Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</string>
+    <string name="night_mode_description_text">Take better picture in low light condition. It can be ON, OFF or AUTOMATIC, which activates the mode automatically in low light conditions.</string>
     <!--<string name="hdr_text">HDR</string>-->
-    <string name="HDR_description_text"> Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</string>
+    <string name="HDR_description_text">Enhance the visual quality of your images by expanding the range of brightness and color.</string>
     <!--<string name="bokeh_text">Bokeh</string>-->
-    <string name="bokeh_description_text"> Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</string>
+    <string name="bokeh_description_text">Highlight the subject by making the background blurred.</string>
     <!--<string name="face_retouch_text">Face Retouch</string>-->
-    <string name="face_retouch_description_text"> Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</string>
+    <string name="face_retouch_description_text">Enhances facial appearance by applying smoothing, skin tone correction, and blemish removal during image capture..</string>
 </resources>
