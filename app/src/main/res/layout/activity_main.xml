@@ -199,7 +199,6 @@
                 android:orientation="vertical">
 
                 <TextView
-                    android:id="@+id/iso_title_textView"
                     android:text="@string/iso"
                     android:textSize="@dimen/pro_mode_font_size"
                     android:paddingStart="@dimen/pro_titles_left_padding"
@@ -245,7 +244,9 @@
                         android:layout_gravity="center"
                         android:padding="@dimen/slider_value_padding"
 
-                        android:text="2000"
+                        android:text="3200"
+                        tools:ignore="HardcodedText"
+
                         android:textColor="@color/white"
                         android:textSize="@dimen/pro_mode_font_size"/>
                 </LinearLayout>
@@ -258,7 +259,6 @@
                 android:layout_height="match_parent"
                 android:orientation="vertical">
                 <TextView
-                    android:id="@+id/shutter_speed_title_textView"
                     android:text="@string/shutter_speed"
                     android:textSize="@dimen/pro_mode_font_size"
                     android:paddingStart="@dimen/pro_titles_left_padding"
@@ -305,7 +305,9 @@
                         android:layout_gravity="center"
                         android:padding="@dimen/slider_value_padding"
 
-                        android:text="8"
+                        android:text="500ms"
+                        tools:ignore="HardcodedText"
+
                         android:textColor="@color/white"
                         android:textSize="@dimen/pro_mode_font_size"/>
                 </LinearLayout>
@@ -316,7 +318,6 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
             <TextView
-                android:id="@+id/hide_pro_mode_textview"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"

@@ -11,6 +11,5 @@
     <item name="top_change_camera_button_guideline_percent" type="dimen" format="float">0.80</item>
     <item name="bottom_change_camera_button_guideline_percent" type="dimen" format="float">0.85</item>
 
-    <item name="top_buttons_guideline_percent" type="dimen" format="float">0.90</item>
     <item name="bottom_buttons_guideline_percent" type="dimen" format="float">0.99</item>
 </resources>

@@ -50,7 +50,6 @@
                 app:layout_constraintTop_toTopOf="parent" />
 
             <TextView
-                android:id="@+id/setting_title_textView"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
 
@@ -93,7 +92,6 @@
 
                 <!--Section title: Extensions-->
                 <TextView
-                    android:id="@+id/extensions_title_textView"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
 
@@ -107,7 +105,6 @@
                     android:textStyle="bold" />
 
                 <Space
-                    android:id="@+id/options_menu_space_1"
                     android:layout_width="match_parent"
                     android:layout_height="@dimen/spaces" />
 
@@ -121,7 +118,6 @@
 
                     <!--First row-->
                     <TextView
-                        android:id="@+id/front_camera_textView"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
 
@@ -137,7 +133,6 @@
                         android:textSize="@dimen/small_text_font_size" />
 
                     <TextView
-                        android:id="@+id/back_camera_textView"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
 
@@ -310,7 +305,6 @@
                 </GridLayout>
 
                 <Space
-                    android:id="@+id/options_menu_space_2"
                     android:layout_width="match_parent"
                     android:layout_height="@dimen/spaces" />
 
@@ -324,13 +318,11 @@
 
             <!--LinearLayout containing the extension handling-->
             <LinearLayout
-                android:id="@+id/options_menu"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical">
 
                 <TextView
-                    android:id="@+id/options_title_textView"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
 
@@ -344,7 +336,6 @@
                     android:textStyle="bold" />
 
                 <Space
-                    android:id="@+id/options_menu_space_3"
                     android:layout_width="match_parent"
                     android:layout_height="@dimen/spaces" />
 
@@ -371,7 +362,6 @@
                         android:src="@drawable/smart_delay_seconds" />
 
                     <TextView
-                        android:id="@+id/smart_delay_seconds_textView"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
 
@@ -422,7 +412,6 @@
                         android:src="@drawable/number_of_frame" />
 
                     <TextView
-                        android:id="@+id/frame_avg_frame_number_textView"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
 
@@ -474,7 +463,6 @@
                         android:src="@drawable/notification_sound" />
 
                     <TextView
-                        android:id="@+id/smart_delay_notification_sound_textView"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
 
@@ -510,7 +498,6 @@
     </ScrollView>
 
     <LinearLayout
-        android:id="@+id/info_line"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
 
@@ -521,10 +508,9 @@
         android:paddingTop="@dimen/top_bottom_padding"
         android:paddingBottom="@dimen/top_bottom_padding">
         <TextView
-            android:id="@+id/info_textView"
             android:textColor="@color/white"
             android:textSize="@dimen/titles_font_size"
-            android:text="Info"
+            android:text="@string/info_text"
 
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -540,7 +526,9 @@
             android:background="@null"
             android:layout_gravity="center"
             android:src="@drawable/info"
-            android:scaleType="fitCenter"/>
+            android:scaleType="fitCenter"
+
+            android:contentDescription="@string/info_icon_description"/>
     </LinearLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

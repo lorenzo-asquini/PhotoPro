@@ -25,6 +25,7 @@ import android.widget.ImageView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.camera.core.FocusMeteringAction
 import androidx.camera.core.ImageCapture
+import androidx.camera.core.TorchState
 import androidx.camera.view.PreviewView
 import androidx.core.content.ContextCompat
 import java.text.SimpleDateFormat
@@ -114,10 +115,14 @@ fun setTorchState(activity: MainActivity, preferences: SharedPreferences, forceT
     //If the torch is forced on, the imageCapture is not needed
     //Otherwise, the torch is turned off and controlled by the preferences
     if(forceTorch){
-        activity.camera?.cameraControl?.enableTorch(true)
+        if(activity.camera?.cameraInfo?.torchState?.value == TorchState.OFF) {
+            activity.camera?.cameraControl?.enableTorch(true)
+        }
         return
     }else{
-        activity.camera?.cameraControl?.enableTorch(false)
+        if(activity.camera?.cameraInfo?.torchState?.value == TorchState.ON) {
+            activity.camera?.cameraControl?.enableTorch(false)
+        }
     }
 
     //No need to create new imageCapture. Change the flash mode in imageCapture

@@ -6,20 +6,12 @@
     <dimen name="image_capture_button_toolbar_margin">10dp</dimen>
 
     <dimen name="smart_delay_timer_size">50dp</dimen>
-    <dimen name="smart_delay_timer_font_size">25dp</dimen>
+    <dimen name="smart_delay_timer_font_size">25sp</dimen>
     <dimen name="smart_delay_timer_margin_top">20dp</dimen>
 
     <dimen name="focus_circle_size">50dp</dimen>
 
-    <dimen name="option_title_font_size">40sp</dimen>
-    <dimen name="option_font_size">30sp</dimen>
-
-    <dimen name="option_textView_bottom_top_padding">5dp</dimen>
-    <dimen name="option_textView_left_padding">5dp</dimen>
-
     <dimen name="option_toolbar_height">45dp</dimen>
-
-    <dimen name="option_space_height">15dp</dimen>
 
     <!--SETTINGS DIMENSIONS-->
     <dimen name="back_padding">10dp</dimen>
@@ -43,12 +35,12 @@
     <!--PRO MODE-->
     <dimen name="pro_mode_font_size">14sp</dimen>
     <dimen name="pro_mode_padding">10dp</dimen>
-    <dimen name="pro_mode_elements_padding">2dp</dimen>
     <dimen  name="slider_percentage">6</dimen>
     <dimen  name="slider_value_percentage">1.5</dimen>
     <dimen  name="slider_value_padding">5dp</dimen>
 
-    <dimen name="mtrl_slider_widget_height">30dp</dimen>
+    <dimen name="mtrl_slider_widget_height" xmlns:tools="http://schemas.android.com/tools"
+        tools:override="true">30dp</dimen>
     <dimen name="pro_titles_left_padding">10dp</dimen>
 
 </resources>
