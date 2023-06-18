@@ -5,7 +5,6 @@ import android.content.SharedPreferences
 import android.hardware.camera2.CameraCharacteristics
 import android.hardware.camera2.CameraManager
 import android.hardware.camera2.CaptureRequest
-import android.util.Log
 import android.util.Range
 import android.view.View.GONE
 import android.view.View.VISIBLE

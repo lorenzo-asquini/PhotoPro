@@ -174,7 +174,6 @@
         app:layout_constraintGuide_percent="@dimen/top_change_camera_button_guideline_percent" />
 
     <androidx.constraintlayout.widget.Guideline
-        android:id="@+id/top_pro_mode_options_guideline"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="vertical"
@@ -207,7 +206,6 @@
                 android:orientation="vertical">
 
                 <TextView
-                    android:id="@+id/iso_title_textView"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:paddingStart="@dimen/pro_titles_left_padding"
@@ -254,7 +252,9 @@
                         android:layout_gravity="center"
                         android:layout_weight="@dimen/slider_value_percentage"
                         android:padding="@dimen/slider_value_padding"
-                        android:text="2000"
+
+                        android:text="3200"
+                        tools:ignore="HardcodedText"
 
                         android:textAlignment="center"
                         android:textColor="@color/white"
@@ -270,7 +270,6 @@
                 android:orientation="vertical">
 
                 <TextView
-                    android:id="@+id/shutter_speed_title_textView"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:paddingStart="@dimen/pro_titles_left_padding"
@@ -318,7 +317,9 @@
                         android:layout_gravity="center"
                         android:layout_weight="@dimen/slider_value_percentage"
                         android:padding="@dimen/slider_value_padding"
-                        android:text="8"
+
+                        android:text="500ms"
+                        tools:ignore="HardcodedText"
 
                         android:textAlignment="center"
                         android:textColor="@color/white"
@@ -332,7 +333,6 @@
             android:layout_height="wrap_content">
 
             <TextView
-                android:id="@+id/hide_pro_mode_textview"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"

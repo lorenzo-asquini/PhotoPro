@@ -14,12 +14,15 @@ import android.view.Surface
 import android.view.View
 import android.widget.Button
 import android.widget.ImageButton
-import android.widget.RelativeLayout
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.camera.core.ExperimentalGetImage
 import androidx.camera.core.ImageAnalysis
 import androidx.camera.core.ImageProxy
+import com.google.mlkit.vision.common.InputImage
+import com.google.mlkit.vision.pose.PoseDetection
+import com.google.mlkit.vision.pose.PoseDetector
+import com.google.mlkit.vision.pose.accurate.AccuratePoseDetectorOptions
 import org.opencv.android.OpenCVLoader
 import org.opencv.android.Utils.bitmapToMat
 import org.opencv.android.Utils.matToBitmap
@@ -27,11 +30,6 @@ import org.opencv.core.Core.addWeighted
 import org.opencv.core.Mat
 import org.opencv.core.Size
 import java.io.OutputStream
-import com.google.mlkit.vision.pose.PoseDetection
-import com.google.mlkit.vision.pose.PoseDetector
-import com.google.mlkit.vision.pose.accurate.AccuratePoseDetectorOptions
-import com.google.mlkit.vision.common.InputImage
-import java.lang.NullPointerException
 import java.util.Calendar
 
 class MultiPurposeAnalyzer(private val activity: MainActivity, private val rotation: Int) : ImageAnalysis.Analyzer{

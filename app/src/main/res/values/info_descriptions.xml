@@ -3,7 +3,7 @@
     <!--Info layout-->
     <string name="info_to_settings_back_arrow_button_description">Button to go from Info Activity to Options Activity</string>
     <string name="flash_text">Flash</string>
-    <string name="flash_description_text">The camera flash can be ON, OFF, AUTOMATIC or ALWAYS ON, depending on your needs of light.</string>
+    <string name="flash_description_text">The camera flash can be ON, OFF, AUTOMATIC or TORCH ON, depending on your needs.</string>
     <string name="image_averaging_text">Image Averaging</string>
     <string name="image_averaging_description_text">Take a picture averaging multiple consecutive frames.\nThe number of frames to average in a single picture can be set in the settings.\nThe final resolution may be lower than the maximum supported by the camera sensor.</string>
     <string name="smart_delay_text">Smart Delay</string>
@@ -15,5 +15,5 @@
     <!--<string name="bokeh_text">Bokeh</string>-->
     <string name="bokeh_description_text">Highlight the subject by making the background blurred.</string>
     <!--<string name="face_retouch_text">Face Retouch</string>-->
-    <string name="face_retouch_description_text">Enhances facial appearance by applying smoothing, skin tone correction, and blemish removal during image capture..</string>
+    <string name="face_retouch_description_text">Enhances facial appearance by applying smoothing, skin tone correction, and blemish removal during image capture.</string>
 </resources>

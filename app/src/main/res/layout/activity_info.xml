@@ -49,7 +49,6 @@
                 app:layout_constraintTop_toTopOf="parent" />
 
             <TextView
-                android:id="@+id/info_title_textView"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
 
@@ -97,7 +96,6 @@
                     android:layout_height="wrap_content"
                     android:orientation="horizontal">
                     <ImageView
-                        android:id="@+id/flash_logo"
 
                         android:layout_width="@dimen/grid_icon_dimensions"
                         android:layout_height="@dimen/grid_icon_dimensions"
@@ -106,10 +104,11 @@
                         android:layout_gravity="center"
                         android:background="@null"
                         android:padding="@dimen/grid_icon_padding"
-                        android:src="@drawable/flash_on" />
+                        android:src="@drawable/flash_on"
+
+                        android:contentDescription="@string/flash_button_description"/>
 
                     <TextView
-                        android:id="@+id/flash_title_textView"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
 
@@ -124,7 +123,6 @@
                         android:layout_gravity="center"/>
                 </LinearLayout>
                 <TextView
-                    android:id="@+id/flash_description_text_view"
 
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -140,7 +138,6 @@
 
             <!--Section: Image Averaging-->
             <LinearLayout
-                android:id="@+id/image_avg_information"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical">
@@ -150,7 +147,6 @@
                     android:layout_height="wrap_content"
                     android:orientation="horizontal">
                     <ImageView
-                        android:id="@+id/image_average_logo"
 
                         android:layout_width="@dimen/grid_icon_dimensions"
                         android:layout_height="@dimen/grid_icon_dimensions"
@@ -159,10 +155,11 @@
                         android:layout_gravity="center"
                         android:background="@null"
                         android:padding="@dimen/grid_icon_padding"
-                        android:src="@drawable/frame_avg_on" />
+                        android:src="@drawable/frame_avg_on"
+
+                        android:contentDescription="@string/frame_avg_button_description"/>
 
                     <TextView
-                        android:id="@+id/image_averaging_title_textView"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
 
@@ -177,7 +174,6 @@
                         android:layout_gravity="center"/>
                 </LinearLayout>
                 <TextView
-                    android:id="@+id/image_averaging_description_text_view"
 
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -193,7 +189,6 @@
 
             <!--Section: Smart Delay-->
             <LinearLayout
-                android:id="@+id/smart_delay_information"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical">
@@ -203,7 +198,6 @@
                     android:layout_height="wrap_content"
                     android:orientation="horizontal">
                     <ImageView
-                        android:id="@+id/smart_delay_logo"
 
                         android:layout_width="@dimen/grid_icon_dimensions"
                         android:layout_height="@dimen/grid_icon_dimensions"
@@ -212,10 +206,11 @@
                         android:layout_gravity="center"
                         android:background="@null"
                         android:padding="@dimen/grid_icon_padding"
-                        android:src="@drawable/smart_delay_on" />
+                        android:src="@drawable/smart_delay_on"
+
+                        android:contentDescription="@string/smart_delay_button_description"/>
 
                     <TextView
-                        android:id="@+id/smart_delay_title_textView"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
 
@@ -230,7 +225,6 @@
                         android:layout_gravity="center"/>
                 </LinearLayout>
                 <TextView
-                    android:id="@+id/smart_delay_description_text_view"
 
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -255,7 +249,6 @@
                     android:layout_height="wrap_content"
                     android:orientation="horizontal">
                     <ImageView
-                        android:id="@+id/night_mode_logo"
 
                         android:layout_width="@dimen/grid_icon_dimensions"
                         android:layout_height="@dimen/grid_icon_dimensions"
@@ -264,10 +257,11 @@
                         android:layout_gravity="center"
                         android:background="@null"
                         android:padding="@dimen/grid_icon_padding"
-                        android:src="@drawable/night_mode_on" />
+                        android:src="@drawable/night_mode_on"
+
+                        android:contentDescription="@string/night_mode_button_description"/>
 
                     <TextView
-                        android:id="@+id/night_mode_title_textView"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
 
@@ -282,7 +276,6 @@
                         android:layout_gravity="center"/>
                 </LinearLayout>
                 <TextView
-                    android:id="@+id/night_mode_description_text_view"
 
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -316,10 +309,11 @@
                         android:layout_gravity="center"
                         android:background="@null"
                         android:padding="@dimen/grid_icon_padding"
-                        android:src="@drawable/hdr" />
+                        android:src="@drawable/hdr"
+
+                        android:contentDescription="@string/HDR_description"/>
 
                     <TextView
-                        android:id="@+id/HDR_title_textView"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
 
@@ -334,7 +328,6 @@
                         android:layout_gravity="center"/>
                 </LinearLayout>
                 <TextView
-                    android:id="@+id/HDR_description_text_view"
 
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -368,10 +361,11 @@
                         android:layout_gravity="center"
                         android:background="@null"
                         android:padding="@dimen/grid_icon_padding"
-                        android:src="@drawable/bokeh" />
+                        android:src="@drawable/bokeh"
+
+                        android:contentDescription="@string/bokeh_description"/>
 
                     <TextView
-                        android:id="@+id/bokeh_title_textView"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
 
@@ -386,7 +380,6 @@
                         android:layout_gravity="center"/>
                 </LinearLayout>
                 <TextView
-                    android:id="@+id/bokeh_description_text_view"
 
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -420,10 +413,11 @@
                         android:layout_gravity="center"
                         android:background="@null"
                         android:padding="@dimen/grid_icon_padding"
-                        android:src="@drawable/face_retouch" />
+                        android:src="@drawable/face_retouch"
+
+                        android:contentDescription="@string/face_retouch_description"/>
 
                     <TextView
-                        android:id="@+id/face_retouch_title_textView"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
 
@@ -438,7 +432,6 @@
                         android:layout_gravity="center"/>
                 </LinearLayout>
                 <TextView
-                    android:id="@+id/face_retouch_description_text_view"
 
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
