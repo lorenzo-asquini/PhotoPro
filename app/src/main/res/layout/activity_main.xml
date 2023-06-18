@@ -199,6 +199,7 @@
                 android:orientation="vertical">
 
                 <TextView
+                    android:id="@+id/iso_title_textView"
                     android:text="@string/iso"
                     android:textSize="@dimen/pro_mode_font_size"
                     android:paddingStart="@dimen/pro_titles_left_padding"
@@ -244,9 +245,7 @@
                         android:layout_gravity="center"
                         android:padding="@dimen/slider_value_padding"
 
-                        android:text="3200"
-                        tools:ignore="HardcodedText"
-
+                        android:text="2000"
                         android:textColor="@color/white"
                         android:textSize="@dimen/pro_mode_font_size"/>
                 </LinearLayout>
@@ -259,6 +258,7 @@
                 android:layout_height="match_parent"
                 android:orientation="vertical">
                 <TextView
+                    android:id="@+id/shutter_speed_title_textView"
                     android:text="@string/shutter_speed"
                     android:textSize="@dimen/pro_mode_font_size"
                     android:paddingStart="@dimen/pro_titles_left_padding"
@@ -305,9 +305,7 @@
                         android:layout_gravity="center"
                         android:padding="@dimen/slider_value_padding"
 
-                        android:text="500ms"
-                        tools:ignore="HardcodedText"
-
+                        android:text="8"
                         android:textColor="@color/white"
                         android:textSize="@dimen/pro_mode_font_size"/>
                 </LinearLayout>
@@ -316,13 +314,14 @@
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:gravity="center">
             <TextView
-                android:layout_width="0dp"
+                android:id="@+id/hide_pro_mode_textview"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:textAlignment="center"
-                android:layout_gravity="center"
+
+                android:padding="@dimen/hide_section_padding"
 
                 android:text="@string/hide_pro_mode_text"
                 android:textColor="@color/white"
@@ -330,12 +329,10 @@
 
             <com.google.android.material.switchmaterial.SwitchMaterial
                 android:id="@+id/hide_pro_mode_switch"
-                android:layout_width="0dp"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:layout_gravity="start"
                 android:backgroundTint="@color/lightBlue"
-                android:padding="5dp"/>
+                android:padding="@dimen/hide_section_padding"/>
         </LinearLayout>
 
     </LinearLayout>
