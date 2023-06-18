@@ -43,4 +43,6 @@
         tools:override="true">30dp</dimen>
     <dimen name="pro_titles_left_padding">10dp</dimen>
 
+    <dimen name="hide_section_padding">10dp</dimen>
+
 </resources>
