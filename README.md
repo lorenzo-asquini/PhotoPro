@@ -20,11 +20,12 @@
   - The app uses the library OpenCV to perform the frame average.
   - Because not all devices have access to the device extensions, it was not possible to deeply test the extension integration. The app was tested on:
     - Xiaomi Mi 10 Lite 5G (no extensions available)
-    - Tablet?
+    - Huawei P30 Lite 2020 (no extensions available)
+    - Samsung Galaxy Tab S8+
 
 ## Authors
 
 The project was realized by: 
   - [Lorenzo Asquini](https://github.com/LorenzoAsquini)
-  - [Michela Schibuola](https://github.com/Fabrifio)
-  - [Fabrizio Genilotti](https://github.com/michela-schibuola)
+  - [Michela Schibuola](https://github.com/michela-schibuola)
+  - [Fabrizio Genilotti](https://github.com/Fabrifio)

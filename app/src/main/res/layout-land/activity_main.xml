@@ -330,13 +330,13 @@
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:gravity="center">
 
             <TextView
-                android:layout_width="0dp"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:layout_weight="1"
+                android:padding="@dimen/hide_section_padding"
                 android:text="@string/hide_pro_mode_text"
 
                 android:textAlignment="center"
@@ -345,12 +345,10 @@
 
             <com.google.android.material.switchmaterial.SwitchMaterial
                 android:id="@+id/hide_pro_mode_switch"
-                android:layout_width="0dp"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_gravity="start"
-                android:layout_weight="1"
                 android:backgroundTint="@color/lightBlue"
-                android:padding="5dp" />
+                android:padding="@dimen/hide_section_padding"/>
         </LinearLayout>
 
     </LinearLayout>
