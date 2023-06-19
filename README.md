@@ -12,6 +12,7 @@
   - Night Mode: It is possible to activate or deactivate the night mode, or to set the night mode to automatic. This possibility will make the camera automatically switch to night mode in low-light conditions.
   - HDR, Bokeh, Face Retouch: Inside the settings menu, it is possible to decide whether to use an extension when taking a photo. If night mode is active, any other extension is not used.
   - Pro Mode: It is possible to take photos by setting the desired ISO and shutter speed. The maximum shutter speed allowed is 500 ms (1/2).
+  - Tap to Focus and Pinch to Zoom
 
 ## Notes
 
