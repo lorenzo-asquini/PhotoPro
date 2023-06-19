@@ -126,7 +126,7 @@
 
                         android:layout_columnWeight="@dimen/grid_toggle_button_percentage"
                         android:layout_gravity="center"
-                        android:text="@string/front_camera_text"
+                        android:text="@string/back_camera_text"
 
                         android:textAlignment="center"
                         android:textColor="@color/white"
@@ -141,7 +141,7 @@
 
                         android:layout_columnWeight="@dimen/grid_toggle_button_percentage"
                         android:layout_gravity="center"
-                        android:text="@string/back_camera_text"
+                        android:text="@string/front_camera_text"
 
                         android:textAlignment="center"
                         android:textColor="@color/white"

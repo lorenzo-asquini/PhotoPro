@@ -148,7 +148,9 @@ fun setTorchState(activity: MainActivity, preferences: SharedPreferences, forceT
 
         Constant.FLASH_ALWAYS_ON -> {
             activity.imageCapture?.flashMode = ImageCapture.FLASH_MODE_OFF
-            activity.camera?.cameraControl?.enableTorch(true)
+            if(activity.camera?.cameraInfo?.torchState?.value == TorchState.OFF) {
+                activity.camera?.cameraControl?.enableTorch(true)
+            }
         }
 
         else -> {
