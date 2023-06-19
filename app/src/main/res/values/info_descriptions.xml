@@ -10,10 +10,7 @@
     <string name="smart_delay_description_text">Start a timer to take a photo when a person is detected.\nThe notification sound, that can be turned on or off in the settings, notifies when a person is detected.\nHint: it is useful when you want to take a photo of yourself but you are alone.</string>
     <string name="night_mode_text">Night Mode</string>
     <string name="night_mode_description_text">Take better picture in low light condition. It can be ON, OFF or AUTOMATIC, which activates the mode automatically in low light conditions.</string>
-    <!--<string name="hdr_text">HDR</string>-->
     <string name="HDR_description_text">Enhance the visual quality of your images by expanding the range of brightness and color.</string>
-    <!--<string name="bokeh_text">Bokeh</string>-->
     <string name="bokeh_description_text">Highlight the subject by making the background blurred.</string>
-    <!--<string name="face_retouch_text">Face Retouch</string>-->
     <string name="face_retouch_description_text">Enhances facial appearance by applying smoothing, skin tone correction, and blemish removal during image capture.</string>
 </resources>
