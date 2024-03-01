@@ -27,6 +27,6 @@
 ## Authors
 
 The project was realized by: 
-  - [Lorenzo Asquini](https://github.com/LorenzoAsquini)
+  - [Lorenzo Asquini](https://github.com/lorenzo-asquini)
   - [Michela Schibuola](https://github.com/michela-schibuola)
   - [Fabrizio Genilotti](https://github.com/Fabrifio)
