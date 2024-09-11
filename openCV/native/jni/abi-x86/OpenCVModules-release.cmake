@@ -18,7 +18,7 @@ list(APPEND _IMPORT_CHECK_FILES_FOR_libcpufeatures "${_IMPORT_PREFIX}/sdk/native
 # Import target "libjpeg-turbo" for configuration "Release"
 set_property(TARGET libjpeg-turbo APPEND PROPERTY IMPORTED_CONFIGURATIONS RELEASE)
 set_target_properties(libjpeg-turbo PROPERTIES
-  IMPORTED_LINK_INTERFACE_LANGUAGES_RELEASE "C"
+  IMPORTED_LINK_INTERFACE_LANGUAGES_RELEASE "ASM_NASM;C"
   IMPORTED_LOCATION_RELEASE "${_IMPORT_PREFIX}/sdk/native/3rdparty/libs/x86/liblibjpeg-turbo.a"
   )
 
@@ -104,16 +104,6 @@ set_target_properties(libprotobuf PROPERTIES
 
 list(APPEND _IMPORT_CHECK_TARGETS libprotobuf )
 list(APPEND _IMPORT_CHECK_FILES_FOR_libprotobuf "${_IMPORT_PREFIX}/sdk/native/3rdparty/libs/x86/liblibprotobuf.a" )
-
-# Import target "quirc" for configuration "Release"
-set_property(TARGET quirc APPEND PROPERTY IMPORTED_CONFIGURATIONS RELEASE)
-set_target_properties(quirc PROPERTIES
-  IMPORTED_LINK_INTERFACE_LANGUAGES_RELEASE "C"
-  IMPORTED_LOCATION_RELEASE "${_IMPORT_PREFIX}/sdk/native/3rdparty/libs/x86/libquirc.a"
-  )
-
-list(APPEND _IMPORT_CHECK_TARGETS quirc )
-list(APPEND _IMPORT_CHECK_FILES_FOR_quirc "${_IMPORT_PREFIX}/sdk/native/3rdparty/libs/x86/libquirc.a" )
 
 # Import target "ittnotify" for configuration "Release"
 set_property(TARGET ittnotify APPEND PROPERTY IMPORTED_CONFIGURATIONS RELEASE)

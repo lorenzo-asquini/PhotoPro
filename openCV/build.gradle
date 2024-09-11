@@ -58,7 +58,7 @@
 //
 // - Use find_package() in app/CMakeLists.txt:
 //
-//   find_package(OpenCV 4.6 REQUIRED java)
+//   find_package(OpenCV 4.10 REQUIRED java)
 //   ...
 //   target_link_libraries(native-lib ${OpenCV_LIBRARIES})
 //
@@ -89,19 +89,21 @@
 //
 
 apply plugin: 'com.android.library'
+apply plugin: 'maven-publish'
 apply plugin: 'kotlin-android'
 
-def openCVersionName = "4.6.0"
-def openCVersionCode = ((4 * 100 + 6) * 100 + 0) * 10 + 0
+def openCVersionName = "4.10.0"
+def openCVersionCode = ((4 * 100 + 10) * 100 + 0) * 10 + 0
 
 println "OpenCV: " +openCVersionName + " " + project.buildscript.sourceFile
 
 android {
-    compileSdkVersion 26
+    namespace 'org.opencv'
+    compileSdk 35
 
     defaultConfig {
-        minSdkVersion 21
-        targetSdkVersion 26
+        minSdkVersion 23
+        targetSdkVersion 35
 
         versionCode openCVersionCode
         versionName openCVersionName
@@ -112,6 +114,11 @@ android {
                 targets "opencv_jni_shared"
             }
         }
+    }
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_17
+        targetCompatibility JavaVersion.VERSION_17
     }
 
     buildTypes {
@@ -129,19 +136,55 @@ android {
         }
     }
 
+    buildFeatures {
+        prefabPublishing true
+        buildConfig true
+    }
+    prefab {
+        opencv_jni_shared {
+            headers "native/jni/include"
+        }
+    }
+
     sourceSets {
         main {
             jniLibs.srcDirs = ['native/libs']
             java.srcDirs = ['java/src']
-            aidl.srcDirs = ['java/src']
             res.srcDirs = ['java/res']
             manifest.srcFile 'java/AndroidManifest.xml'
+        }
+    }
+
+    publishing {
+        singleVariant('release') {
+            withSourcesJar()
+            withJavadocJar()
         }
     }
 
     externalNativeBuild {
         cmake {
             path (project.projectDir.toString() + '/libcxx_helper/CMakeLists.txt')
+        }
+    }
+}
+
+publishing {
+    publications {
+        release(MavenPublication) {
+            groupId = 'org.opencv'
+            artifactId = 'opencv'
+            version = '4.10.0'
+
+            afterEvaluate {
+               from components.release
+           }
+        }
+    }
+    repositories {
+        maven {
+            name = 'myrepo'
+            url = "${project.buildDir}/repo"
         }
     }
 }

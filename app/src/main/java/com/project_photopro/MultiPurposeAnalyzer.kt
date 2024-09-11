@@ -232,7 +232,7 @@ class MultiPurposeAnalyzer(private val activity: MainActivity, private val rotat
         //If enough frames are averaged
         if(framesAveraged >= framesToAverage){
             //Create bitmap for result from Mat
-            val resultBitmap = imageBitmap!!.copy(imageBitmap!!.config, true)
+            val resultBitmap = imageBitmap!!.copy(imageBitmap!!.config!!, true)
             matToBitmap(frameAvgResult, resultBitmap)
 
             //Reverse portrait is not supported by the app

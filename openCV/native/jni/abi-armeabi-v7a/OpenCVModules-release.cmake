@@ -95,16 +95,6 @@ set_target_properties(libprotobuf PROPERTIES
 list(APPEND _IMPORT_CHECK_TARGETS libprotobuf )
 list(APPEND _IMPORT_CHECK_FILES_FOR_libprotobuf "${_IMPORT_PREFIX}/sdk/native/3rdparty/libs/armeabi-v7a/liblibprotobuf.a" )
 
-# Import target "quirc" for configuration "Release"
-set_property(TARGET quirc APPEND PROPERTY IMPORTED_CONFIGURATIONS RELEASE)
-set_target_properties(quirc PROPERTIES
-  IMPORTED_LINK_INTERFACE_LANGUAGES_RELEASE "C"
-  IMPORTED_LOCATION_RELEASE "${_IMPORT_PREFIX}/sdk/native/3rdparty/libs/armeabi-v7a/libquirc.a"
-  )
-
-list(APPEND _IMPORT_CHECK_TARGETS quirc )
-list(APPEND _IMPORT_CHECK_FILES_FOR_quirc "${_IMPORT_PREFIX}/sdk/native/3rdparty/libs/armeabi-v7a/libquirc.a" )
-
 # Import target "tegra_hal" for configuration "Release"
 set_property(TARGET tegra_hal APPEND PROPERTY IMPORTED_CONFIGURATIONS RELEASE)
 set_target_properties(tegra_hal PROPERTIES

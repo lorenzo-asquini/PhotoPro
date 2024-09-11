@@ -257,6 +257,33 @@ public class DISOpticalFlow extends DenseOpticalFlow {
 
 
     //
+    // C++:  float cv::DISOpticalFlow::getVariationalRefinementEpsilon()
+    //
+
+    /**
+     * Norm value shift for robust penalizer
+     * SEE: setVariationalRefinementEpsilon
+     * @return automatically generated
+     */
+    public float getVariationalRefinementEpsilon() {
+        return getVariationalRefinementEpsilon_0(nativeObj);
+    }
+
+
+    //
+    // C++:  void cv::DISOpticalFlow::setVariationalRefinementEpsilon(float val)
+    //
+
+    /**
+     *  getVariationalRefinementEpsilon SEE: getVariationalRefinementEpsilon
+     * @param val automatically generated
+     */
+    public void setVariationalRefinementEpsilon(float val) {
+        setVariationalRefinementEpsilon_0(nativeObj, val);
+    }
+
+
+    //
     // C++:  bool cv::DISOpticalFlow::getUseMeanNormalization()
     //
 
@@ -394,6 +421,12 @@ public class DISOpticalFlow extends DenseOpticalFlow {
 
     // C++:  void cv::DISOpticalFlow::setVariationalRefinementGamma(float val)
     private static native void setVariationalRefinementGamma_0(long nativeObj, float val);
+
+    // C++:  float cv::DISOpticalFlow::getVariationalRefinementEpsilon()
+    private static native float getVariationalRefinementEpsilon_0(long nativeObj);
+
+    // C++:  void cv::DISOpticalFlow::setVariationalRefinementEpsilon(float val)
+    private static native void setVariationalRefinementEpsilon_0(long nativeObj, float val);
 
     // C++:  bool cv::DISOpticalFlow::getUseMeanNormalization()
     private static native boolean getUseMeanNormalization_0(long nativeObj);
