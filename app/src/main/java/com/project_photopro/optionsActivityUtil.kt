@@ -20,79 +20,79 @@ import java.util.Locale
 //Draw extension options according to the feature availability
 //If an extension is not available for both the front and the back camera, hide the row
 //If an extension is not available only for one of the two, disable that check
-fun showExtensionsToggles(activity: AppCompatActivity, features: AvailableFeatures){
+fun showExtensionsToggles(activity: AppCompatActivity, features: AvailableFeatures) {
 
     //See if at least one extension is available. If not, do not show the extension choices
     var isOneExtensionAvailable = false
 
     //HDR
-    if(!features.isFrontHDRAvailable && !features.isBackHDRAvailable){
+    if (!features.isFrontHDRAvailable && !features.isBackHDRAvailable) {
 
         //Do not show the row containing the HDR choice if not available
         activity.findViewById<ImageView>(R.id.HDR_logo).visibility = View.GONE
         activity.findViewById<TextView>(R.id.HDR_textView).visibility = View.GONE
         activity.findViewById<SwitchMaterial>(R.id.HDR_front_camera_switch).visibility = View.GONE
         activity.findViewById<SwitchMaterial>(R.id.HDR_back_camera_switch).visibility = View.GONE
-    }else if(!features.isFrontHDRAvailable){
+    } else if (!features.isFrontHDRAvailable) {
 
         //Do not allow to select mode if unavailable
         activity.findViewById<SwitchMaterial>(R.id.HDR_front_camera_switch).isEnabled = false
-    }else if(!features.isBackHDRAvailable){
+    } else if (!features.isBackHDRAvailable) {
 
         //Do not allow to select mode if unavailable
         activity.findViewById<SwitchMaterial>(R.id.HDR_back_camera_switch).isEnabled = false
-    }else{
+    } else {
         isOneExtensionAvailable = true
     }
 
     //Bokeh
-    if(!features.isFrontBokehAvailable && !features.isBackBokehAvailable){
+    if (!features.isFrontBokehAvailable && !features.isBackBokehAvailable) {
 
         //Do not show the row containing the bokeh choice if not available
         activity.findViewById<ImageView>(R.id.bokeh_logo).visibility = View.GONE
         activity.findViewById<TextView>(R.id.bokeh_textView).visibility = View.GONE
         activity.findViewById<SwitchMaterial>(R.id.bokeh_front_camera_switch).visibility = View.GONE
         activity.findViewById<SwitchMaterial>(R.id.bokeh_back_camera_switch).visibility = View.GONE
-    }else if(!features.isFrontBokehAvailable){
+    } else if (!features.isFrontBokehAvailable) {
 
         //Do not allow to select mode if unavailable
         activity.findViewById<SwitchMaterial>(R.id.bokeh_front_camera_switch).isEnabled = false
-    }else if(!features.isBackBokehAvailable){
+    } else if (!features.isBackBokehAvailable) {
 
         //Do not allow to select mode if unavailable
         activity.findViewById<SwitchMaterial>(R.id.bokeh_back_camera_switch).isEnabled = false
-    }else{
+    } else {
         isOneExtensionAvailable = true
     }
 
     //Face retouch
-    if(!features.isFrontFaceRetouchAvailable && !features.isBackFaceRetouchAvailable){
+    if (!features.isFrontFaceRetouchAvailable && !features.isBackFaceRetouchAvailable) {
 
         //Do not show the row containing the HDR choice if not available
         activity.findViewById<ImageView>(R.id.face_retouch_logo).visibility = View.GONE
         activity.findViewById<TextView>(R.id.face_retouch_textView).visibility = View.GONE
         activity.findViewById<SwitchMaterial>(R.id.face_retouch_front_camera_switch).visibility = View.GONE
         activity.findViewById<SwitchMaterial>(R.id.face_retouch_back_camera_switch).visibility = View.GONE
-    }else if(!features.isFrontFaceRetouchAvailable){
+    } else if (!features.isFrontFaceRetouchAvailable) {
 
         //Do not allow to select mode if unavailable
         activity.findViewById<SwitchMaterial>(R.id.face_retouch_front_camera_switch).isEnabled = false
-    }else if(!features.isBackFaceRetouchAvailable){
+    } else if (!features.isBackFaceRetouchAvailable) {
 
         //Do not allow to select mode if unavailable
         activity.findViewById<SwitchMaterial>(R.id.face_retouch_back_camera_switch).isEnabled = false
-    }else{
+    } else {
         isOneExtensionAvailable = true
     }
 
     //No extension available
-    if(!isOneExtensionAvailable){
+    if (!isOneExtensionAvailable) {
         activity.findViewById<LinearLayout>(R.id.extension_menu).visibility = View.GONE
     }
 }
 
 //Retrieve values from SharedPreferences and show their value
-fun retrieveOptionsValue(activity: AppCompatActivity, preferences: SharedPreferences){
+fun retrieveOptionsValue(activity: AppCompatActivity, preferences: SharedPreferences) {
 
     //Set the switches to the saved value
     //HDR
@@ -118,24 +118,31 @@ fun retrieveOptionsValue(activity: AppCompatActivity, preferences: SharedPrefere
 
     //Smart delay seconds
     activity.findViewById<EditText>(R.id.smart_delay_seconds_editText).setText(
-        String.format(Locale.getDefault(), "%d",
-            preferences.getInt(SharedPrefs.SMART_DELAY_SECONDS_KEY, Constant.DEFAULT_SMART_DELAY_SECONDS))
+        String.format(
+            Locale.getDefault(), "%d",
+            preferences.getInt(SharedPrefs.SMART_DELAY_SECONDS_KEY, Constant.DEFAULT_SMART_DELAY_SECONDS)
+        )
     )
 
     //Set EditText to the saved values
     //Frames to average
     activity.findViewById<EditText>(R.id.frame_avg_frame_number_editText).setText(
-        String.format(Locale.getDefault(), "%d",
-            preferences.getInt(SharedPrefs.NR_FRAMES_TO_AVERAGE_KEY, Constant.DEFAULT_FRAMES_TO_AVERAGE))
+        String.format(
+            Locale.getDefault(), "%d",
+            preferences.getInt(SharedPrefs.NR_FRAMES_TO_AVERAGE_KEY, Constant.DEFAULT_FRAMES_TO_AVERAGE)
+        )
     )
 
     //Smart delay notification
     activity.findViewById<SwitchMaterial>(R.id.smart_delay_notification_sound_switch).isChecked =
-        preferences.getInt(SharedPrefs.SMART_DELAY_NOTIFICATION_KEY, Constant.SMART_DELAY_NOTIFICATION_ON) == Constant.SMART_DELAY_NOTIFICATION_ON
+        preferences.getInt(
+            SharedPrefs.SMART_DELAY_NOTIFICATION_KEY,
+            Constant.SMART_DELAY_NOTIFICATION_ON
+        ) == Constant.SMART_DELAY_NOTIFICATION_ON
 }
 
 //Add listener to the different elements in order to handle the value changes and save the results in SharedPreferences
-fun setValueChangeListeners(activity: AppCompatActivity, preferences: SharedPreferences){
+fun setValueChangeListeners(activity: AppCompatActivity, preferences: SharedPreferences) {
 
     /*SWITCHES*/
     val HDRBackSwitch = activity.findViewById<SwitchMaterial>(R.id.HDR_back_camera_switch)
@@ -150,7 +157,7 @@ fun setValueChangeListeners(activity: AppCompatActivity, preferences: SharedPref
     //HDR
     HDRBackSwitch.setOnCheckedChangeListener { _, isChecked ->
         preferences.edit {
-            if(isChecked) {
+            if (isChecked) {
                 putInt(SharedPrefs.HDR_BACK_KEY, Constant.HDR_ON)
 
                 //Only one switch at a time can be enabled per camera
@@ -160,7 +167,7 @@ fun setValueChangeListeners(activity: AppCompatActivity, preferences: SharedPref
                 faceRetouchBackSwitch.isChecked = false
                 putInt(SharedPrefs.FACE_RETOUCH_BACK_KEY, Constant.FACE_RETOUCH_OFF)
 
-            }else{
+            } else {
                 putInt(SharedPrefs.HDR_BACK_KEY, Constant.HDR_OFF)
             }
         }
@@ -168,7 +175,7 @@ fun setValueChangeListeners(activity: AppCompatActivity, preferences: SharedPref
 
     HDRFrontSwitch.setOnCheckedChangeListener { _, isChecked ->
         preferences.edit {
-            if(isChecked) {
+            if (isChecked) {
                 putInt(SharedPrefs.HDR_FRONT_KEY, Constant.HDR_ON)
 
                 //Only one switch at a time can be enabled per camera
@@ -178,7 +185,7 @@ fun setValueChangeListeners(activity: AppCompatActivity, preferences: SharedPref
                 faceRetouchFrontSwitch.isChecked = false
                 putInt(SharedPrefs.FACE_RETOUCH_FRONT_KEY, Constant.FACE_RETOUCH_OFF)
 
-            }else{
+            } else {
                 putInt(SharedPrefs.HDR_FRONT_KEY, Constant.HDR_OFF)
             }
         }
@@ -187,7 +194,7 @@ fun setValueChangeListeners(activity: AppCompatActivity, preferences: SharedPref
     //Bokeh
     bokehBackSwitch.setOnCheckedChangeListener { _, isChecked ->
         preferences.edit {
-            if(isChecked) {
+            if (isChecked) {
                 putInt(SharedPrefs.BOKEH_BACK_KEY, Constant.BOKEH_ON)
 
                 //Only one switch at a time can be enabled per camera
@@ -197,7 +204,7 @@ fun setValueChangeListeners(activity: AppCompatActivity, preferences: SharedPref
                 faceRetouchBackSwitch.isChecked = false
                 putInt(SharedPrefs.FACE_RETOUCH_BACK_KEY, Constant.FACE_RETOUCH_OFF)
 
-            }else{
+            } else {
                 putInt(SharedPrefs.BOKEH_BACK_KEY, Constant.BOKEH_OFF)
             }
         }
@@ -205,7 +212,7 @@ fun setValueChangeListeners(activity: AppCompatActivity, preferences: SharedPref
 
     bokehFrontSwitch.setOnCheckedChangeListener { _, isChecked ->
         preferences.edit {
-            if(isChecked) {
+            if (isChecked) {
                 putInt(SharedPrefs.BOKEH_FRONT_KEY, Constant.BOKEH_ON)
 
                 //Only one switch at a time can be enabled per camera
@@ -215,7 +222,7 @@ fun setValueChangeListeners(activity: AppCompatActivity, preferences: SharedPref
                 faceRetouchFrontSwitch.isChecked = false
                 putInt(SharedPrefs.FACE_RETOUCH_FRONT_KEY, Constant.FACE_RETOUCH_OFF)
 
-            }else{
+            } else {
                 putInt(SharedPrefs.BOKEH_FRONT_KEY, Constant.BOKEH_OFF)
             }
         }
@@ -224,7 +231,7 @@ fun setValueChangeListeners(activity: AppCompatActivity, preferences: SharedPref
     //Face retouch
     faceRetouchBackSwitch.setOnCheckedChangeListener { _, isChecked ->
         preferences.edit {
-            if(isChecked) {
+            if (isChecked) {
                 putInt(SharedPrefs.FACE_RETOUCH_BACK_KEY, Constant.FACE_RETOUCH_ON)
 
                 //Only one switch at a time can be enabled per camera
@@ -234,7 +241,7 @@ fun setValueChangeListeners(activity: AppCompatActivity, preferences: SharedPref
                 bokehBackSwitch.isChecked = false
                 putInt(SharedPrefs.BOKEH_BACK_KEY, Constant.BOKEH_OFF)
 
-            }else{
+            } else {
                 putInt(SharedPrefs.FACE_RETOUCH_BACK_KEY, Constant.FACE_RETOUCH_OFF)
             }
         }
@@ -242,7 +249,7 @@ fun setValueChangeListeners(activity: AppCompatActivity, preferences: SharedPref
 
     faceRetouchFrontSwitch.setOnCheckedChangeListener { _, isChecked ->
         preferences.edit {
-            if(isChecked) {
+            if (isChecked) {
                 putInt(SharedPrefs.FACE_RETOUCH_FRONT_KEY, Constant.FACE_RETOUCH_ON)
 
                 //Only one switch at a time can be enabled per camera
@@ -252,7 +259,7 @@ fun setValueChangeListeners(activity: AppCompatActivity, preferences: SharedPref
                 bokehFrontSwitch.isChecked = false
                 putInt(SharedPrefs.BOKEH_FRONT_KEY, Constant.BOKEH_OFF)
 
-            }else{
+            } else {
                 putInt(SharedPrefs.FACE_RETOUCH_FRONT_KEY, Constant.FACE_RETOUCH_OFF)
             }
         }
@@ -267,7 +274,8 @@ fun setValueChangeListeners(activity: AppCompatActivity, preferences: SharedPref
             validateInputSmartDelaySeconds(smartDelaySecondsEditText, activity, preferences)
 
             // Hide keyboard
-            val imm = smartDelaySecondsEditText.context.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+            val imm =
+                smartDelaySecondsEditText.context.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
             imm.hideSoftInputFromWindow(smartDelaySecondsEditText.windowToken, 0)
         }
     }
@@ -285,6 +293,7 @@ fun setValueChangeListeners(activity: AppCompatActivity, preferences: SharedPref
                 view.clearFocus()
                 true
             }
+
             else -> false
         }
     }
@@ -297,7 +306,8 @@ fun setValueChangeListeners(activity: AppCompatActivity, preferences: SharedPref
             validateInputFramesToAverage(framesToAverageEditText, activity, preferences)
 
             // Hide keyboard
-            val imm = framesToAverageEditText.context.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+            val imm =
+                framesToAverageEditText.context.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
             imm.hideSoftInputFromWindow(framesToAverageEditText.windowToken, 0)
         }
     }
@@ -316,25 +326,31 @@ fun setValueChangeListeners(activity: AppCompatActivity, preferences: SharedPref
                 view.clearFocus()
                 true
             }
+
             else -> false
         }
     }
 
     //Notification sound
-    val smartDelayNotificationSoundSwitch = activity.findViewById<SwitchMaterial>(R.id.smart_delay_notification_sound_switch)
+    val smartDelayNotificationSoundSwitch =
+        activity.findViewById<SwitchMaterial>(R.id.smart_delay_notification_sound_switch)
 
     smartDelayNotificationSoundSwitch.setOnCheckedChangeListener { _, isChecked ->
         preferences.edit {
-            if(isChecked) {
+            if (isChecked) {
                 putInt(SharedPrefs.SMART_DELAY_NOTIFICATION_KEY, Constant.SMART_DELAY_NOTIFICATION_ON)
-            }else{
+            } else {
                 putInt(SharedPrefs.SMART_DELAY_NOTIFICATION_KEY, Constant.SMART_DELAY_NOTIFICATION_OFF)
             }
         }
     }
 }
 
-fun validateInputSmartDelaySeconds(smartDelaySecondsEditText: EditText, activity: AppCompatActivity, preferences: SharedPreferences){
+fun validateInputSmartDelaySeconds(
+    smartDelaySecondsEditText: EditText,
+    activity: AppCompatActivity,
+    preferences: SharedPreferences
+) {
     //Input validation
     val input = smartDelaySecondsEditText.text.toString()
     val inputNumber = input.toIntOrNull()
@@ -358,7 +374,11 @@ fun validateInputSmartDelaySeconds(smartDelaySecondsEditText: EditText, activity
     }
 }
 
-fun validateInputFramesToAverage(framesToAverageEditText: EditText, activity: AppCompatActivity, preferences: SharedPreferences){
+fun validateInputFramesToAverage(
+    framesToAverageEditText: EditText,
+    activity: AppCompatActivity,
+    preferences: SharedPreferences
+) {
     //Input validation
     val input = framesToAverageEditText.text.toString()
     val inputNumber = input.toIntOrNull()

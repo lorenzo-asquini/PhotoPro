@@ -17,7 +17,7 @@ class OptionsActivity : AppCompatActivity() {
     private var isInfoButtonClicked = false
 
     //Necessary lateinit because the SharedPreferences need the activity to be created
-    private lateinit var preferences : SharedPreferences
+    private lateinit var preferences: SharedPreferences
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -37,15 +37,15 @@ class OptionsActivity : AppCompatActivity() {
         //Set listener to save the new values
         setValueChangeListeners(this, preferences)
 
-        val backArrowButton : ImageButton = findViewById(R.id.back_arrow_button)
-        backArrowButton.setOnClickListener{
+        val backArrowButton: ImageButton = findViewById(R.id.back_arrow_button)
+        backArrowButton.setOnClickListener {
             finish()
         }
 
         //Add listener to button to open the information activity
         val infoButton: ImageButton = findViewById(R.id.info_image_button)
-        infoButton.setOnClickListener{
-            if(!isInfoButtonClicked) {
+        infoButton.setOnClickListener {
+            if (!isInfoButtonClicked) {
                 val openInfoIntent = Intent(this, InfoActivity::class.java)
                 startActivity(openInfoIntent)
                 isInfoButtonClicked = true

@@ -22,7 +22,12 @@ import androidx.camera.lifecycle.ProcessCameraProvider
 import androidx.camera.view.PreviewView
 import androidx.core.content.ContextCompat
 
-fun startCamera(activity: MainActivity, preferences: SharedPreferences, zoomValue: Float = 1.0F, forceNightMode : Boolean = false) : MultiPurposeAnalyzer? {
+fun startCamera(
+    activity: MainActivity,
+    preferences: SharedPreferences,
+    zoomValue: Float = 1.0F,
+    forceNightMode: Boolean = false
+): MultiPurposeAnalyzer? {
 
     // This is used to bind the lifecycle of cameras to the lifecycle owner (the main activity).
     // This eliminates the task of opening and closing the camera since CameraX is lifecycle-aware.
@@ -51,8 +56,12 @@ fun startCamera(activity: MainActivity, preferences: SharedPreferences, zoomValu
 
             //Get extension values for back camera
             var isHDRSelected = preferences.getInt(SharedPrefs.HDR_BACK_KEY, Constant.HDR_OFF) == Constant.HDR_ON
-            var isBokehSelected = preferences.getInt(SharedPrefs.BOKEH_BACK_KEY, Constant.BOKEH_OFF) == Constant.BOKEH_ON
-            var isFaceRetouchSelected = preferences.getInt(SharedPrefs.FACE_RETOUCH_BACK_KEY, Constant.FACE_RETOUCH_OFF) == Constant.FACE_RETOUCH_ON
+            var isBokehSelected =
+                preferences.getInt(SharedPrefs.BOKEH_BACK_KEY, Constant.BOKEH_OFF) == Constant.BOKEH_ON
+            var isFaceRetouchSelected = preferences.getInt(
+                SharedPrefs.FACE_RETOUCH_BACK_KEY,
+                Constant.FACE_RETOUCH_OFF
+            ) == Constant.FACE_RETOUCH_ON
 
             //Change only if not camera back (default value)
             if (preferences.getInt(SharedPrefs.CAMERA_FACING_KEY, Constant.CAMERA_BACK) == Constant.CAMERA_FRONT) {
@@ -60,13 +69,17 @@ fun startCamera(activity: MainActivity, preferences: SharedPreferences, zoomValu
 
                 //Get extension values for front camera
                 isHDRSelected = preferences.getInt(SharedPrefs.HDR_FRONT_KEY, Constant.HDR_OFF) == Constant.HDR_ON
-                isBokehSelected = preferences.getInt(SharedPrefs.BOKEH_FRONT_KEY, Constant.BOKEH_OFF) == Constant.BOKEH_ON
-                isFaceRetouchSelected = preferences.getInt(SharedPrefs.FACE_RETOUCH_FRONT_KEY, Constant.FACE_RETOUCH_OFF)  == Constant.FACE_RETOUCH_ON
+                isBokehSelected =
+                    preferences.getInt(SharedPrefs.BOKEH_FRONT_KEY, Constant.BOKEH_OFF) == Constant.BOKEH_ON
+                isFaceRetouchSelected = preferences.getInt(
+                    SharedPrefs.FACE_RETOUCH_FRONT_KEY,
+                    Constant.FACE_RETOUCH_OFF
+                ) == Constant.FACE_RETOUCH_ON
             }
 
             //Only one value of night mode for both front and back camera
             val isNightModeSelected = forceNightMode ||
-                    (preferences.getInt(SharedPrefs.NIGHT_MODE_KEY, Constant.NIGHT_MODE_OFF) == Constant.NIGHT_MODE_ON)
+                (preferences.getInt(SharedPrefs.NIGHT_MODE_KEY, Constant.NIGHT_MODE_OFF) == Constant.NIGHT_MODE_ON)
 
             //Used to handle extension, if available
             val extensionsManager = extensionsManagerFuture.get()
@@ -78,18 +91,18 @@ fun startCamera(activity: MainActivity, preferences: SharedPreferences, zoomValu
                 cameraProvider.unbindAll()
 
                 //SELECT AN EXTENSION IF NEEDED (change the normal cameraSelector)
-                if(isNightModeSelected){
+                if (isNightModeSelected) {
                     //Check again if it is really available
-                    if(extensionsManager.isExtensionAvailable(cameraSelector, ExtensionMode.NIGHT)){
+                    if (extensionsManager.isExtensionAvailable(cameraSelector, ExtensionMode.NIGHT)) {
                         cameraSelector =
                             extensionsManager.getExtensionEnabledCameraSelector(
                                 cameraSelector,
                                 ExtensionMode.NIGHT
                             )
                     }
-                }else{  //Night mode has priority on the others
+                } else {  //Night mode has priority on the others
 
-                    if(isHDRSelected) {
+                    if (isHDRSelected) {
                         //Check again if it is really available
                         if (extensionsManager.isExtensionAvailable(cameraSelector, ExtensionMode.HDR)) {
                             cameraSelector =
@@ -98,7 +111,7 @@ fun startCamera(activity: MainActivity, preferences: SharedPreferences, zoomValu
                                     ExtensionMode.HDR
                                 )
                         }
-                    }else if(isBokehSelected){
+                    } else if (isBokehSelected) {
                         //Check again if it is really available
                         if (extensionsManager.isExtensionAvailable(cameraSelector, ExtensionMode.BOKEH)) {
                             cameraSelector =
@@ -107,7 +120,7 @@ fun startCamera(activity: MainActivity, preferences: SharedPreferences, zoomValu
                                     ExtensionMode.BOKEH
                                 )
                         }
-                    }else if(isFaceRetouchSelected){
+                    } else if (isFaceRetouchSelected) {
                         //Check again if it is really available
                         if (extensionsManager.isExtensionAvailable(cameraSelector, ExtensionMode.FACE_RETOUCH)) {
                             cameraSelector =
@@ -126,7 +139,13 @@ fun startCamera(activity: MainActivity, preferences: SharedPreferences, zoomValu
                     if (imageAnalysis == null) {  //null because it is not needed by any feature
                         cameraProvider.bindToLifecycle(activity, cameraSelector, preview, activity.imageCapture)
                     } else {
-                        cameraProvider.bindToLifecycle(activity, cameraSelector, preview, activity.imageCapture, imageAnalysis)
+                        cameraProvider.bindToLifecycle(
+                            activity,
+                            cameraSelector,
+                            preview,
+                            activity.imageCapture,
+                            imageAnalysis
+                        )
                     }
 
                 if (preferences.getInt(SharedPrefs.FLASH_KEY, Constant.FLASH_OFF) == Constant.FLASH_ALWAYS_ON) {
@@ -166,7 +185,8 @@ fun createImageAnalysis(activity: MainActivity, preferences: SharedPreferences)
     //Create only if necessary
     if (frameAvgValue == Constant.FRAME_AVG_ON ||
         nightModeValue == Constant.NIGHT_MODE_AUTO ||
-        smartDelayValue == Constant.SMART_DELAY_ON) {
+        smartDelayValue == Constant.SMART_DELAY_ON
+    ) {
 
         val cameraManager =
             activity.getSystemService(Context.CAMERA_SERVICE) as CameraManager
@@ -185,7 +205,8 @@ fun createImageAnalysis(activity: MainActivity, preferences: SharedPreferences)
             cameraManager.getCameraCharacteristics(cameraId!!)
         val cameraConfigs: StreamConfigurationMap? =
             cameraCharacteristics[CameraCharacteristics.SCALER_STREAM_CONFIGURATION_MAP]
-        val supportedSizes = cameraConfigs!!.getOutputSizes(ImageFormat.YUV_420_888)!!.toList()  //YUV_420_888 is commonly supported in Android
+        val supportedSizes = cameraConfigs!!.getOutputSizes(ImageFormat.YUV_420_888)!!
+            .toList()  //YUV_420_888 is commonly supported in Android
 
         //Select the size with the maximum resolution. Necessary to make good photos with frame averaging
         var currentMaxSize = supportedSizes[0]

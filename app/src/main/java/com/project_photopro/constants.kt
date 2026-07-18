@@ -50,11 +50,13 @@ object Constant {
     //Values in nanoseconds. The maximum value supported is the one that allows to have a usable experience
     //A shutter speed greater than 500ms makes the app unusable
     val SHUTTER_SPEED_VALUES =
-        listOf(100_000F, 250_000F, 300_000F, 400_000F, 500_000F, 600_000F, 750_000F,
+        listOf(
+            100_000F, 250_000F, 300_000F, 400_000F, 500_000F, 600_000F, 750_000F,
             1_000_000F, 1_250_000F, 1_500_000F, 1_750_000F, 2_000_000F, 3_000_000F,
             4_000_000F, 5_000_000F, 7_500_000F, 10_000_000F, 12_500_000F, 15_000_000F,
             20_000_000F, 25_000_000F, 30_000_000F, 40_000_000F, 50_000_000F, 75_000_000F,
-            100_000_000F, 125_000_000F, 200_000_000F, 250_000_000F, 500_000_000F)
+            100_000_000F, 125_000_000F, 200_000_000F, 250_000_000F, 500_000_000F
+        )
 
     //TAG for debug
     const val TAG = "PhotoPro"

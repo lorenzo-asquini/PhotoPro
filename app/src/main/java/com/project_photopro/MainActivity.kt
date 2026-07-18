@@ -25,25 +25,25 @@ import androidx.core.content.ContextCompat
 
 
 //Implements also SmartDelayListener
-class MainActivity : AppCompatActivity(), SmartDelayListener{
+class MainActivity : AppCompatActivity(), SmartDelayListener {
     //Object that becomes not null when (and if) the camera is started
     var imageCapture: ImageCapture? = null
 
     //Variable used to communicate with the analyzer if necessary
-    private var imageAnalyzer : MultiPurposeAnalyzer? = null
+    private var imageAnalyzer: MultiPurposeAnalyzer? = null
 
     //Public variable set when the camera is initialised.
     //Not returned because the initialisation may happen after the startCamera has finished
     var camera: Camera? = null
 
     //Necessary lateinit because the SharedPreferences need the activity to be created
-    private lateinit var preferences : SharedPreferences
+    private lateinit var preferences: SharedPreferences
 
     //Avoid opening the options menu multiple times when spamming button
     private var isOptionsButtonClicked = false
 
     //Timer for smart delay
-    private var smartDelayTimer : CountDownTimer? = null
+    private var smartDelayTimer: CountDownTimer? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -62,20 +62,24 @@ class MainActivity : AppCompatActivity(), SmartDelayListener{
         // Request camera permissions if not already granted
         if (cameraPermissionGranted(this)) {
             //Keep zoom value if it was saved
-            val zoomValue= intent.getFloatExtra(Constant.ZOOM_VALUE_KEY, 1.0F)
+            val zoomValue = intent.getFloatExtra(Constant.ZOOM_VALUE_KEY, 1.0F)
             startCameraWrapper(zoomValue)  //Force saved zoom
         } else {
             //Ask for CAMERA permission
             //The actions to perform when permission request result arrive are described inside onRequestPermissionsResult (below)
-            ActivityCompat.requestPermissions(this, arrayOf(Manifest.permission.CAMERA), Constant.REQUEST_CODE_PERMISSIONS)
+            ActivityCompat.requestPermissions(
+                this,
+                arrayOf(Manifest.permission.CAMERA),
+                Constant.REQUEST_CODE_PERMISSIONS
+            )
         }
 
         /*ADD LISTENERS TO BUTTONS*/
 
         //Add listener to button to open the options menu
         val optionsButton: ImageButton = findViewById(R.id.options_button)
-        optionsButton.setOnClickListener{
-            if(!isOptionsButtonClicked) {
+        optionsButton.setOnClickListener {
+            if (!isOptionsButtonClicked) {
                 val openOptionsIntent = Intent(this, OptionsActivity::class.java)
                 startActivity(openOptionsIntent)
                 isOptionsButtonClicked = true
@@ -83,8 +87,8 @@ class MainActivity : AppCompatActivity(), SmartDelayListener{
         }
 
         //Add listener to button to change flash mode
-        val flashButton : ImageButton = findViewById(R.id.flash_button)
-        flashButton.setOnClickListener{
+        val flashButton: ImageButton = findViewById(R.id.flash_button)
+        flashButton.setOnClickListener {
             changeFlashValue(preferences)
             drawFlashButton(this, preferences, true)
 
@@ -93,7 +97,7 @@ class MainActivity : AppCompatActivity(), SmartDelayListener{
 
         //Add listener to button to change frame average mode
         val frameAvgButton: ImageButton = findViewById(R.id.frame_avg_button)
-        frameAvgButton.setOnClickListener{
+        frameAvgButton.setOnClickListener {
             changeFrameAvgValue(preferences)
             drawFrameAvgButton(this, preferences, true)
             startCameraWrapper()  //Start camera to start analyzer
@@ -101,10 +105,10 @@ class MainActivity : AppCompatActivity(), SmartDelayListener{
 
         //Add listener to button to change smart delay mode
         val smartDelayButton: ImageButton = findViewById(R.id.smart_delay_button)
-        val smartDelayTimerText : TextView = findViewById(R.id.smart_delay_timer)
+        val smartDelayTimerText: TextView = findViewById(R.id.smart_delay_timer)
         smartDelayTimerText.visibility = View.INVISIBLE  //Timer always invisible when button clicked
 
-        smartDelayButton.setOnClickListener{
+        smartDelayButton.setOnClickListener {
             changeSmartDelayValue(preferences)
             drawSmartDelayButton(this, preferences, true)
             startCameraWrapper()  //Start camera to start analyzer
@@ -115,7 +119,7 @@ class MainActivity : AppCompatActivity(), SmartDelayListener{
 
         //Add listener to button to change night mode
         val nightModeButton: ImageButton = findViewById(R.id.night_mode_button)
-        nightModeButton.setOnClickListener{
+        nightModeButton.setOnClickListener {
             changeNightModeValue(preferences)
             drawNightModeButton(this, preferences, true)
             startCameraWrapper()  //Start camera to start analyzer
@@ -129,24 +133,24 @@ class MainActivity : AppCompatActivity(), SmartDelayListener{
         }
 
         //Add listener to button to make it take photos
-        val takePhotoButton : Button = findViewById(R.id.image_capture_button)
-        takePhotoButton.setOnClickListener{
+        val takePhotoButton: Button = findViewById(R.id.image_capture_button)
+        takePhotoButton.setOnClickListener {
             takePhoto()
         }
 
         //Add listener to button to open gallery
-        val openGalleryButton : ImageButton = findViewById(R.id.gallery_button)
-        openGalleryButton.setOnClickListener{
+        val openGalleryButton: ImageButton = findViewById(R.id.gallery_button)
+        openGalleryButton.setOnClickListener {
             openGallery(this)
         }
 
         //Handle switch camera button
         //Display button only if both front and back camera are available
         initialiseChangeCameraButton(this, features, preferences)
-        val changeCameraButton : ImageButton = findViewById(R.id.change_camera_button)
+        val changeCameraButton: ImageButton = findViewById(R.id.change_camera_button)
 
         //If button is present and pressed, then both cameras are available
-        changeCameraButton.setOnClickListener{
+        changeCameraButton.setOnClickListener {
             changeCameraFacingValue(preferences)
             startCameraWrapper(1.0F)  //Force zoom reset
             drawAllButtons(this, preferences, features)  //When changing camera the available features change
@@ -157,11 +161,15 @@ class MainActivity : AppCompatActivity(), SmartDelayListener{
     }
 
     //Wrapper for startCamera, simplifies function call
-    fun startCameraWrapper(zoomValue : Float = camera?.cameraInfo?.zoomState?.value?.zoomRatio ?: 1.0F, forceNightMode : Boolean = false){
+    fun startCameraWrapper(
+        zoomValue: Float = camera?.cameraInfo?.zoomState?.value?.zoomRatio ?: 1.0F,
+        forceNightMode: Boolean = false
+    ) {
         //Delete old camera to reset Pro settings
         camera = null
         //Restart the camera with current zoom value if not told otherwise (and if the value is available)
-        imageAnalyzer = startCamera(this, preferences, zoomValue, forceNightMode)  //Start camera if permission already granted
+        imageAnalyzer =
+            startCamera(this, preferences, zoomValue, forceNightMode)  //Start camera if permission already granted
     }
 
     private fun takePhoto() {
@@ -171,14 +179,14 @@ class MainActivity : AppCompatActivity(), SmartDelayListener{
         val imageCapture = imageCapture ?: return
 
         //Change color of the button while taking a picture (also while using frame average)
-        val imageCaptureButton : Button = findViewById(R.id.image_capture_button)
+        val imageCaptureButton: Button = findViewById(R.id.image_capture_button)
         imageCaptureButton.backgroundTintList = ColorStateList.valueOf(getColor(R.color.lightBlue))
 
         //Vibrate when photo is taken
         vibratePhone(this, 100)
 
         //If a photo is taken using frame averaging, it is handled by the analyzer
-        if(preferences.getInt(SharedPrefs.FRAME_AVG_KEY, Constant.FRAME_AVG_OFF) == Constant.FRAME_AVG_ON){
+        if (preferences.getInt(SharedPrefs.FRAME_AVG_KEY, Constant.FRAME_AVG_OFF) == Constant.FRAME_AVG_ON) {
             //Check to see if a frame average is happening right now. Do not start a new one
             imageAnalyzer?.let { analyzer ->
                 if (analyzer.framesAveraged == -1) {
@@ -207,6 +215,7 @@ class MainActivity : AppCompatActivity(), SmartDelayListener{
                     //Reset take picture button color
                     imageCaptureButton.backgroundTintList = ColorStateList.valueOf(getColor(R.color.white))
                 }
+
                 override fun onError(exc: ImageCaptureException) {
                     Log.e(Constant.TAG, "Photo capture failed: ${exc.message}", exc)
 
@@ -221,7 +230,7 @@ class MainActivity : AppCompatActivity(), SmartDelayListener{
     override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<String>, grantResults: IntArray) {
 
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
-        
+
         if (requestCode == Constant.REQUEST_CODE_PERMISSIONS) {
             if (cameraPermissionGranted(this)) {
                 startCameraWrapper()
@@ -250,7 +259,7 @@ class MainActivity : AppCompatActivity(), SmartDelayListener{
 
         //Make the person not detected anymore and cancel timer if it was set
         //Cannot just set personDetected to false because it would start a new search in the time the activity switches
-        val smartDelayTimerView : TextView = findViewById(R.id.smart_delay_timer)
+        val smartDelayTimerView: TextView = findViewById(R.id.smart_delay_timer)
         smartDelayTimerView.visibility = View.INVISIBLE
         smartDelayTimer?.cancel()
 
@@ -258,13 +267,13 @@ class MainActivity : AppCompatActivity(), SmartDelayListener{
         val frameAvgButton: ImageButton = findViewById(R.id.frame_avg_button)
         frameAvgButton.setColorFilter(getColor(R.color.white))
 
-        val imageCaptureButton : Button = findViewById(R.id.image_capture_button)
+        val imageCaptureButton: Button = findViewById(R.id.image_capture_button)
         imageCaptureButton.backgroundTintList = ColorStateList.valueOf(getColor(R.color.white))
 
         //Save current zoom value, used when maintaining the same camera but rotating the phone
         //Not used onSavedInstanceState because the value is needed both in onCreate and in onResume
         val currentZoomRatio = camera?.cameraInfo?.zoomState?.value?.zoomRatio ?: 1.0F
-        intent.putExtra(Constant.ZOOM_VALUE_KEY,currentZoomRatio)
+        intent.putExtra(Constant.ZOOM_VALUE_KEY, currentZoomRatio)
     }
 
     override fun onResume() {
@@ -274,20 +283,21 @@ class MainActivity : AppCompatActivity(), SmartDelayListener{
         setTorchState(this, preferences)
 
         //Keep zoom value if it was saved
-        val zoomValue= intent.getFloatExtra(Constant.ZOOM_VALUE_KEY, 1.0F)
+        val zoomValue = intent.getFloatExtra(Constant.ZOOM_VALUE_KEY, 1.0F)
         //Necessary to restart camera in case a new extension was selected in the options menu
         startCameraWrapper(zoomValue)  //Force saved zoom
     }
 
     //Manage count down timer for smart delay
-    override fun onPersonDetected(analyzer : MultiPurposeAnalyzer){
+    override fun onPersonDetected(analyzer: MultiPurposeAnalyzer) {
         analyzer.personDetected = true
 
         //Notify the user with a sound if a person was detected
         try {
             //Play the notification only if enabled
-            val smartDelayValue = preferences.getInt(SharedPrefs.SMART_DELAY_NOTIFICATION_KEY, Constant.SMART_DELAY_NOTIFICATION_ON)
-            if(smartDelayValue == Constant.SMART_DELAY_NOTIFICATION_ON) {
+            val smartDelayValue =
+                preferences.getInt(SharedPrefs.SMART_DELAY_NOTIFICATION_KEY, Constant.SMART_DELAY_NOTIFICATION_ON)
+            if (smartDelayValue == Constant.SMART_DELAY_NOTIFICATION_ON) {
                 val toneGenerator = ToneGenerator(AudioManager.STREAM_MUSIC, 100)
                 toneGenerator.startTone(ToneGenerator.TONE_CDMA_ABBR_ALERT, 500)
                 toneGenerator.release()
@@ -297,20 +307,20 @@ class MainActivity : AppCompatActivity(), SmartDelayListener{
         }
 
         //Show timer text when a person is detected
-        val smartDelayTimer : TextView = findViewById(R.id.smart_delay_timer)
+        val smartDelayTimer: TextView = findViewById(R.id.smart_delay_timer)
         smartDelayTimer.visibility = View.VISIBLE
 
         val timerSeconds = preferences.getInt(SharedPrefs.SMART_DELAY_SECONDS_KEY, Constant.DEFAULT_SMART_DELAY_SECONDS)
-        this.smartDelayTimer = object: CountDownTimer((timerSeconds * 1000).toLong(), 1000) {
+        this.smartDelayTimer = object : CountDownTimer((timerSeconds * 1000).toLong(), 1000) {
             override fun onTick(millisUntilFinished: Long) {
-                val timeLeft = ((millisUntilFinished-1) / 1000) + 1 //Seconds
+                val timeLeft = ((millisUntilFinished - 1) / 1000) + 1 //Seconds
                 smartDelayTimer.text = String.format(java.util.Locale.getDefault(), "%d", timeLeft)
             }
 
             override fun onFinish() {
                 val smartDelayValue = preferences.getInt(SharedPrefs.SMART_DELAY_KEY, Constant.SMART_DELAY_OFF)
                 //Only if the smart delay button is still on, take a photo
-                if(smartDelayValue == Constant.SMART_DELAY_ON && analyzer.personDetected){
+                if (smartDelayValue == Constant.SMART_DELAY_ON && analyzer.personDetected) {
                     Log.d(Constant.TAG, "Smart delay: capturing photo")
                     takePhoto()
                     analyzer.personDetected = false
