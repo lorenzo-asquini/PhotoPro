@@ -14,7 +14,9 @@ import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.camera.camera2.interop.Camera2CameraControl
 import androidx.camera.camera2.interop.CaptureRequestOptions
+import androidx.core.content.edit
 import com.google.android.material.switchmaterial.SwitchMaterial
+import java.util.Locale
 import kotlin.math.roundToInt
 
 data class ProModeRanges(
@@ -71,12 +73,12 @@ fun changeProModeValue(preferences: SharedPreferences){
 
     val newValue = (currentValue+1) % Constant.PRO_MODE_STATES
 
-    val editor = preferences.edit()
-    editor.putInt(SharedPrefs.PRO_MODE_KEY, newValue)
-    editor.apply()
+    preferences.edit {
+        putInt(SharedPrefs.PRO_MODE_KEY, newValue)
+    }
 }
 
-//The slider are considered available if commands are shown
+//The sliders are considered available if commands are shown
 fun handleProModeCommands(activity: MainActivity, preferences: SharedPreferences) {
 
     //Add listener to hide and show pro mode sliders
@@ -129,7 +131,7 @@ fun handleISOSlider(activity: MainActivity, preferences: SharedPreferences){
         }
 
     //Retrieve shown value from list
-    isoTextView.text = Constant.ISO_VALUES[savedISOValueIndex].toString()
+    isoTextView.text = String.format(Locale.getDefault(), "%d", Constant.ISO_VALUES[savedISOValueIndex])
     isoSlider.value = savedISOValueIndex.toFloat()
 
     //Set saved values
@@ -138,16 +140,16 @@ fun handleISOSlider(activity: MainActivity, preferences: SharedPreferences){
     //Add listener
     isoSlider.addOnChangeListener { _, valueIndex, _ ->
         //Retrieve shown value from list
-        isoTextView.text = Constant.ISO_VALUES[valueIndex.toInt()].toString()
+        isoTextView.text = String.format(Locale.getDefault(), "%d", Constant.ISO_VALUES[valueIndex.toInt()])
 
         //Save new value (index)
-        val editor = preferences.edit()
-        if (preferences.getInt(SharedPrefs.CAMERA_FACING_KEY, Constant.CAMERA_BACK) == Constant.CAMERA_BACK) {
-            editor.putInt(SharedPrefs.ISO_INDEX_BACK_KEY, valueIndex.toInt())
-        } else {
-            editor.putInt(SharedPrefs.ISO_INDEX_FRONT_KEY, valueIndex.toInt())
+        preferences.edit {
+            if (preferences.getInt(SharedPrefs.CAMERA_FACING_KEY, Constant.CAMERA_BACK) == Constant.CAMERA_BACK) {
+                putInt(SharedPrefs.ISO_INDEX_BACK_KEY, valueIndex.toInt())
+            } else {
+                putInt(SharedPrefs.ISO_INDEX_FRONT_KEY, valueIndex.toInt())
+            }
         }
-        editor.apply()
 
         //Set new values
         setProCameraOptions(activity, preferences)
@@ -183,7 +185,7 @@ fun handleShutterSpeedSlider(activity: MainActivity, preferences: SharedPreferen
         }
 
     //Retrieve shown value from list
-    shutterSpeedTextView.text = convertNanosecondsToReadableTime(Constant.SHUTTER_SPEED_VALUE[savedShutterSpeedValueIndex])
+    shutterSpeedTextView.text = convertNanosecondsToReadableTime(Constant.SHUTTER_SPEED_VALUES[savedShutterSpeedValueIndex])
     shutterSpeedSlider.value = savedShutterSpeedValueIndex.toFloat()
 
     //Set saved values
@@ -192,16 +194,16 @@ fun handleShutterSpeedSlider(activity: MainActivity, preferences: SharedPreferen
     //Add the listener
     shutterSpeedSlider.addOnChangeListener { _, valueIndex, _ ->
         //Retrieve shown value from list
-        shutterSpeedTextView.text = convertNanosecondsToReadableTime(Constant.SHUTTER_SPEED_VALUE[valueIndex.toInt()])
+        shutterSpeedTextView.text = convertNanosecondsToReadableTime(Constant.SHUTTER_SPEED_VALUES[valueIndex.toInt()])
 
         //Save new value (index)
-        val editor = preferences.edit()
-        if (preferences.getInt(SharedPrefs.CAMERA_FACING_KEY, Constant.CAMERA_BACK) == Constant.CAMERA_BACK) {
-            editor.putInt(SharedPrefs.SHUTTER_SPEED_INDEX_BACK_KEY, valueIndex.toInt())
-        } else {
-            editor.putInt(SharedPrefs.SHUTTER_SPEED_INDEX_FRONT_KEY, valueIndex.toInt())
+        preferences.edit {
+            if (preferences.getInt(SharedPrefs.CAMERA_FACING_KEY, Constant.CAMERA_BACK) == Constant.CAMERA_BACK) {
+                putInt(SharedPrefs.SHUTTER_SPEED_INDEX_BACK_KEY, valueIndex.toInt())
+            } else {
+                putInt(SharedPrefs.SHUTTER_SPEED_INDEX_FRONT_KEY, valueIndex.toInt())
+            }
         }
-        editor.apply()
 
         //Set new values
         setProCameraOptions(activity, preferences)
@@ -261,7 +263,7 @@ fun setProCameraOptions(activity: MainActivity, preferences: SharedPreferences){
             .setCaptureRequestOption(CaptureRequest.SENSOR_SENSITIVITY, Constant.ISO_VALUES[savedISOValueIndex])
             //Target is 60fps. If exposure time is greater than frame duration, it is automatically adjusted
             .setCaptureRequestOption(CaptureRequest.SENSOR_FRAME_DURATION, 16666666)
-            .setCaptureRequestOption(CaptureRequest.SENSOR_EXPOSURE_TIME, Constant.SHUTTER_SPEED_VALUE[savedShutterSpeedValueIndex].toLong())
+            .setCaptureRequestOption(CaptureRequest.SENSOR_EXPOSURE_TIME, Constant.SHUTTER_SPEED_VALUES[savedShutterSpeedValueIndex].toLong())
             .build()
 
         camera2CameraControl.addCaptureRequestOptions(newCaptureRequestOptions)
@@ -289,7 +291,7 @@ fun getProModeSliderRanges(activity: AppCompatActivity) : ProModeRanges{
 
     //Ranges relative to the list of possible values
     ranges.frontISORangeInList = getRangeInList_II(Constant.ISO_VALUES, ranges.frontISORange)
-    ranges.frontExposureTimeRangeInList = getRangeInList_FL(Constant.SHUTTER_SPEED_VALUE, ranges.frontExposureTimeRange)
+    ranges.frontExposureTimeRangeInList = getRangeInList_FL(Constant.SHUTTER_SPEED_VALUES, ranges.frontExposureTimeRange)
 
     //Ranges in absolute values
     if(backCameraId != null) {
@@ -302,7 +304,7 @@ fun getProModeSliderRanges(activity: AppCompatActivity) : ProModeRanges{
 
     //Ranges relative to the list of possible values
     ranges.backISORangeInList = getRangeInList_II(Constant.ISO_VALUES, ranges.backISORange)
-    ranges.backExposureTimeRangeInList = getRangeInList_FL(Constant.SHUTTER_SPEED_VALUE, ranges.backExposureTimeRange)
+    ranges.backExposureTimeRangeInList = getRangeInList_FL(Constant.SHUTTER_SPEED_VALUES, ranges.backExposureTimeRange)
     
     return ranges
 }
@@ -313,7 +315,7 @@ fun getRangeInList_II(list: List<Int>, range: Range<Int>?) : Range<Int>?{
         return null
     }
 
-    //Check if the list has at list one value that is compatible with the range given
+    //Check if the list has at least one value that is compatible with the range given
     var rangeEmpty = true
     for(value in list){
         if(value in range){
@@ -345,7 +347,7 @@ fun getRangeInList_FL(list: List<Float>, range: Range<Long>?) : Range<Int>?{
         return null
     }
     
-    //Check if the list has at list one value that is compatible with the range given
+    //Check if the list has at least one value that is compatible with the range given
     var rangeEmpty = true
     for(value in list){
         if(value.toLong() in range){

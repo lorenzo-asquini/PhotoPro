@@ -4,7 +4,6 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/black"
     tools:context=".MainActivity">
 
     <!--Create guideline to set the toolbar height to a percentage of the screen-->
@@ -203,6 +202,7 @@
                     android:text="@string/iso"
                     android:textSize="@dimen/pro_mode_font_size"
                     android:paddingStart="@dimen/pro_titles_left_padding"
+                    android:paddingEnd="@dimen/pro_titles_left_padding"
 
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -245,7 +245,7 @@
                         android:layout_gravity="center"
                         android:padding="@dimen/slider_value_padding"
 
-                        android:text="2000"
+                        android:text="@string/iso_placeholder"
                         android:textColor="@color/white"
                         android:textSize="@dimen/pro_mode_font_size"/>
                 </LinearLayout>
@@ -262,6 +262,7 @@
                     android:text="@string/shutter_speed"
                     android:textSize="@dimen/pro_mode_font_size"
                     android:paddingStart="@dimen/pro_titles_left_padding"
+                    android:paddingEnd="@dimen/pro_titles_left_padding"
 
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -305,7 +306,7 @@
                         android:layout_gravity="center"
                         android:padding="@dimen/slider_value_padding"
 
-                        android:text="8"
+                        android:text="@string/shutter_speed_placeholder"
                         android:textColor="@color/white"
                         android:textSize="@dimen/pro_mode_font_size"/>
                 </LinearLayout>

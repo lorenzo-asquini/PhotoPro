@@ -22,9 +22,6 @@ import androidx.camera.core.ImageCapture
 import androidx.camera.core.ImageCaptureException
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
-import java.util.Calendar
-import java.util.concurrent.ExecutorService
-import java.util.concurrent.Executors
 
 
 //Implements also SmartDelayListener
@@ -38,10 +35,6 @@ class MainActivity : AppCompatActivity(), SmartDelayListener{
     //Public variable set when the camera is initialised.
     //Not returned because the initialisation may happen after the startCamera has finished
     var camera: Camera? = null
-
-    //Using lateinit makes it possible to initialize later a variable (inside onCreate)
-    //Create a cameraExecutor to use the camera
-    private lateinit var cameraExecutor: ExecutorService
 
     //Necessary lateinit because the SharedPreferences need the activity to be created
     private lateinit var preferences : SharedPreferences
@@ -83,8 +76,8 @@ class MainActivity : AppCompatActivity(), SmartDelayListener{
         val optionsButton: ImageButton = findViewById(R.id.options_button)
         optionsButton.setOnClickListener{
             if(!isOptionsButtonClicked) {
-                val openSettingsIntent = Intent(this, OptionsActivity::class.java)
-                startActivity(openSettingsIntent)
+                val openOptionsIntent = Intent(this, OptionsActivity::class.java)
+                startActivity(openOptionsIntent)
                 isOptionsButtonClicked = true
             }
         }
@@ -120,7 +113,7 @@ class MainActivity : AppCompatActivity(), SmartDelayListener{
             smartDelayTimer?.cancel()
         }
 
-        //Add listener to button to change night mode mode
+        //Add listener to button to change night mode
         val nightModeButton: ImageButton = findViewById(R.id.night_mode_button)
         nightModeButton.setOnClickListener{
             changeNightModeValue(preferences)
@@ -159,14 +152,8 @@ class MainActivity : AppCompatActivity(), SmartDelayListener{
             drawAllButtons(this, preferences, features)  //When changing camera the available features change
         }
 
-        //Add listener to the camera preview that will allow zoom
-        //Zoom is maintained when changing to landscape
-        //Add listener to the camera preview that will get the point of the tap and set the focus on that point
-        //Focus point is lost when changing to landscape and/or changing camera
+        // Pinch to zoom and tap to focus on the camera preview
         setPreviewGestures(this, preferences, features)
-
-        //Create a single thread for processing camera data
-        cameraExecutor = Executors.newSingleThreadExecutor()
     }
 
     //Wrapper for startCamera, simplifies function call
@@ -193,8 +180,10 @@ class MainActivity : AppCompatActivity(), SmartDelayListener{
         //If a photo is taken using frame averaging, it is handled by the analyzer
         if(preferences.getInt(SharedPrefs.FRAME_AVG_KEY, Constant.FRAME_AVG_OFF) == Constant.FRAME_AVG_ON){
             //Check to see if a frame average is happening right now. Do not start a new one
-            if(imageAnalyzer!!.framesAveraged == -1) {
-                imageAnalyzer!!.startFrameAvg()  //The image will be saved by the analyzer
+            imageAnalyzer?.let { analyzer ->
+                if (analyzer.framesAveraged == -1) {
+                    analyzer.startFrameAvg()  //The image will be saved by the analyzer
+                }
             }
             return
         }
@@ -290,11 +279,6 @@ class MainActivity : AppCompatActivity(), SmartDelayListener{
         startCameraWrapper(zoomValue)  //Force saved zoom
     }
 
-    override fun onDestroy() {
-        super.onDestroy()
-        cameraExecutor.shutdown()
-    }
-
     //Manage count down timer for smart delay
     override fun onPersonDetected(analyzer : MultiPurposeAnalyzer){
         analyzer.personDetected = true
@@ -304,13 +288,12 @@ class MainActivity : AppCompatActivity(), SmartDelayListener{
             //Play the notification only if enabled
             val smartDelayValue = preferences.getInt(SharedPrefs.SMART_DELAY_NOTIFICATION_KEY, Constant.SMART_DELAY_NOTIFICATION_ON)
             if(smartDelayValue == Constant.SMART_DELAY_NOTIFICATION_ON) {
-                //Generate a tone from the default ones present inside the system
                 val toneGenerator = ToneGenerator(AudioManager.STREAM_MUSIC, 100)
-                //For list of possible tones, see https://developer.android.com/reference/android/media/ToneGenerator
                 toneGenerator.startTone(ToneGenerator.TONE_CDMA_ABBR_ALERT, 500)
+                toneGenerator.release()
             }
-        } catch (e: java.lang.Exception) {
-            e.printStackTrace()
+        } catch (e: Exception) {
+            Log.e(Constant.TAG, "Smart delay notification failed", e)
         }
 
         //Show timer text when a person is detected
@@ -321,23 +304,23 @@ class MainActivity : AppCompatActivity(), SmartDelayListener{
         this.smartDelayTimer = object: CountDownTimer((timerSeconds * 1000).toLong(), 1000) {
             override fun onTick(millisUntilFinished: Long) {
                 val timeLeft = ((millisUntilFinished-1) / 1000) + 1 //Seconds
-                smartDelayTimer.text = timeLeft.toString()
+                smartDelayTimer.text = String.format(java.util.Locale.getDefault(), "%d", timeLeft)
             }
 
             override fun onFinish() {
                 val smartDelayValue = preferences.getInt(SharedPrefs.SMART_DELAY_KEY, Constant.SMART_DELAY_OFF)
                 //Only if the smart delay button is still on, take a photo
                 if(smartDelayValue == Constant.SMART_DELAY_ON && analyzer.personDetected){
-                    Log.d("PoseDetection: ", "Photo capturing")
+                    Log.d(Constant.TAG, "Smart delay: capturing photo")
                     takePhoto()
                     analyzer.personDetected = false
-                    analyzer.smartDelayLastPhotoTaken = Calendar.getInstance().timeInMillis
+                    analyzer.smartDelayLastPhotoTaken = System.currentTimeMillis()
                 }
 
                 //Hide timer at the end of the countdown
                 smartDelayTimer.visibility = View.INVISIBLE
             }
         }.start()
-        Log.d("PoseDetection: ", "Person detected, taking picture")
+        Log.d(Constant.TAG, "Smart delay: person detected")
     }
 }

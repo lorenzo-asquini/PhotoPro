@@ -33,7 +33,7 @@ data class AvailableFeatures(
     var isBackAutoFocusAvailable : Boolean = false,
 
     var isFrontProModeAvailable : Boolean = false,
-    var isBackProModeAvailable :Boolean = false
+    var isBackProModeAvailable: Boolean = false
 )
 
 fun getAvailableFeatures(activity: AppCompatActivity) : AvailableFeatures{

@@ -1,6 +1,6 @@
 package com.project_photopro
 
-object Constant{
+object Constant {
 
     const val FLASH_OFF = 0
     const val FLASH_ON = 1
@@ -49,7 +49,7 @@ object Constant{
 
     //Values in nanoseconds. The maximum value supported is the one that allows to have a usable experience
     //A shutter speed greater than 500ms makes the app unusable
-    val SHUTTER_SPEED_VALUE =
+    val SHUTTER_SPEED_VALUES =
         listOf(100_000F, 250_000F, 300_000F, 400_000F, 500_000F, 600_000F, 750_000F,
             1_000_000F, 1_250_000F, 1_500_000F, 1_750_000F, 2_000_000F, 3_000_000F,
             4_000_000F, 5_000_000F, 7_500_000F, 10_000_000F, 12_500_000F, 15_000_000F,
@@ -69,7 +69,7 @@ object Constant{
     const val ZOOM_VALUE_KEY = "zoom_value"
 }
 
-object SharedPrefs{
+object SharedPrefs {
     const val SHARED_PREFERENCES_KEY = "global_shared_preferences"
 
     const val FLASH_KEY = "flash_value"

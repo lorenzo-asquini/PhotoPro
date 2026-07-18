@@ -1,6 +1,5 @@
 package com.project_photopro
 
-import android.content.ContentValues
 import android.content.SharedPreferences
 import android.content.res.ColorStateList
 import android.graphics.Bitmap
@@ -30,7 +29,6 @@ import org.opencv.core.Core.addWeighted
 import org.opencv.core.Mat
 import org.opencv.core.Size
 import java.io.OutputStream
-import java.util.Calendar
 
 class MultiPurposeAnalyzer(private val activity: MainActivity, private val rotation: Int) : ImageAnalysis.Analyzer{
 
@@ -48,7 +46,7 @@ class MultiPurposeAnalyzer(private val activity: MainActivity, private val rotat
         set(value) {
             field = value
 
-            if(!personDetected){
+            if (!value) {
                 //Hide timer if person is not detected
                 val smartDelayTimerView : TextView = activity.findViewById(R.id.smart_delay_timer)
                 smartDelayTimerView.visibility = View.INVISIBLE
@@ -121,7 +119,7 @@ class MultiPurposeAnalyzer(private val activity: MainActivity, private val rotat
         if(smartDelayValue == Constant.SMART_DELAY_ON && !personDetected){
 
             val timeBetweenDetections = 2000 //ms
-            if(Calendar.getInstance().timeInMillis - smartDelayLastPhotoTaken >= timeBetweenDetections && framesAveraged == -1) {
+            if(System.currentTimeMillis() - smartDelayLastPhotoTaken >= timeBetweenDetections && framesAveraged == -1) {
                 smartDelay(image)
             }else{
                 image.close()  //Close to prevent blocking
@@ -160,11 +158,11 @@ class MultiPurposeAnalyzer(private val activity: MainActivity, private val rotat
                 }
 
                 val brightness = getAverageBrightness()
-                val nighModeButton: ImageButton = activity.findViewById(R.id.night_mode_button)
+                val nightModeButton: ImageButton = activity.findViewById(R.id.night_mode_button)
 
                 //It is still dark. Do not create a new camera if it is not necessary
                 if(isDark && brightness < 80 && !forceNightMode) {
-                    nighModeButton.setColorFilter(activity.getColor(R.color.night_mode_is_on_color))
+                    nightModeButton.setColorFilter(activity.getColor(R.color.night_mode_is_on_color))
                     forceNightMode = true
                     activity.startCameraWrapper(forceNightMode = true)
                     cameraRecreatedByAutoNightMode = true
@@ -173,7 +171,7 @@ class MultiPurposeAnalyzer(private val activity: MainActivity, private val rotat
                 //It is still bright. Do not create a new camera if it is not necessary
                 else if (!isDark && brightness >= 80 && forceNightMode)
                 {
-                    nighModeButton.setColorFilter(activity.getColor(R.color.white))
+                    nightModeButton.setColorFilter(activity.getColor(R.color.white))
                     forceNightMode = false
                     activity.startCameraWrapper(forceNightMode = false)
                     cameraRecreatedByAutoNightMode = true
@@ -295,7 +293,7 @@ class MultiPurposeAnalyzer(private val activity: MainActivity, private val rotat
                 outputStream.close()
                 Log.i(Constant.TAG, "Photo saved")
             } catch (e: Exception) {
-                Log.e(Constant.TAG, "Photo save failed: ${e.printStackTrace()}")
+                Log.e(Constant.TAG, "Photo save failed", e)
             }
         }
     }
@@ -331,16 +329,16 @@ class MultiPurposeAnalyzer(private val activity: MainActivity, private val rotat
                 var detectionLikelihood = 0F
 
                 for (landmark in posList.allPoseLandmarks) {
-                    if (!landmark.equals(null)) {
+                    if (landmark != null) {
                         detectionLikelihood += landmark.inFrameLikelihood
                     }
                 }
 
-                Log.d("PoseDetection: ", "Pose detected: $detectionLikelihood")
+                Log.d(Constant.TAG, "Pose detected: $detectionLikelihood")
 
                 if (detectionLikelihood >= 27.0) {  //27.0 is a good value from various tests
                     smartDelayFramesWithPerson++
-                    Log.d("PoseDetection: ", "Person in $smartDelayFramesWithPerson frames")
+                    Log.d(Constant.TAG, "Person in $smartDelayFramesWithPerson frames")
                 } else {
                     //Reset counter if for one frame the person is not detected
                     smartDelayFramesWithPerson = 0
@@ -348,7 +346,7 @@ class MultiPurposeAnalyzer(private val activity: MainActivity, private val rotat
 
                 //Person recognized multiple times. It should be a real person
                 if (smartDelayFramesWithPerson == 3) {
-                    Log.d("PoseDetection: ", "Taking picture in few seconds")
+                    Log.d(Constant.TAG, "Taking picture in few seconds")
                     smartDelayFramesWithPerson = 0
                     notifyActivity()
                 }
@@ -357,7 +355,7 @@ class MultiPurposeAnalyzer(private val activity: MainActivity, private val rotat
             }
             .addOnFailureListener {
                 image.close()
-                Log.d(ContentValues.TAG, "Error from analyzer")
+                Log.e(Constant.TAG, "Error from analyzer", it)
             }
     }
 

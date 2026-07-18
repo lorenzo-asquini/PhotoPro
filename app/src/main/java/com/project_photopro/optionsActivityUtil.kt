@@ -12,7 +12,9 @@ import android.widget.LinearLayout
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.edit
 import com.google.android.material.switchmaterial.SwitchMaterial
+import java.util.Locale
 
 
 //Draw extension options according to the feature availability
@@ -89,7 +91,7 @@ fun showExtensionsToggles(activity: AppCompatActivity, features: AvailableFeatur
     }
 }
 
-//Retrieve values from SharePreferences and show their value
+//Retrieve values from SharedPreferences and show their value
 fun retrieveOptionsValue(activity: AppCompatActivity, preferences: SharedPreferences){
 
     //Set the switches to the saved value
@@ -116,13 +118,15 @@ fun retrieveOptionsValue(activity: AppCompatActivity, preferences: SharedPrefere
 
     //Smart delay seconds
     activity.findViewById<EditText>(R.id.smart_delay_seconds_editText).setText(
-        preferences.getInt(SharedPrefs.SMART_DELAY_SECONDS_KEY, Constant.DEFAULT_SMART_DELAY_SECONDS).toString()
+        String.format(Locale.getDefault(), "%d",
+            preferences.getInt(SharedPrefs.SMART_DELAY_SECONDS_KEY, Constant.DEFAULT_SMART_DELAY_SECONDS))
     )
 
     //Set EditText to the saved values
     //Frames to average
     activity.findViewById<EditText>(R.id.frame_avg_frame_number_editText).setText(
-        preferences.getInt(SharedPrefs.NR_FRAMES_TO_AVERAGE_KEY, Constant.DEFAULT_FRAMES_TO_AVERAGE).toString()
+        String.format(Locale.getDefault(), "%d",
+            preferences.getInt(SharedPrefs.NR_FRAMES_TO_AVERAGE_KEY, Constant.DEFAULT_FRAMES_TO_AVERAGE))
     )
 
     //Smart delay notification
@@ -145,125 +149,113 @@ fun setValueChangeListeners(activity: AppCompatActivity, preferences: SharedPref
 
     //HDR
     HDRBackSwitch.setOnCheckedChangeListener { _, isChecked ->
-        val editor = preferences.edit()
+        preferences.edit {
+            if(isChecked) {
+                putInt(SharedPrefs.HDR_BACK_KEY, Constant.HDR_ON)
 
-        if(isChecked) {
-            editor.putInt(SharedPrefs.HDR_BACK_KEY, Constant.HDR_ON)
+                //Only one switch at a time can be enabled per camera
+                bokehBackSwitch.isChecked = false
+                putInt(SharedPrefs.BOKEH_BACK_KEY, Constant.BOKEH_OFF)
 
-            //Only one switch at a time can be enabled per camera
-            bokehBackSwitch.isChecked = false
-            editor.putInt(SharedPrefs.BOKEH_BACK_KEY, Constant.BOKEH_OFF)
+                faceRetouchBackSwitch.isChecked = false
+                putInt(SharedPrefs.FACE_RETOUCH_BACK_KEY, Constant.FACE_RETOUCH_OFF)
 
-            faceRetouchBackSwitch.isChecked = false
-            editor.putInt(SharedPrefs.FACE_RETOUCH_BACK_KEY, Constant.FACE_RETOUCH_OFF)
-
-        }else{
-            editor.putInt(SharedPrefs.HDR_BACK_KEY, Constant.HDR_OFF)
+            }else{
+                putInt(SharedPrefs.HDR_BACK_KEY, Constant.HDR_OFF)
+            }
         }
-
-        editor.apply()
     }
 
     HDRFrontSwitch.setOnCheckedChangeListener { _, isChecked ->
-        val editor = preferences.edit()
+        preferences.edit {
+            if(isChecked) {
+                putInt(SharedPrefs.HDR_FRONT_KEY, Constant.HDR_ON)
 
-        if(isChecked) {
-            editor.putInt(SharedPrefs.HDR_FRONT_KEY, Constant.HDR_ON)
+                //Only one switch at a time can be enabled per camera
+                bokehFrontSwitch.isChecked = false
+                putInt(SharedPrefs.BOKEH_FRONT_KEY, Constant.BOKEH_OFF)
 
-            //Only one switch at a time can be enabled per camera
-            bokehFrontSwitch.isChecked = false
-            editor.putInt(SharedPrefs.BOKEH_FRONT_KEY, Constant.BOKEH_OFF)
+                faceRetouchFrontSwitch.isChecked = false
+                putInt(SharedPrefs.FACE_RETOUCH_FRONT_KEY, Constant.FACE_RETOUCH_OFF)
 
-            faceRetouchFrontSwitch.isChecked = false
-            editor.putInt(SharedPrefs.FACE_RETOUCH_FRONT_KEY, Constant.FACE_RETOUCH_OFF)
-
-        }else{
-            editor.putInt(SharedPrefs.HDR_FRONT_KEY, Constant.HDR_OFF)
+            }else{
+                putInt(SharedPrefs.HDR_FRONT_KEY, Constant.HDR_OFF)
+            }
         }
-
-        editor.apply()
     }
 
     //Bokeh
     bokehBackSwitch.setOnCheckedChangeListener { _, isChecked ->
-        val editor = preferences.edit()
+        preferences.edit {
+            if(isChecked) {
+                putInt(SharedPrefs.BOKEH_BACK_KEY, Constant.BOKEH_ON)
 
-        if(isChecked) {
-            editor.putInt(SharedPrefs.BOKEH_BACK_KEY, Constant.BOKEH_ON)
+                //Only one switch at a time can be enabled per camera
+                HDRBackSwitch.isChecked = false
+                putInt(SharedPrefs.HDR_BACK_KEY, Constant.HDR_OFF)
 
-            //Only one switch at a time can be enabled per camera
-            HDRBackSwitch.isChecked = false
-            editor.putInt(SharedPrefs.HDR_BACK_KEY, Constant.HDR_OFF)
+                faceRetouchBackSwitch.isChecked = false
+                putInt(SharedPrefs.FACE_RETOUCH_BACK_KEY, Constant.FACE_RETOUCH_OFF)
 
-            faceRetouchBackSwitch.isChecked = false
-            editor.putInt(SharedPrefs.FACE_RETOUCH_BACK_KEY, Constant.FACE_RETOUCH_OFF)
-
-        }else{
-            editor.putInt(SharedPrefs.BOKEH_BACK_KEY, Constant.BOKEH_OFF)
+            }else{
+                putInt(SharedPrefs.BOKEH_BACK_KEY, Constant.BOKEH_OFF)
+            }
         }
-
-        editor.apply()
     }
 
     bokehFrontSwitch.setOnCheckedChangeListener { _, isChecked ->
-        val editor = preferences.edit()
+        preferences.edit {
+            if(isChecked) {
+                putInt(SharedPrefs.BOKEH_FRONT_KEY, Constant.BOKEH_ON)
 
-        if(isChecked) {
-            editor.putInt(SharedPrefs.BOKEH_FRONT_KEY, Constant.BOKEH_ON)
+                //Only one switch at a time can be enabled per camera
+                HDRFrontSwitch.isChecked = false
+                putInt(SharedPrefs.HDR_FRONT_KEY, Constant.HDR_OFF)
 
-            //Only one switch at a time can be enabled per camera
-            HDRFrontSwitch.isChecked = false
-            editor.putInt(SharedPrefs.HDR_FRONT_KEY, Constant.HDR_OFF)
+                faceRetouchFrontSwitch.isChecked = false
+                putInt(SharedPrefs.FACE_RETOUCH_FRONT_KEY, Constant.FACE_RETOUCH_OFF)
 
-            faceRetouchFrontSwitch.isChecked = false
-            editor.putInt(SharedPrefs.FACE_RETOUCH_FRONT_KEY, Constant.FACE_RETOUCH_OFF)
-
-        }else{
-            editor.putInt(SharedPrefs.BOKEH_FRONT_KEY, Constant.BOKEH_OFF)
+            }else{
+                putInt(SharedPrefs.BOKEH_FRONT_KEY, Constant.BOKEH_OFF)
+            }
         }
-
-        editor.apply()
     }
 
     //Face retouch
     faceRetouchBackSwitch.setOnCheckedChangeListener { _, isChecked ->
-        val editor = preferences.edit()
+        preferences.edit {
+            if(isChecked) {
+                putInt(SharedPrefs.FACE_RETOUCH_BACK_KEY, Constant.FACE_RETOUCH_ON)
 
-        if(isChecked) {
-            editor.putInt(SharedPrefs.FACE_RETOUCH_BACK_KEY, Constant.FACE_RETOUCH_ON)
+                //Only one switch at a time can be enabled per camera
+                HDRBackSwitch.isChecked = false
+                putInt(SharedPrefs.HDR_BACK_KEY, Constant.HDR_OFF)
 
-            //Only one switch at a time can be enabled per camera
-            HDRBackSwitch.isChecked = false
-            editor.putInt(SharedPrefs.HDR_BACK_KEY, Constant.HDR_OFF)
+                bokehBackSwitch.isChecked = false
+                putInt(SharedPrefs.BOKEH_BACK_KEY, Constant.BOKEH_OFF)
 
-            bokehBackSwitch.isChecked = false
-            editor.putInt(SharedPrefs.BOKEH_BACK_KEY, Constant.BOKEH_OFF)
-
-        }else{
-            editor.putInt(SharedPrefs.FACE_RETOUCH_BACK_KEY, Constant.FACE_RETOUCH_OFF)
+            }else{
+                putInt(SharedPrefs.FACE_RETOUCH_BACK_KEY, Constant.FACE_RETOUCH_OFF)
+            }
         }
-
-        editor.apply()
     }
 
     faceRetouchFrontSwitch.setOnCheckedChangeListener { _, isChecked ->
-        val editor = preferences.edit()
+        preferences.edit {
+            if(isChecked) {
+                putInt(SharedPrefs.FACE_RETOUCH_FRONT_KEY, Constant.FACE_RETOUCH_ON)
 
-        if(isChecked) {
-            editor.putInt(SharedPrefs.FACE_RETOUCH_FRONT_KEY, Constant.FACE_RETOUCH_ON)
+                //Only one switch at a time can be enabled per camera
+                HDRFrontSwitch.isChecked = false
+                putInt(SharedPrefs.HDR_FRONT_KEY, Constant.HDR_OFF)
 
-            //Only one switch at a time can be enabled per camera
-            HDRFrontSwitch.isChecked = false
-            editor.putInt(SharedPrefs.HDR_FRONT_KEY, Constant.HDR_OFF)
+                bokehFrontSwitch.isChecked = false
+                putInt(SharedPrefs.BOKEH_FRONT_KEY, Constant.BOKEH_OFF)
 
-            bokehFrontSwitch.isChecked = false
-            editor.putInt(SharedPrefs.BOKEH_FRONT_KEY, Constant.BOKEH_OFF)
-
-        }else{
-            editor.putInt(SharedPrefs.FACE_RETOUCH_FRONT_KEY, Constant.FACE_RETOUCH_OFF)
+            }else{
+                putInt(SharedPrefs.FACE_RETOUCH_FRONT_KEY, Constant.FACE_RETOUCH_OFF)
+            }
         }
-
-        editor.apply()
     }
 
     /*EDITTEXT*/
@@ -332,15 +324,13 @@ fun setValueChangeListeners(activity: AppCompatActivity, preferences: SharedPref
     val smartDelayNotificationSoundSwitch = activity.findViewById<SwitchMaterial>(R.id.smart_delay_notification_sound_switch)
 
     smartDelayNotificationSoundSwitch.setOnCheckedChangeListener { _, isChecked ->
-        val editor = preferences.edit()
-
-        if(isChecked) {
-            editor.putInt(SharedPrefs.SMART_DELAY_NOTIFICATION_KEY, Constant.SMART_DELAY_NOTIFICATION_ON)
-        }else{
-            editor.putInt(SharedPrefs.SMART_DELAY_NOTIFICATION_KEY, Constant.SMART_DELAY_NOTIFICATION_OFF)
+        preferences.edit {
+            if(isChecked) {
+                putInt(SharedPrefs.SMART_DELAY_NOTIFICATION_KEY, Constant.SMART_DELAY_NOTIFICATION_ON)
+            }else{
+                putInt(SharedPrefs.SMART_DELAY_NOTIFICATION_KEY, Constant.SMART_DELAY_NOTIFICATION_OFF)
+            }
         }
-
-        editor.apply()
     }
 }
 
@@ -362,9 +352,9 @@ fun validateInputSmartDelaySeconds(smartDelaySecondsEditText: EditText, activity
         smartDelaySecondsEditText.backgroundTintList = ColorStateList.valueOf(activity.getColor(R.color.white))
         smartDelaySecondsEditText.setTextColor(activity.getColor(R.color.white))
 
-        val editor = preferences.edit()
-        editor.putInt(SharedPrefs.SMART_DELAY_SECONDS_KEY, inputNumber)
-        editor.apply()
+        preferences.edit {
+            putInt(SharedPrefs.SMART_DELAY_SECONDS_KEY, inputNumber)
+        }
     }
 }
 
@@ -386,8 +376,8 @@ fun validateInputFramesToAverage(framesToAverageEditText: EditText, activity: Ap
         framesToAverageEditText.backgroundTintList = ColorStateList.valueOf(activity.getColor(R.color.white))
         framesToAverageEditText.setTextColor(activity.getColor(R.color.white))
 
-        val editor = preferences.edit()
-        editor.putInt(SharedPrefs.NR_FRAMES_TO_AVERAGE_KEY, inputNumber)
-        editor.apply()
+        preferences.edit {
+            putInt(SharedPrefs.NR_FRAMES_TO_AVERAGE_KEY, inputNumber)
+        }
     }
 }

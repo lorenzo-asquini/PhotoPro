@@ -10,7 +10,6 @@
     tools:context=".OptionsActivity"
 
 
-    android:background="@color/black"
 
     android:clickable="true"
     android:focusable="true"

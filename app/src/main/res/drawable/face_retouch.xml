@@ -1,8 +1,10 @@
 <vector xmlns:android="http://schemas.android.com/apk/res/android"
-    android:width="512dp"
-    android:height="512dp"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:width="24dp"
+    android:height="24dp"
     android:viewportWidth="135.47"
-    android:viewportHeight="135.47">
+    android:viewportHeight="135.47"
+    tools:ignore="VectorRaster">
   <group>
     <clip-path
         android:pathData="M0.01,80.4a81.47,69.99 90,1 0,139.98 0a81.47,69.99 90,1 0,-139.98 0z"/>

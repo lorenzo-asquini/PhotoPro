@@ -4,7 +4,6 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/black"
     tools:context=".MainActivity">
 
 
@@ -19,7 +18,6 @@
         android:id="@+id/features_toolbar"
         android:layout_width="0dp"
         android:layout_height="match_parent"
-        android:background="@color/black"
 
         app:contentInsetLeft="0dp"
         app:contentInsetStart="0dp"
@@ -209,6 +207,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:paddingStart="@dimen/pro_titles_left_padding"
+                    android:paddingEnd="@dimen/pro_titles_left_padding"
 
                     android:text="@string/iso"
                     android:textColor="@color/white"
@@ -253,8 +252,7 @@
                         android:layout_weight="@dimen/slider_value_percentage"
                         android:padding="@dimen/slider_value_padding"
 
-                        android:text="3200"
-                        tools:ignore="HardcodedText"
+                        android:text="@string/iso_placeholder_land"
 
                         android:textAlignment="center"
                         android:textColor="@color/white"
@@ -273,6 +271,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:paddingStart="@dimen/pro_titles_left_padding"
+                    android:paddingEnd="@dimen/pro_titles_left_padding"
 
                     android:text="@string/shutter_speed"
                     android:textColor="@color/white"
@@ -318,8 +317,7 @@
                         android:layout_weight="@dimen/slider_value_percentage"
                         android:padding="@dimen/slider_value_padding"
 
-                        android:text="500ms"
-                        tools:ignore="HardcodedText"
+                        android:text="@string/shutter_speed_placeholder_land"
 
                         android:textAlignment="center"
                         android:textColor="@color/white"

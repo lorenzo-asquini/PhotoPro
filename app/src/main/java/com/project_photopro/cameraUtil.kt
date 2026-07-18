@@ -29,7 +29,7 @@ import androidx.camera.core.TorchState
 import androidx.camera.view.PreviewView
 import androidx.core.content.ContextCompat
 import java.text.SimpleDateFormat
-import java.util.*
+import java.util.Locale
 import java.util.concurrent.TimeUnit
 
 //Functions useful for both normal camera and PRO camera
@@ -228,12 +228,12 @@ fun setPreviewGestures(activity: MainActivity, preferences: SharedPreferences, f
                 val autoFocusDuration : Long = 5000  //How long the current focus point will maintained
 
                 //Reset the time of the last tap
-                startTimeAutoFocus = Calendar.getInstance().timeInMillis
+                startTimeAutoFocus = System.currentTimeMillis()
 
                 //Make the circle disappear after a few seconds
                 Handler(Looper.getMainLooper()).postDelayed({
                     //If the delayed action is referring to the last tap
-                    if(Calendar.getInstance().timeInMillis - startTimeAutoFocus >= autoFocusDuration) {
+                    if(System.currentTimeMillis() - startTimeAutoFocus >= autoFocusDuration) {
                         focusCircle.visibility = View.INVISIBLE
                     }
                 }, autoFocusDuration)

@@ -7,6 +7,7 @@ import android.view.View
 import android.widget.ImageButton
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.edit
 
 fun drawAllButtons(activity: AppCompatActivity, preferences: SharedPreferences, features: AvailableFeatures){
 
@@ -78,9 +79,9 @@ fun changeFlashValue(preferences: SharedPreferences){
 
     val newValue = (currentValue+1) % Constant.FLASH_STATES
 
-    val editor = preferences.edit()
-    editor.putInt(SharedPrefs.FLASH_KEY, newValue)
-    editor.apply()
+    preferences.edit {
+        putInt(SharedPrefs.FLASH_KEY, newValue)
+    }
 }
 
 fun drawFrameAvgButton(activity: AppCompatActivity, preferences: SharedPreferences, show : Boolean){
@@ -108,9 +109,9 @@ fun changeFrameAvgValue(preferences: SharedPreferences){
 
     val newValue = (currentValue+1) % Constant.FRAME_AVG_STATES
 
-    val editor = preferences.edit()
-    editor.putInt(SharedPrefs.FRAME_AVG_KEY, newValue)
-    editor.apply()
+    preferences.edit {
+        putInt(SharedPrefs.FRAME_AVG_KEY, newValue)
+    }
 }
 
 fun drawSmartDelayButton(activity: AppCompatActivity, preferences: SharedPreferences, show : Boolean){
@@ -140,9 +141,9 @@ fun changeSmartDelayValue(preferences: SharedPreferences){
 
     val newValue = (currentValue+1) % Constant.SMART_DELAY_STATES
 
-    val editor = preferences.edit()
-    editor.putInt(SharedPrefs.SMART_DELAY_KEY, newValue)
-    editor.apply()
+    preferences.edit {
+        putInt(SharedPrefs.SMART_DELAY_KEY, newValue)
+    }
 }
 
 fun drawNightModeButton(activity: AppCompatActivity, preferences: SharedPreferences, show : Boolean){
@@ -171,9 +172,9 @@ fun changeNightModeValue(preferences: SharedPreferences){
 
     val newValue = (currentValue+1) % Constant.NIGHT_MODE_STATES
 
-    val editor = preferences.edit()
-    editor.putInt(SharedPrefs.NIGHT_MODE_KEY, newValue)
-    editor.apply()
+    preferences.edit {
+        putInt(SharedPrefs.NIGHT_MODE_KEY, newValue)
+    }
 }
 
 fun initialiseChangeCameraButton(activity: AppCompatActivity, features: AvailableFeatures, preferences: SharedPreferences){
@@ -184,13 +185,13 @@ fun initialiseChangeCameraButton(activity: AppCompatActivity, features: Availabl
     if(!features.isFrontCameraAvailable || !features.isBackCameraAvailable){
         changeCameraButton.visibility = View.GONE
 
-        val editor = preferences.edit()
-        if(!features.isFrontCameraAvailable){
-            editor.putInt(SharedPrefs.CAMERA_FACING_KEY, Constant.CAMERA_FRONT)
-        }else{  //Just else because at least a camera is present
-            editor.putInt(SharedPrefs.CAMERA_FACING_KEY, Constant.CAMERA_BACK)
+        preferences.edit {
+            if(!features.isFrontCameraAvailable){
+                putInt(SharedPrefs.CAMERA_FACING_KEY, Constant.CAMERA_FRONT)
+            }else{  //Just else because at least a camera is present
+                putInt(SharedPrefs.CAMERA_FACING_KEY, Constant.CAMERA_BACK)
+            }
         }
-        editor.apply()
     }
 }
 
@@ -199,9 +200,9 @@ fun changeCameraFacingValue(preferences: SharedPreferences){
 
     val newValue = (currentValue+1) % Constant.CAMERA_STATES
 
-    val editor = preferences.edit()
-    editor.putInt(SharedPrefs.CAMERA_FACING_KEY, newValue)
-    editor.apply()
+    preferences.edit {
+        putInt(SharedPrefs.CAMERA_FACING_KEY, newValue)
+    }
 }
 
 fun openGallery(baseContext : Context) {

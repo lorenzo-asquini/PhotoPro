@@ -46,8 +46,8 @@ class OptionsActivity : AppCompatActivity() {
         val infoButton: ImageButton = findViewById(R.id.info_image_button)
         infoButton.setOnClickListener{
             if(!isInfoButtonClicked) {
-                val openSettingsIntent = Intent(this, InfoActivity::class.java)
-                startActivity(openSettingsIntent)
+                val openInfoIntent = Intent(this, InfoActivity::class.java)
+                startActivity(openInfoIntent)
                 isInfoButtonClicked = true
             }
         }
@@ -86,9 +86,9 @@ class OptionsActivity : AppCompatActivity() {
 
     //Hide the keyboard when touching anywhere in the activity
     override fun dispatchTouchEvent(ev: MotionEvent?): Boolean {
-        if (currentFocus != null) {
+        currentFocus?.let { focus ->
             val imm = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
-            imm.hideSoftInputFromWindow(currentFocus!!.windowToken, 0)
+            imm.hideSoftInputFromWindow(focus.windowToken, 0)
 
             //Remove cursors when hiding keyboard
             findViewById<EditText>(R.id.frame_avg_frame_number_editText).clearFocus()
