@@ -70,7 +70,7 @@ class MultiPurposeAnalyzer(private val activity: MainActivity, private val rotat
     var framesAveraged = -1
 
     init {
-        OpenCVLoader.initDebug()
+        OpenCVLoader.initLocal()
 
         //Reset the value if it was not the auto night mode function who re-created the camera
         if(!cameraRecreatedByAutoNightMode){
