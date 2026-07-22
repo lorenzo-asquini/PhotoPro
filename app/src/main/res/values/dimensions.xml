@@ -35,12 +35,14 @@
     <!--PRO MODE-->
     <dimen name="pro_mode_font_size">14sp</dimen>
     <dimen name="pro_mode_padding">10dp</dimen>
-    <dimen  name="slider_percentage">6</dimen>
-    <dimen  name="slider_value_percentage">1.5</dimen>
-    <dimen  name="slider_value_padding">5dp</dimen>
+    <dimen name="slider_percentage">6</dimen>
+    <dimen name="slider_value_percentage">1.5</dimen>
+    <dimen name="slider_value_padding">5dp</dimen>
 
-    <dimen name="mtrl_slider_widget_height" xmlns:tools="http://schemas.android.com/tools"
-        tools:override="true">30dp</dimen>
+    <!-- Overrides Material slider height -->
+    <dimen xmlns:tools="http://schemas.android.com/tools" name="mtrl_slider_widget_height" tools:ignore="UnusedResources" tools:override="true">
+        30dp
+    </dimen>
     <dimen name="pro_titles_left_padding">10dp</dimen>
 
     <dimen name="hide_section_padding">10dp</dimen>

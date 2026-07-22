@@ -29,21 +29,21 @@ import androidx.camera.core.TorchState
 import androidx.camera.view.PreviewView
 import androidx.core.content.ContextCompat
 import java.text.SimpleDateFormat
-import java.util.*
+import java.util.Locale
 import java.util.concurrent.TimeUnit
 
 //Functions useful for both normal camera and PRO camera
 
 interface SmartDelayListener {
-    fun onPersonDetected(analyzer : MultiPurposeAnalyzer)
+    fun onPersonDetected(analyzer: MultiPurposeAnalyzer)
 }
 
-fun cameraPermissionGranted(baseContext : Context) =
+fun cameraPermissionGranted(baseContext: Context) =
     ContextCompat.checkSelfPermission(baseContext, Manifest.permission.CAMERA) == PackageManager.PERMISSION_GRANTED
 
 //The constant appears to not be wrong according to documentation
 @SuppressLint("WrongConstant")
-fun vibratePhone(activity: AppCompatActivity, duration: Long){
+fun vibratePhone(activity: AppCompatActivity, duration: Long) {
     val vib =
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
             //Gives error (suppressed) while it is correct as for:
@@ -56,17 +56,17 @@ fun vibratePhone(activity: AppCompatActivity, duration: Long){
         }
 
     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-        vib.vibrate(VibrationEffect.createOneShot(duration, VibrationEffect.DEFAULT_AMPLITUDE) )
-    }else{
+        vib.vibrate(VibrationEffect.createOneShot(duration, VibrationEffect.DEFAULT_AMPLITUDE))
+    } else {
         @Suppress("DEPRECATION")
         vib.vibrate(duration)
     }
 }
 
-fun getBackCameraId(cameraManager: CameraManager) : String?{
-    var backCameraId : String? = null
+fun getBackCameraId(cameraManager: CameraManager): String? {
+    var backCameraId: String? = null
 
-    for(cameraId in cameraManager.cameraIdList) {
+    for (cameraId in cameraManager.cameraIdList) {
         val cameraCharacteristics = cameraManager.getCameraCharacteristics(cameraId)
         val cameraFacing = cameraCharacteristics.get(CameraCharacteristics.LENS_FACING)
 
@@ -79,10 +79,10 @@ fun getBackCameraId(cameraManager: CameraManager) : String?{
     return backCameraId
 }
 
-fun getFrontCameraId(cameraManager: CameraManager) : String?{
-    var frontCameraId : String? = null
+fun getFrontCameraId(cameraManager: CameraManager): String? {
+    var frontCameraId: String? = null
 
-    for(cameraId in cameraManager.cameraIdList) {
+    for (cameraId in cameraManager.cameraIdList) {
         val cameraCharacteristics = cameraManager.getCameraCharacteristics(cameraId)
         val cameraFacing = cameraCharacteristics.get(CameraCharacteristics.LENS_FACING)
 
@@ -95,7 +95,7 @@ fun getFrontCameraId(cameraManager: CameraManager) : String?{
     return frontCameraId
 }
 
-fun getSaveImageContentValues() : ContentValues {
+fun getSaveImageContentValues(): ContentValues {
     // Create time stamped name using the FILENAME_FORMAT defined inside the companion object
     // This allows the MediaStore to be unique
     val name = SimpleDateFormat(Constant.FILENAME_FORMAT, Locale.US).format(System.currentTimeMillis())
@@ -104,23 +104,23 @@ fun getSaveImageContentValues() : ContentValues {
     return ContentValues().apply {
         put(MediaStore.MediaColumns.DISPLAY_NAME, name)
         put(MediaStore.MediaColumns.MIME_TYPE, "image/jpeg")
-        if(Build.VERSION.SDK_INT > Build.VERSION_CODES.P) {
+        if (Build.VERSION.SDK_INT > Build.VERSION_CODES.P) {
             put(MediaStore.Images.Media.RELATIVE_PATH, "Pictures/PhotoPro")
         }
     }
 }
 
 //Nothing happens if called on a camera without a flash
-fun setTorchState(activity: MainActivity, preferences: SharedPreferences, forceTorch : Boolean = false){
+fun setTorchState(activity: MainActivity, preferences: SharedPreferences, forceTorch: Boolean = false) {
     //If the torch is forced on, the imageCapture is not needed
     //Otherwise, the torch is turned off and controlled by the preferences
-    if(forceTorch){
-        if(activity.camera?.cameraInfo?.torchState?.value == TorchState.OFF) {
+    if (forceTorch) {
+        if (activity.camera?.cameraInfo?.torchState?.value == TorchState.OFF) {
             activity.camera?.cameraControl?.enableTorch(true)
         }
         return
-    }else{
-        if(activity.camera?.cameraInfo?.torchState?.value == TorchState.ON) {
+    } else {
+        if (activity.camera?.cameraInfo?.torchState?.value == TorchState.ON) {
             activity.camera?.cameraControl?.enableTorch(false)
         }
     }
@@ -130,7 +130,7 @@ fun setTorchState(activity: MainActivity, preferences: SharedPreferences, forceT
 
     //If cameraControl is not defined, that means that the camera has not started,
     //so the correct status of the torch will be set when the initialisation has finished
-    when(savedFlashValue) {
+    when (savedFlashValue) {
         Constant.FLASH_OFF -> {
             activity.camera?.cameraControl?.enableTorch(false)
             activity.imageCapture?.flashMode = ImageCapture.FLASH_MODE_OFF
@@ -148,7 +148,7 @@ fun setTorchState(activity: MainActivity, preferences: SharedPreferences, forceT
 
         Constant.FLASH_ALWAYS_ON -> {
             activity.imageCapture?.flashMode = ImageCapture.FLASH_MODE_OFF
-            if(activity.camera?.cameraInfo?.torchState?.value == TorchState.OFF) {
+            if (activity.camera?.cameraInfo?.torchState?.value == TorchState.OFF) {
                 activity.camera?.cameraControl?.enableTorch(true)
             }
         }
@@ -161,9 +161,10 @@ fun setTorchState(activity: MainActivity, preferences: SharedPreferences, forceT
 
 //Variable used to be sure that the circle is set to invisible depending on the last tap
 //Without using this, when doing multiple consecutive taps, the first tap may make invisible later taps before enough time has passed
-private var startTimeAutoFocus : Long = 0
+private var startTimeAutoFocus: Long = 0
+
 @SuppressLint("ClickableViewAccessibility")
-fun setPreviewGestures(activity: MainActivity, preferences: SharedPreferences, features: AvailableFeatures){
+fun setPreviewGestures(activity: MainActivity, preferences: SharedPreferences, features: AvailableFeatures) {
 
     // Listen to pinch gestures
     val listener = object : ScaleGestureDetector.SimpleOnScaleGestureListener() {
@@ -184,7 +185,7 @@ fun setPreviewGestures(activity: MainActivity, preferences: SharedPreferences, f
     val scaleGestureDetector = ScaleGestureDetector(activity, listener)
 
     // Attach the pinch gesture listener to the viewfinder
-    val cameraPreview : PreviewView = activity.findViewById(R.id.camera_preview)
+    val cameraPreview: PreviewView = activity.findViewById(R.id.camera_preview)
 
     cameraPreview.setOnTouchListener { _, motionEvent: MotionEvent ->
 
@@ -200,12 +201,12 @@ fun setPreviewGestures(activity: MainActivity, preferences: SharedPreferences, f
             MotionEvent.ACTION_UP -> {
 
                 //Do nothing if current camera does not support autofocus
-                if(preferences.getInt(SharedPrefs.CAMERA_FACING_KEY, Constant.CAMERA_BACK) == Constant.CAMERA_FRONT){
-                    if(!features.isFrontAutoFocusAvailable){
+                if (preferences.getInt(SharedPrefs.CAMERA_FACING_KEY, Constant.CAMERA_BACK) == Constant.CAMERA_FRONT) {
+                    if (!features.isFrontAutoFocusAvailable) {
                         return@setOnTouchListener true
                     }
-                }else{  //Back camera
-                    if(!features.isBackAutoFocusAvailable){
+                } else {  //Back camera
+                    if (!features.isBackAutoFocusAvailable) {
                         return@setOnTouchListener true
                     }
                 }
@@ -221,19 +222,19 @@ fun setPreviewGestures(activity: MainActivity, preferences: SharedPreferences, f
                 //Show focus circle where the user tapped
                 val focusCircle: ImageView = activity.findViewById(R.id.tapToFocus_circle)
 
-                focusCircle.x = motionEvent.x - focusCircle.width/2
-                focusCircle.y = motionEvent.y - focusCircle.height/2
+                focusCircle.x = motionEvent.x - focusCircle.width / 2
+                focusCircle.y = motionEvent.y - focusCircle.height / 2
 
                 focusCircle.visibility = View.VISIBLE
-                val autoFocusDuration : Long = 5000  //How long the current focus point will maintained
+                val autoFocusDuration: Long = 5000  //How long the current focus point will maintained
 
                 //Reset the time of the last tap
-                startTimeAutoFocus = Calendar.getInstance().timeInMillis
+                startTimeAutoFocus = System.currentTimeMillis()
 
                 //Make the circle disappear after a few seconds
                 Handler(Looper.getMainLooper()).postDelayed({
                     //If the delayed action is referring to the last tap
-                    if(Calendar.getInstance().timeInMillis - startTimeAutoFocus >= autoFocusDuration) {
+                    if (System.currentTimeMillis() - startTimeAutoFocus >= autoFocusDuration) {
                         focusCircle.visibility = View.INVISIBLE
                     }
                 }, autoFocusDuration)
@@ -248,6 +249,7 @@ fun setPreviewGestures(activity: MainActivity, preferences: SharedPreferences, f
 
                 return@setOnTouchListener true
             }
+
             else -> return@setOnTouchListener false
         }
     }

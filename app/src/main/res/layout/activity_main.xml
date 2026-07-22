@@ -4,7 +4,6 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/black"
     tools:context=".MainActivity">
 
     <!--Create guideline to set the toolbar height to a percentage of the screen-->
@@ -39,10 +38,10 @@
 
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:padding="@dimen/button_toolbar_padding"
                 android:layout_weight="1"
                 android:background="@null"
                 android:contentDescription="@string/flash_button_description"
+                android:padding="@dimen/button_toolbar_padding"
                 android:scaleType="fitCenter"
                 android:src="@drawable/flash_on" />
 
@@ -52,10 +51,10 @@
 
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:padding="@dimen/button_toolbar_padding"
                 android:layout_weight="1"
                 android:background="@null"
                 android:contentDescription="@string/frame_avg_button_description"
+                android:padding="@dimen/button_toolbar_padding"
                 android:scaleType="fitCenter"
                 android:src="@drawable/frame_avg_on" />
 
@@ -65,10 +64,10 @@
 
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:padding="@dimen/button_toolbar_padding"
                 android:layout_weight="1"
                 android:background="@null"
                 android:contentDescription="@string/smart_delay_button_description"
+                android:padding="@dimen/button_toolbar_padding"
                 android:scaleType="fitCenter"
                 android:src="@drawable/smart_delay_on" />
 
@@ -78,10 +77,10 @@
 
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:padding="@dimen/button_toolbar_padding"
                 android:layout_weight="1"
                 android:background="@null"
                 android:contentDescription="@string/night_mode_button_description"
+                android:padding="@dimen/button_toolbar_padding"
                 android:scaleType="fitCenter"
                 android:src="@drawable/night_mode_on" />
 
@@ -91,10 +90,10 @@
 
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:padding="@dimen/button_toolbar_padding"
                 android:layout_weight="1"
                 android:background="@null"
                 android:contentDescription="@string/options_button_description"
+                android:padding="@dimen/button_toolbar_padding"
                 android:scaleType="fitCenter"
                 android:src="@drawable/vertical_dots" />
 
@@ -135,11 +134,11 @@
 
         <ImageView
             android:id="@+id/tapToFocus_circle"
-            android:src="@drawable/circle"
-            android:visibility="invisible"
-            android:layout_height="@dimen/focus_circle_size"
             android:layout_width="@dimen/focus_circle_size"
-            android:contentDescription="@string/focus_circle_descriptor"/>
+            android:layout_height="@dimen/focus_circle_size"
+            android:contentDescription="@string/focus_circle_descriptor"
+            android:src="@drawable/circle"
+            android:visibility="invisible" />
     </FrameLayout>
 
     <androidx.constraintlayout.widget.Guideline
@@ -157,15 +156,15 @@
 
         android:layout_marginTop="@dimen/smart_delay_timer_margin_top"
 
-        app:layout_constraintTop_toBottomOf="@id/features_toolbar"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-
+        android:background="@drawable/round_button_opaque"
         android:gravity="center"
         android:orientation="horizontal"
-        android:background="@drawable/round_button_opaque"
+
+        android:text="@string/default_smart_delay_timer"
         android:textSize="@dimen/smart_delay_timer_font_size"
-        android:text="@string/default_smart_delay_timer" />
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/features_toolbar" />
 
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/top_change_camera_button_guideline"
@@ -175,41 +174,44 @@
         app:layout_constraintGuide_percent="@dimen/top_change_camera_button_guideline_percent" />
 
     <LinearLayout
-        android:id = "@+id/pro_mode_menu"
+        android:id="@+id/pro_mode_menu"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:layout_constraintBottom_toBottomOf="@+id/top_change_camera_button_guideline"
-        android:background="@drawable/rounded_corners"
-        android:padding="@dimen/pro_mode_padding"
         android:layout_margin="@dimen/pro_mode_padding"
+        android:background="@drawable/rounded_corners"
         android:orientation="vertical"
-        android:visibility="visible">
+        android:padding="@dimen/pro_mode_padding"
+        android:visibility="visible"
+        app:layout_constraintBottom_toBottomOf="@+id/top_change_camera_button_guideline">
 
         <LinearLayout
-            android:id = "@+id/pro_mode_sliders"
+            android:id="@+id/pro_mode_sliders"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical">
 
             <!--ISO-->
             <LinearLayout
-                android:id = "@+id/iso_slider_block"
+                android:id="@+id/iso_slider_block"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:orientation="vertical">
 
                 <TextView
                     android:id="@+id/iso_title_textView"
-                    android:text="@string/iso"
-                    android:textSize="@dimen/pro_mode_font_size"
-                    android:paddingStart="@dimen/pro_titles_left_padding"
-
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:textColor="@color/white"/>
+                    android:paddingStart="@dimen/pro_titles_left_padding"
+                    android:paddingEnd="@dimen/pro_titles_left_padding"
+
+                    android:text="@string/iso"
+                    android:textColor="@color/white"
+                    android:textSize="@dimen/pro_mode_font_size" />
+
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content">
+
                     <com.google.android.material.slider.Slider
                         android:id="@+id/iso_slider"
                         android:layout_width="0dp"
@@ -236,39 +238,44 @@
                         app:trackColorActive="#00000000"
                         app:trackColorInactive="#00000000"
                         app:trackHeight="3dp" />
+
                     <TextView
                         android:id="@+id/iso_slider_value"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
-                        android:layout_weight="@dimen/slider_value_percentage"
-                        android:textAlignment="center"
                         android:layout_gravity="center"
+                        android:layout_weight="@dimen/slider_value_percentage"
                         android:padding="@dimen/slider_value_padding"
+                        android:text="@string/iso_placeholder"
 
-                        android:text="2000"
+                        android:textAlignment="center"
                         android:textColor="@color/white"
-                        android:textSize="@dimen/pro_mode_font_size"/>
+                        android:textSize="@dimen/pro_mode_font_size" />
                 </LinearLayout>
             </LinearLayout>
 
             <!--SHUTTER SPEED-->
             <LinearLayout
-                android:id = "@+id/shutter_speed_slider_block"
+                android:id="@+id/shutter_speed_slider_block"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:orientation="vertical">
+
                 <TextView
                     android:id="@+id/shutter_speed_title_textView"
-                    android:text="@string/shutter_speed"
-                    android:textSize="@dimen/pro_mode_font_size"
-                    android:paddingStart="@dimen/pro_titles_left_padding"
-
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:textColor="@color/white"/>
+                    android:paddingStart="@dimen/pro_titles_left_padding"
+                    android:paddingEnd="@dimen/pro_titles_left_padding"
+
+                    android:text="@string/shutter_speed"
+                    android:textColor="@color/white"
+                    android:textSize="@dimen/pro_mode_font_size" />
+
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content">
+
                     <com.google.android.material.slider.Slider
                         android:id="@+id/shutter_speed_slider"
 
@@ -296,18 +303,19 @@
                         app:trackColorActive="#00000000"
                         app:trackColorInactive="#00000000"
                         app:trackHeight="3dp" />
+
                     <TextView
                         android:id="@+id/shutter_speed_slider_value"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
-                        android:layout_weight="@dimen/slider_value_percentage"
-                        android:textAlignment="center"
                         android:layout_gravity="center"
+                        android:layout_weight="@dimen/slider_value_percentage"
                         android:padding="@dimen/slider_value_padding"
+                        android:text="@string/shutter_speed_placeholder"
 
-                        android:text="8"
+                        android:textAlignment="center"
                         android:textColor="@color/white"
-                        android:textSize="@dimen/pro_mode_font_size"/>
+                        android:textSize="@dimen/pro_mode_font_size" />
                 </LinearLayout>
             </LinearLayout>
         </LinearLayout>
@@ -316,6 +324,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="center">
+
             <TextView
                 android:id="@+id/hide_pro_mode_textview"
                 android:layout_width="wrap_content"
@@ -325,14 +334,14 @@
 
                 android:text="@string/hide_pro_mode_text"
                 android:textColor="@color/white"
-                android:textSize="@dimen/pro_mode_font_size"/>
+                android:textSize="@dimen/pro_mode_font_size" />
 
             <com.google.android.material.switchmaterial.SwitchMaterial
                 android:id="@+id/hide_pro_mode_switch"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:backgroundTint="@color/lightBlue"
-                android:padding="@dimen/hide_section_padding"/>
+                android:padding="@dimen/hide_section_padding" />
         </LinearLayout>
 
     </LinearLayout>
@@ -347,8 +356,8 @@
         android:contentDescription="@string/change_camera_button_description"
         android:scaleType="fitCenter"
         android:src="@drawable/change_camera"
-        app:layout_constraintDimensionRatio="1:1"
         app:layout_constraintBottom_toTopOf="@+id/bottom_change_camera_button_guideline"
+        app:layout_constraintDimensionRatio="1:1"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="@+id/top_change_camera_button_guideline" />
@@ -382,15 +391,15 @@
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:background="@null"
+        android:contentDescription="@string/pro_mode_button_description"
         android:padding="@dimen/pro_button_toolbar_padding"
         android:scaleType="fitCenter"
         android:src="@drawable/pro"
-        android:contentDescription="@string/pro_mode_button_description"
         app:layout_constraintBottom_toTopOf="@+id/bottom_button_guideline"
+        app:layout_constraintDimensionRatio="1:1"
         app:layout_constraintEnd_toStartOf="@+id/image_capture_button"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/bottom_view_guideline"
-        app:layout_constraintDimensionRatio="1:1" />
+        app:layout_constraintTop_toTopOf="@+id/bottom_view_guideline" />
 
     <ImageButton
         android:id="@+id/gallery_button"
@@ -398,8 +407,8 @@
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:background="@null"
-        android:padding="@dimen/gallery_button_toolbar_padding"
         android:contentDescription="@string/gallery_button_description"
+        android:padding="@dimen/gallery_button_toolbar_padding"
         android:scaleType="fitCenter"
         android:src="@drawable/gallery"
         app:layout_constraintBottom_toTopOf="@+id/bottom_button_guideline"
@@ -415,5 +424,5 @@
         android:layout_height="wrap_content"
         android:orientation="horizontal"
         app:layout_constraintGuide_percent="@dimen/bottom_buttons_guideline_percent" />
-    
+
 </androidx.constraintlayout.widget.ConstraintLayout>

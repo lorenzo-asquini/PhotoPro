@@ -55,6 +55,10 @@
     <!--PRO mode-->
     <string name="iso">ISO</string>
     <string name="shutter_speed">Shutter Speed</string>
+    <string name="iso_placeholder">2000</string>
+    <string name="iso_placeholder_land">3200</string>
+    <string name="shutter_speed_placeholder">8</string>
+    <string name="shutter_speed_placeholder_land">500ms</string>
     <string name="hide_pro_mode_text">HIDE</string>
 
 </resources>

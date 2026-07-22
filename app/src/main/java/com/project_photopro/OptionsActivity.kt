@@ -17,7 +17,7 @@ class OptionsActivity : AppCompatActivity() {
     private var isInfoButtonClicked = false
 
     //Necessary lateinit because the SharedPreferences need the activity to be created
-    private lateinit var preferences : SharedPreferences
+    private lateinit var preferences: SharedPreferences
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -37,17 +37,17 @@ class OptionsActivity : AppCompatActivity() {
         //Set listener to save the new values
         setValueChangeListeners(this, preferences)
 
-        val backArrowButton : ImageButton = findViewById(R.id.back_arrow_button)
-        backArrowButton.setOnClickListener{
+        val backArrowButton: ImageButton = findViewById(R.id.back_arrow_button)
+        backArrowButton.setOnClickListener {
             finish()
         }
 
         //Add listener to button to open the information activity
         val infoButton: ImageButton = findViewById(R.id.info_image_button)
-        infoButton.setOnClickListener{
-            if(!isInfoButtonClicked) {
-                val openSettingsIntent = Intent(this, InfoActivity::class.java)
-                startActivity(openSettingsIntent)
+        infoButton.setOnClickListener {
+            if (!isInfoButtonClicked) {
+                val openInfoIntent = Intent(this, InfoActivity::class.java)
+                startActivity(openInfoIntent)
                 isInfoButtonClicked = true
             }
         }
@@ -86,9 +86,9 @@ class OptionsActivity : AppCompatActivity() {
 
     //Hide the keyboard when touching anywhere in the activity
     override fun dispatchTouchEvent(ev: MotionEvent?): Boolean {
-        if (currentFocus != null) {
+        currentFocus?.let { focus ->
             val imm = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
-            imm.hideSoftInputFromWindow(currentFocus!!.windowToken, 0)
+            imm.hideSoftInputFromWindow(focus.windowToken, 0)
 
             //Remove cursors when hiding keyboard
             findViewById<EditText>(R.id.frame_avg_frame_number_editText).clearFocus()
